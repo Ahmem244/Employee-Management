@@ -1,0 +1,103 @@
+{% include "includes/instructor/header.html" %}
+{% include "includes/instructor/nav.html" %}
+{% load static %}
+
+<div class="sidebar">
+    {% include "includes/instructor/sidebar.html" %}
+</div>
+<div class="main">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Mi Perfil
+                    </h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="box-white">
+                                <div class="box-open-datos" id="box-open-datos">
+                                    <div class="col-md-12">
+                                        <h5 class="font-family-Outfit-SemiBold mb-4">Datos de usuario</h5>
+                                    </div>
+                                    <div class="box-open-datos-flex">
+                                        <div class="">
+                                            {% if userprofile.profile_picture %}
+                                            <img src="{{userprofile.profile_picture.url}}" id="vista-previa" class="foto" alt="Vista Previa">
+                                            {% else %}
+                                            <img src="{% static "img/foto.png" %}" id="vista-previa" class="foto" alt="Vista Previa">
+                                            {% endif %}
+                                        </div>
+                                        <div class="">
+                                            <form method="post" action="{% url 'instructor-profile' %}" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <label for="campo-archivo" class="form-label font-family-Inter-Regular texto-1">
+                                                    Adjunta tu foto de perfil para completar tus datos.
+                                                    <i class="fas fa-edit"></i>
+                                                </label>
+                                                <p id="file-name" class="mb-3 font-family-Inter-Medium">Archivo: Archivo.jpg</p>
+                                                <input type="file" class="form-control" id="campo-archivo" name="profile_picture" accept="image/*" style="display: none;" required>
+                                                <button class="custom-button-label btn-mod font-family-Inter-Medium" type="submit" >Cargar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="box-white mb-4">
+                                <h5 class="font-family-Outfit-SemiBold">Mis Datos</h5>
+                                <table class="table table-borderless font-family-Inter-Regular">
+                                    <tbody>
+                                    <tr>
+                                        <td>Nombre de usuario</td>
+                                        <td>{{userprofile.username}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nombre completo</td>
+                                        <td> {{ userprofile.full_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Correo Electrónico</td>
+                                        <td>{{ userprofile.user.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Teléfono</td>
+                                        <td>{{ userprofile.phone_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Número DUI</td>
+                                        <td>{{ userprofile.dui_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ciudad</td>
+                                        <td>{{ userprofile.city }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fecha de nacimiento</td>
+                                        <td>{{ userprofile.birth_date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fecha de creación</td>
+                                        <td>{{ userprofile.created_at }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    document.getElementById('campo-archivo').addEventListener('change', function() {
+        const fileName = this.files[0].name;
+        document.getElementById('file-name').textContent = 'Archivo: ' + fileName;
+    });
+</script>
+
+{% include "includes/instructor/footer.html" %}

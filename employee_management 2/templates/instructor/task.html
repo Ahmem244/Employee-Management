@@ -1,0 +1,76 @@
+{% include "includes/instructor/header.html" %}
+{% load static %}
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-5">
+
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container" style="padding-top: 80px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-detalle-evaluacion">
+                <h3 class="font-family-Inter-SemiBold">{{task.module}}: {{task.title}}</h3>
+                <h5 class="font-family-Inter-Medium">{{task.module.course}}</h5>
+                <div class="row mt-3 mb-3">
+                    <div class="col-md-12">
+                        <p class="font-family-Inter-Regular text-gris mb-0">
+                            ¡Refuerza tu conocimiento! <br>
+                            Las siguientes tareas no son calificadas
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box_cali" style="padding: 20px;background-color: #4128E6;">
+                <div class="fz-16 d-flex align-items-center justify-content-start" style="gap: 20px">
+                    <img src="{% static 'img/instructor/unlock-black.png' %}" alt="icono">
+                    <p class="mb-0 font-family-Inter-SemiBold text-white">
+                        Crucigrama
+                    </p>
+                </div>
+                <div class="">
+                    <a href="{% url 'Crossword-detail' task.id %}" class="btn-border-white btn-default d-inline-block font-family-Inter-Medium">Realizar</a>
+                </div>
+            </div>
+
+            <div class="box_cali" style="padding: 20px;">
+                <div class="fz-16 d-flex align-items-center justify-content-start" style="gap: 20px">
+                    <img src="{% static 'img/instructor/unlock-black.png' %}" alt="icono">
+                    <p class="mb-0 font-family-Inter-SemiBold">
+                        Unir
+                    </p>
+                </div>
+                <div class="">
+                    <a href="{% url 'joinlines-detail' task.id %}" class="btn-border btn-default d-inline-block font-family-Inter-Medium">Realizar</a>
+                </div>
+            </div>
+
+            <div class="box_cali " style="padding: 20px;">
+                <div class="fz-16 d-flex align-items-center justify-content-start" style="gap: 20px">
+                    <img src="{% static 'img/instructor/unlock-black.png' %}" alt="icono">
+                    <p class="mb-0 font-family-Inter-SemiBold">
+                        Cuestionario
+                    </p>
+                </div>
+                <div class="bloqueado">
+                    <a href="{% url 'questions-detail' task.id %}" class="btn-border btn-default d-inline-block font-family-Inter-Medium">Realizar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="d-block mb-2 footer-evaluacion font-family-Inter-Regular">Copyright © 2022 Eduperse Company</p>
+            <img src="{% static 'img/logo-gris.png' %}" alt="logo">
+        </div>
+    </div>
+</div>
+
+{% include "includes/instructor/footer.html" %}

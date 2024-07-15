@@ -1,0 +1,282 @@
+{% include 'includes/admin/header.html' %}
+{% include 'includes/admin/nav.html' %}
+{% load static %}
+<!-- add jquery ui cdn-->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+<div class="sidebar">
+    {% include 'includes/admin/sidebar.html' %}
+</div>
+<div class="main">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 col-lg-10 col-md-8 col-sm-8 col-8 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Reportes - {{ group.course.name }}
+                    </h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                            <div class="box-white">
+                                <div class="box-perfil text-center">
+                                    {% if student.profile_picture %}
+                                        <img src="{{ student.profile_picture.url }}" alt="perfil" width="72px"
+                                             height="72px" style="border-radius: 50%">
+                                    {% else %}
+                                        <img src="{% static 'img/profile.jpeg' %}" alt="perfil">
+                                    {% endif %}
+                                    <h3 class="font-family-Inter-Medium">{{ student.user.first_name }} {{ student.user.last_name }} </h3>
+                                    {% if student.status == 'active' %}
+
+                                        <div class="alerta boton-aceptado">
+                                            <i class="fas fa-circle"></i> {{ student.status }}
+                                        </div>
+                                    {% else %}
+                                        <div class="alerta boton-rechazada">
+                                            <i class="fas fa-circle"></i> {{ student.status }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="box-cursos">
+                                    <div class="columna w-100">
+                                        <strong class="font-family-Inter-SemiBold">{{ progress |floatformat:'0' }}%</strong>
+                                        <p class="font-family-Inter-Regular">Completado</p>
+                                    </div>
+                                    <div class="columna w-100">
+                                        <strong class="font-family-Inter-SemiBold">{{ average.average }}/100</strong>
+                                        <p class="font-family-Inter-Regular">Nota Promedio</p>
+                                    </div>
+                                </div>
+                                <div class="box-lista">
+                                    <div>
+                                        <a href="javascript:void(0)" class="btn-black font-family-Inter-Medium">
+                                            Ver Certificado
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills font-family-Inter-Medium lista-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#datos">Módulos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#grupos">Lecciones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#cursos">Evaluaciones</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="datos" class="container tab-pane active"><br>
+                                    <div class="box-border">
+                                        <div class="header">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form action="" class="buscador">
+                                                        <div class="form-group position-relative">
+                                                            <label for="buscar"><i class="fal fa-search"></i></label>
+                                                            <input type="text" name="buscar" id="buscar"
+                                                                   placeholder="Buscar">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                            <tr class="font-family-Outfit-SemiBold">
+                                                <th>Módulo</th>
+                                                <th>Estado</th>
+                                                <th>Fecha realizado</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for module in modules %}
+                                                <tr>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ module.module_name }}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {% if module.status == 'not_started' %}
+                                                            <span>Sin Empezar</span>
+                                                        {% elif module.status == 'in_progress' %}
+                                                            <span class="text-orange">En proceso</span>
+                                                        {% else %}
+                                                            <span class="text-blue">Completado</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ module.completed_at }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div id="grupos" class="container tab-pane fade"><br>
+                                    <div class="box-border">
+                                        <div class="header">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form action="" class="buscador">
+                                                        <div class="form-group position-relative">
+                                                            <label for="buscar"><i class="fal fa-search"></i></label>
+                                                            <input type="text" name="buscar" id="lessons-table-search"
+                                                                   placeholder="Buscar">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table" data-init-by-header="0" id="lessons-table">
+                                            <thead class="thead-dark">
+                                            <tr class="font-family-Outfit-SemiBold">
+                                                <th>Lección</th>
+                                                <th>Estado</th>
+                                                <th>Módulo</th>
+                                                <th>Fecha</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for lesson in lessons %}
+                                                <tr>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ lesson.lesson }}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {% if lesson.status == 'not_started' %}
+                                                            <span>Sin Empezar</span>
+                                                        {% elif lesson.status == 'in_progress' %}
+                                                            <span class="text-orange">En proceso</span>
+                                                        {% else %}
+                                                            <span class="text-blue">Completado</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ lesson.lesson.module.title }}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ lesson.completed_at }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="cursos" class="container tab-pane fade"><br>
+                                    <div class="box-border">
+                                        <div class="header">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form action="" class="buscador">
+                                                        <div class="form-group position-relative">
+                                                            <label for="buscar"><i class="fal fa-search"></i></label>
+                                                            <input type="text" name="buscar" id="evaluations-table-search"
+                                                                   placeholder="Buscar">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table" data-init-by-header="0" id="evaluations-table">
+                                            <thead class="thead-dark">
+                                            <tr class="font-family-Outfit-SemiBold">
+                                                <th>evaluación</th>
+                                                <th>Estado</th>
+                                                <th>Módulo</th>
+                                                <th>Nota</th>
+                                                <th>Horario</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for evaluation in evaluations %}
+
+                                                <tr>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ evaluation.evaluation.title }}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {% if evaluation.status == 'not_started' %}
+                                                            <span>Sin Empezar</span>
+                                                        {% elif evaluation.status == 'in_progress' %}
+                                                            <span class="text-orange">En proceso</span>
+                                                        {% else %}
+                                                            <span class="text-blue">Completado</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ evaluation.evaluation.module.title }}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ evaluation.percentage|floatformat:'0' }}/100
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ evaluation.date }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    
+    $(function(){
+        
+        initTable('lessons-table','lessons-table-search');
+        initTable('evaluations-table','evaluations-table-search');
+        
+        function initTable(tableId='',searchInputId='',) {
+            
+            const table = $($(`#${tableId}`)).DataTable({
+            "paging": true,
+            "info": false,
+            "lengthChange": false,
+            "pageLength": 10,
+            "language": {
+                "paginate": {
+                    "previous": "Previous",
+                    "next": "Next",
+                    'class': 'page-link',
+                }
+
+            },
+            "searching": true,
+        });
+            
+        $('.dataTables_filter').hide();
+            
+        $(`#${searchInputId}`).on('keyup', function () {
+            // Filter the table
+            table.search(this.value).draw();
+        });
+        
+        
+        }
+    })
+    
+</script>
+
+{% include 'includes/admin/footer.html' %}

@@ -1,0 +1,147 @@
+{% load static %}
+{% load django_tables2 %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+<div class="sidebar">
+    {% include "includes/admin/sidebar.html" %}
+</div>
+<div class="container next-shift" style="height: 500px;width: 90%; margin-top: 70px">
+    {% if messages %}
+        <div id="alert-container" class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="card " style="width: 900px; ">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h2 class="card-title">{{ form_title }}</h2>
+                    </div>
+                    <div class="col-4">
+                        {% if form_title == 'Latest Announcements' %}
+                            <a href="{% url 'add_announcement' %}" class="btn btn-primary float-right">Add Announcement</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <!-- Search Form -->
+                {% if form_title == 'Latest Announcements' %}
+                    <div class="input-group mb-3">
+                        <input type="text" id="announcementSearch" class="form-control" placeholder="Search announcements..." onkeyup="filterAnnouncements()">
+                    </div>
+                {% endif %}
+                {% if form %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-3 form-group">
+                                    <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                                    <br>
+                                    {% render_field field class="form-control" %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </form>
+                {% endif %}
+                {% if announcements %}
+                    <div id="announcementList">
+                        {% for announcement in announcements %}
+                            <div class="card announcement-card" style="border-width: 6px;">
+                                <div class="card-header" style="background: #3F28E3;color: white ">
+                                    <div class="row">
+                                        <div class="col-8">{{ announcement.title }}</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p>Description : &nbsp;&nbsp;&nbsp;{{ announcement.description }}</p>
+                                    <p>Date: &nbsp;&nbsp;&nbsp;{{ announcement.created_at }}</p>
+                                    
+                                    <div class="float-right">
+                                        <a class="btn btn-light" href="{% url 'edit_announcement' announcement.id %}">Edit</a>
+                                        <button class="btn btn-danger" onclick="confirmDelete('{{ announcement.id }}')">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for delete confirmation -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this announcement?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a id="deleteLink" class="btn btn-danger" href="#">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.alert').delay(3000).fadeOut('slow', function () {
+            $(this).remove();
+        });
+    });
+
+    function confirmDelete(announcementId) {
+        // Set the delete link dynamically
+        var deleteUrl = "{% url 'delete_announcement' %}?id=" + announcementId;
+        $('#deleteLink').attr('href', deleteUrl);
+        
+        // Show the modal
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    function filterAnnouncements() {
+        var input, filter, cards, cardContainer, title, i;
+        input = document.getElementById("announcementSearch");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("announcementList");
+        cards = cardContainer.getElementsByClassName("announcement-card");
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].getElementsByClassName("col-8")[0];
+            if (title.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+</body>
+</html>

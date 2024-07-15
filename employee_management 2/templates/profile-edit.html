@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee Profile</title>
+    <link rel="stylesheet" href="{% static 'profile-edit.css' %}"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<div class="container">
+    <h2>Edit Employee Profile</h2>
+
+    <!-- Employee Search Form -->
+    <div class="employee-search-form">
+        <input type="text" id="employee-search" placeholder="Search by name or employee number...">
+        <button type="button" onclick="searchEmployee()">Search</button>
+    </div>
+
+    <!-- Employee Details Form (hidden initially and shown when an employee is selected) -->
+    <div id="employee-details-form" style="display: none;">
+        <h3>Employee Details</h3>
+        <form>
+            <label for="employee-name">Name:</label>
+            <input type="text" id="employee-name" name="employee-name" required>
+
+            <label for="employee-number">Employee Number:</label>
+            <input type="text" id="employee-number" name="employee-number" required>
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+
+            <label for="phone-number">Phone Number:</label>
+            <input type="tel" id="phone-number" name="phone-number">
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function searchEmployee() {
+        // Implement the logic to search for an employee
+        // This can include showing the employee-details-form with the details of the searched employee
+    }
+</script>
+
+</body>
+</html>

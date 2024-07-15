@@ -1,0 +1,73 @@
+{% load static %}
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="foto" height="80px" width="80px"
+                     style="border-radius: 50%">
+            {% else %}
+                <img src="{% static 'img/profile.jpeg' %}" alt="foto" height="80px" width="80px"
+                     style="border-radius: 50%">
+            {% endif %}
+            <h4 class="font-family-Inter-SemiBold fz-16 mt-3">{{ user.first_name }} {{ user.surname }}</h4>
+        </div>
+        <div class="col-md-9 m-auto">
+            <table class="table table-borderless font-family-Inter-Medium">
+                <tbody>
+                <tr>
+                    <td class="fz-12">Nombre de usuario</td>
+                    <td class="fz-14">{{ user.username }}</td>
+
+                </tr>
+                <tr>
+                    <td class="fz-12">Correo Electrónico</td>
+                    <td class="fz-14">{{ user.user.email }}</td>
+
+                </tr>
+                <tr>
+                    <td class="fz-12">Número celular</td>
+                    <td class="fz-14">{{ user.phone_number }}</td>
+                </tr>
+                <tr>
+                    <td class="fz-12">Últ. actividad</td>
+                    <td class="fz-14">{{ user.user.last_login }}</td>
+                </tr>
+                <tr>
+                    <td class="fz-12">Fecha creación</td>
+                    <td class="fz-14">{{ user.created_at }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer justify-content-center">
+    <a href="mensajes.php" class="btn-gris font-family-Inter-Medium btn-border">Enviar mensaje</a>
+    <button type="button" class="btn-gris font-family-Inter-Medium btn-border editrole" data-dismiss="modal"
+            id="cerrar" data-toggle="modal" data-target="#editrole" data-url="{% url 'edit_role' id=user.id %}">Editar
+        admin
+    </button>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.editrole').click(function (e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    // Do something with the response
+                    //insert html into modal-body
+                    $('#editroleTarget').html(response)
+
+
+                }
+            });
+        });
+    });
+</script>

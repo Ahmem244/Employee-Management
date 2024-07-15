@@ -1,0 +1,38 @@
+<ul class="font-family-Inter-SemiBold sales_advisor " id="sales_advisor">
+      <li>
+        <a href="{% url 'index' %}" class="nav-link {% if nav_class == 'dashboard' %}activo{% endif %}">
+          <i class="fab fa-windows"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'manager-shift' %}" class="nav-link {% if nav_class == 'shift_management' %}activo{% endif %}">
+          <i class="fas fa-calendar-alt"></i> Manage Shifts
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'manager-task-assignment' %}" class="nav-link {% if nav_class == 'task_management' %}activo{% endif %}">
+          <i class="fas fa-tasks"></i> Assign Tasks
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'manager-leave-requests' %}" class="nav-link {% if nav_class == 'leave_request' %}activo{% endif %}">
+          <i class="fas fa-file-alt"></i> Leave Requests
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'manager-sales-advisors-directory' %}" class="nav-link {% if nav_class == 'sales_advisor_directory' %}activo{% endif %}">
+          <i class="fas fa-users"></i> Sales Advisors
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'manager-message' %}" class="nav-link {% if nav_class == 'messages' %}activo{% endif %}">
+          <i class="fas fa-comments"></i> Messages
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'm-latest-accouncement' %}" class="nav-link {% if nav_class == 'latest_announements' %}activo{% endif %}">
+          <i class="fas fa-bullhorn"></i> Announcements
+        </a>
+      </li>
+    </ul>
+    <script src="../../../staticfiles/js/sidebar.js"></script> 

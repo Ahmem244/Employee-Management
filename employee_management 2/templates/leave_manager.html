@@ -1,0 +1,59 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Request Management</title>
+    <link rel="stylesheet" href="{% static 'leave_manager.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="container">
+    <h2>Leave Request Management</h2>
+
+    <!-- Search Form -->
+    <div class="search-form">
+        <h3>Search Employee</h3>
+        <form id="search-form" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="col-lg-6 col-md-6">
+                    {% render_field field class="form_control_select" placeholder=field.label %}
+                </div>
+            {% endfor %}
+            {#            <input type="text" id="search-query" name="search-query" placeholder="Enter employee name or number"#}
+            {#                   required>#}
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Search Results / Leave Requests Display -->
+    <div id="search-results">
+        <h3>Search Results</h3>
+        <!-- Search results will be dynamically inserted here -->
+    </div>
+
+    <!-- Placeholder for dynamically loaded Leave Requests -->
+    {% for request in  requests %}
+        <div id="leave-requests">
+            <h2>{{ request.title }}</h2>
+            <p>{{ request.description }}</p>
+            <!-- Leave requests for the selected employee will be shown here after a search -->
+        </div>
+    {% endfor %}
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.form_control_select').select2();
+    });
+</script>
+
+</body>
+</html>

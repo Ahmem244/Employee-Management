@@ -1,0 +1,520 @@
+{% load static %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-ath-form">
+                    <div class="form-align-box">
+                        <div class="wizard">
+                            <div class="wizard-inner">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation">
+                                        <a href="#edit-step4" class="active" data-toggle="tab" id="editEvalTab1"
+                                        aria-controls="edit-step4" role="tab" aria-expanded="true"
+                                        data-step="4">
+                                            <span class="round-tab font-family-Inter-Medium">1. Selecciona un tipo</span>
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#edit-step5" class="disabled" data-toggle="tab" id="editEvalTab2"
+                                        aria-controls="edit-step5" role="tab" aria-expanded="false"
+                                        data-step="5">
+                                            <span class="round-tab font-family-Inter-Medium">2. Crea un título</span>
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#edit-step6" class="disabled" data-toggle="tab" id="editEvalTab3"
+                                        aria-controls="edit-step6" role="tab" data-step="6">
+                                            <span class="round-tab font-family-Inter-Medium">3. Preguntas y respuestas</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <form action="{% url 'update_content' model_name=model_name id=content.id %}" class="form-estado" method="post">
+                                {% csrf_token %}
+
+                            <input name="module_id" id="evaluation_id" hidden>
+                            <input name="model_name" value="evaluation" hidden>
+                                <div class="tab-content" id="main_form">
+                                {# step 1 #}
+                                    <div class="tab-pane active" role="tabpanel" id="edit-step4">
+                                        <div class="form-input-steps tipo-tareas">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p class="font-family-Inter-Regular fz-14">Ejemplo de
+                                                        texto descriptivo para este tipo de tarea</p>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="radio" id="edit-cuestionario1" value="questionnaire"
+                                                            name="evaluation_type"
+                                                            {% if content.evaluation_type == 'questionnaire' %}
+                                                            checked
+                                                            {% endif %}
+                                                            />
+                                                        <label for="edit-cuestionario1" class="eval-edit-step-3-enable-trigger">
+                                                            <div class="vista-tarea">
+                                                                <object data="{% static 'img/cuestionario.svg' %}"
+                                                                        width="32" height="32"
+                                                                        type="image/svg+xml"></object>
+                                                                <div class="vista-contenido">
+                                                                    <h3 class="font-family-Inter-SemiBold fz-16">Cuestionario</h3>
+                                                                    <p class="font-family-Inter-Regular fz-14">
+                                                                        Ejemplo de texto descriptivo para
+                                                                        este tipo de tarea
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="radio" id="edit-ensayo" value="rehearsal"
+                                                            name="evaluation_type"
+                                                            {% if content.evaluation_type == 'rehearsal' %}
+                                                            checked
+                                                            {% endif %}
+                                                            />
+                                                        <label for="edit-ensayo" class="eval-edit-step-3-disable-trigger">
+                                                            <div class="vista-tarea">
+                                                                <object data="{% static 'img/ensayo.svg' %}"
+                                                                        width="32" height="32"
+                                                                        type="image/svg+xml"></object>
+                                                                <div class="vista-contenido">
+                                                                    <h3 class="font-family-Inter-SemiBold fz-16">Ensayo</h3>
+                                                                    <p class="font-family-Inter-Regular fz-14">
+                                                                        Ejemplo de texto descriptivo para
+                                                                        este tipo de tarea
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <ul class="align-items-center d-flex justify-content-between list-inline">
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                    Anterior
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" id="editEvalFormStep1Btn"
+                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                    Siguiente
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {# step 2 #}
+                                    <div class="tab-pane" role="tabpanel" id="edit-step5">
+                                        <div class="form-input-steps">
+                                            <div class="form-estado">
+                                                <div class="form-group">
+                                                    <label for="edit-nombreEvaluacion" class="d-block font-family-Inter-Regular">
+                                                        Nombre de Evaluación
+                                                    </label>
+                                                    <input type="text" name="title" id="edit-nombreEvaluacion" value="{{content.title}}" placeholder="Ejemplo de Nombre de Lección 1" class="font-family-Inter-Medium">
+                                                    <label data-error-for="edit-nombreEvaluacion" class="d-none text-danger font-family-Inter-Regular">Please fill out this field!</label>
+
+                                                </div>
+                                                <p class="font-family-Inter-Regular fz-14 text-gris mb-5">
+                                                    Saldrá como el título de la evaluación en el contenido del curso.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <ul class="align-items-center d-flex justify-content-between list-inline">
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                    Anterior
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" id="editEvalStep2SubmitBtn"
+                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                    Siguiente
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {# step 3 #}
+                                    <div class="tab-pane" role="tabpanel" id="edit-step6">
+                                        <div class="form-input-steps">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p class="font-family-Inter-Regular fz-14">
+                                                        Ejemplo de texto descriptivo para este tipo de evaluación
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-md-12 mb-5">
+                                                    <div class="sortable p-0 mb-4" id="edit-preguntas-lista-2">
+                                                        <ul data-list-id="500" class="sortable">
+                                                            {% for question in content.questions.all %}
+                                                            <li data-item-id="500" class="font-family-Inter-SemiBold">
+                                                                <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                                {{question.text}}
+                                                                <strong class="float-right botones">
+                                                                    <a href="#" class="editar mr-1" id="edit-editar-pregunta-{{question.id}}"><i class="fas fa-pen"></i></a>
+                                                                    <a href="#" class="eliminar" id="edit-eliminar-pregunta-200"><i class="fas fa-trash"></i></a>
+                                                                </strong>
+                                                            </li>
+                                                            <div class="editar-pregunta" style="display: none;" id="edit-editar-pregunta-contenido-{{question.id}}">
+                                                                <div class="form-estado">
+                                                                    <input name="question_id" hidden value="{{question.id}}">
+                                                                    <div class="form-group">
+                                                                        <label for="titulodepregunto" class="d-block font-family-Inter-Regular">
+                                                                            Escribe la pregunta
+                                                                        </label>
+                                                                        <input type="text" name="question" id="titulodepregunto-200" value="{{question.text}}" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="d-block font-family-Inter-Regular">
+                                                                            Punto(s) por esta respuesta
+                                                                        </label>
+                                                                        <div class="cuadro-reloj w-50">
+                                                                            <!-- Botones para ajustar los puntos -->
+                                                                            <button type="button"  onclick="editddecrementarPuntos({{question.id}})">
+                                                                                <i class="fas fa-minus"></i>
+                                                                            </button>
+                                                                            <input id="edit-points{{question.id}}" name="points" hidden value="{{question.total_points}}">
+                                                                            <span id="edit-puntos-{{question.id}}" class="font-family-Inter-SemiBold">{{question.total_points}}</span>
+                                                                            <button type="button"  onclick="editincrementarPuntos({{question.id}})">
+                                                                                <i class="fas fa-plus"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                            Respuesta correcta
+                                                                        </label>
+                                                                        <input type="text" name="correct_answer" id="repuesta-200" value="{{question.correct_answer}}" class="font-family-Inter-Medium">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                            Resto de alternative
+                                                                        </label>
+                                                                        <input type="text" name="alt_answer_1" id="repuesta-201" value="{{question.alternative_ans_1}}" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="alt_answer_2" id="repuesta-202" value="{{question.alternative_ans_2}}" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="alt_answer_3" id="repuesta-203" value="{{question.alternative_ans_3}}" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="alt_answer_4" id="repuesta-204" value="{{question.alternative_ans_4}}" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    
+                                                                    {% comment %} <div class="form-group">
+                                                                        <button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                            Guardar Cambios
+                                                                        </button>
+                                                                    </div> {% endcomment %}
+                                                                </div>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                    <a href="#" id="edit-agregar-pregunta-2" class="btn btn-border font-family-Inter-Medium d-inline-block fz-14">
+                                                        +Agregar Pregunta
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <ul class="align-items-center d-flex justify-content-between list-inline">
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                    Anterior
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="submit"
+                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                    Guardar Cambios
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        $(document).ready(function () {
+            var contador = 500;
+
+            $('#edit-agregar-pregunta-2').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-1" id="editar-pregunta-' + contador + '"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar" id="eliminar-pregunta-' + contador + '"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;" id="editar-pregunta-contenido-' + contador + '">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunta" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="new_question" id="titulodepregunto-' + contador + '" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label class="d-block font-family-Inter-Regular">' +
+                    'Punto(s) por esta respuesta' +
+                    '</label>' +
+                    '<div class="cuadro-reloj w-50">' +
+                    '<button type="button" onclick="appendeddecrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-minus"></i>' +
+                    '</button>' +
+                    '<input id="append-points-' + contador + '" name="new_points" hidden value="0">' +
+                    '<span id="append-puntos-' + contador + '" class="font-family-Inter-SemiBold">00</span>' +
+                    '<button type="button" onclick="appendedincrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-plus"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="new_correct_answer" id="repuesta-' + contador + '" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+
+                    '<div class="form-group">'+
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Resto de alternative'+
+                    '</label>'+
+                    '<input type="text" name="new_alt_1" id="alt_1' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 1" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="new_alt_2" id="alt_2' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 2" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="new_alt_3" id="alt_3' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 3" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="new_alt_4" id="alt_4' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 4" class="font-family-Inter-Medium">' +
+                    '</div>' +
+
+                    {% comment %} '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' + {% endcomment %}
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#edit-preguntas-lista-2 ul').append(nuevaPregunta);
+            });
+
+            $('#edit-preguntas-lista-2').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#edit-preguntas-lista-2').on('click', '.editar', function () {
+                console.log('edit_module_evaluation.html: #edit-preguntas-lista-2 > .editar click')
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#edit-preguntas-lista-2 li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                /*var iconos = $(this).find('i');
+                iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');*/
+            });
+        });
+
+
+
+
+        function ajustpointvalue(unidad, operacion) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor + 1) % 100;
+            } else {
+                valor = (valor - 1  + 100) % 100 ;
+            }
+            $('#' + unidad).text(valor.toString().padStart(2, '0'));
+        }
+
+
+        function ajustpointinput(unidad, operacion, input) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor) % 100;
+                console.log(valor, 'valor');
+            } else {
+                valor = (valor + 100) % 100;
+                console.log(valor, 'valor');
+            }
+            document.getElementById(input).setAttribute('value', valor.toString().padStart(2, '0'));
+    
+        }
+
+
+        function editincrementarPuntos(contador) {
+            ajustpointvalue('edit-puntos-' + contador, '+');
+            ajustpointinput('edit-puntos-' + contador, '+', 'edit-points' + contador );
+        }
+
+        function editddecrementarPuntos(contador) {
+            ajustpointvalue('edit-puntos-' + contador, '-');
+            ajustpointinput('edit-puntos-' + contador, '-', 'edit-points'+ contador);
+        }
+    
+
+        function appendedincrementarPuntos(contador) {
+            ajustpointvalue('append-puntos-' + contador, '+');
+            ajustpointinput('append-puntos-' + contador, '+', 'append-points-' + contador );
+        }
+
+        function appendeddecrementarPuntos(contador) {
+            ajustpointvalue('append-puntos-' + contador, '-');
+            ajustpointinput('append-puntos-' + contador, '-', 'append-points-'+ contador);
+        }
+
+
+        // ------------register-steps--------------
+        $(document).ready(function () {
+            $('.nav-tabs > li a[title]').tooltip();
+            //Wizard
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var $target = $(e.target);
+                if ($target.hasClass('disabled')) {
+                    return false;
+                }
+
+                // handle with prgressbar
+                var step = $(e.target).data('step');
+                var percent = (parseInt(step) / 4) * 100;
+                $('.progress-bar').css({width: percent + '%'});
+                $('.progress-bar').text('Step ' + step + ' of 4');
+
+            });
+
+            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                var $target = $(e.target);
+                $target.parent().addClass('active');
+            });
+
+            $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
+                var $target = $(e.target);
+                $target.parent().removeClass('active');
+            });
+
+
+            $(".next-step").click(function (e) {
+                var $active = $('.wizard .nav-tabs li a.active');
+                $active.parent().next().children().removeClass('disabled');
+                $active.parent().addClass('done');
+                nextTab($active);
+            });
+
+            $(".prev-step").click(function (e) {
+                var $active = $('.wizard .nav-tabs li a.active');
+                prevTab($active);
+            });
+
+        function nextTab(elem) {
+            $(elem).parent().next().find('a[data-toggle="tab"]').click();
+        }
+
+        function prevTab(elem) {
+            $(elem).parent().prev().find('a[data-toggle="tab"]').click();
+        };
+        
+                
+        {# Eval #}
+        $('#editEvalFormStep1Btn,#editEvalTab2').on('click',function(){
+            
+            const isQuestionnaire = $('#edit-cuestionario1').prop('checked');
+            const step2SubmitBtn = $('#editEvalStep2SubmitBtn')
+            console.log({isQuestionnaire});
+            if(isQuestionnaire) {
+                // enable 3rd step
+                step2SubmitBtn.prop('type','button');
+                step2SubmitBtn.text('Siguiente');
+                $('#editEvalTab3').removeClass('disabled');
+            } else {
+                // disable 3rd step
+                step2SubmitBtn.prop('type','submit');
+                step2SubmitBtn.text('Guardar Cambios');
+                $('#editEvalTab3').addClass('disabled');
+            }
+        
+        });
+        
+        $('.eval-edit-step-3-disable-trigger').on('click',function(){
+            $('#editEvalTab3').addClass('disabled');
+        });
+        
+        $('.eval-edit-step-3-enable-trigger').on('click',function(){
+            const isStep2ActiveOrDone = $('#editEvalTab2').parent().attr('class').includes('active');
+            if(isStep2ActiveOrDone) {
+            $('#editEvalTab3').removeClass('disabled');
+            }
+        });
+        
+        {# Evaluation form step2 validation  #}
+        $('#edit-nombreEvaluacion').on('input',function(e) {
+            const isQuestionnaire = $('#cuestionario1').prop('checked');
+            const errorEl = $('label[data-error-for="edit-nombreEvaluacion"]');
+            if(e.target.value.trim()) {
+            $('#editEvalStep2SubmitBtn').prop('disabled',false);
+            if(isQuestionnaire){
+            $('#editEvalTab3').removeClass('disabled');
+            $('#editEvalTab3').removeClass('no-pointer-events');
+            }
+            errorEl.addClass('d-none');
+            }else{
+            $('#editEvalTab3').addClass('no-pointer-events');
+            $('#editEvalStep2SubmitBtn').prop('disabled',true);
+            errorEl.removeClass('d-none');
+            $('#editEvalTab3').addClass('disabled');
+            }
+        });
+        
+          
+          
+    });
+
+    </script>

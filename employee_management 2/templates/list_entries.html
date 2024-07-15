@@ -1,0 +1,38 @@
+{% load static %}
+{% load django_tables2 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.js"></script>
+</head>
+<body>
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+<div class="sidebar">
+    {% include "includes/admin/sidebar.html" %}
+
+</div>
+<section class="bg_login">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 box2 d-flex  justify-content-center flex-column">
+                <div class="box_login">
+                    <table id="userTable" class="display">
+                        {% render_table table %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('.userTable').DataTable();
+    });
+</script>
+</body>
+</html>

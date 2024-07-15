@@ -1,0 +1,39 @@
+
+
+<script>
+    $(document).ready(function () {
+        $("#mostrarOcultar").click(function () {
+            var tipo = $("#contrasena").attr("type");
+            if (tipo === "password") {
+                $("#contrasena").attr("type", "text");
+                $(this).html('<i class="fas fa-eye-slash"></i>');
+            } else {
+                $("#contrasena").attr("type", "password");
+                $(this).html('<i class="fas fa-eye"></i>');
+            }
+        });
+
+        $('#recuperar').click(function () {
+            $('#cuadro_login').addClass('d-none');
+            $('#cuadro_recuperar').removeClass('d-none');
+        })
+        $('.cerrar').click(function () {
+            $('#cuadro_login').removeClass('d-none');
+            $('#cuadro_recuperar').addClass('d-none');
+        })
+        $('#abrirperfil').click(function () {
+            $('#perfil_abs').toggle();
+            $(this).find("i").toggleClass("fa-angle-down fa-angle-up");
+        })
+        $('#navegador li a').click(function () {
+            $('#navegador li a').removeClass('activo');
+            $(this).addClass('activo');
+
+            var target = $(this).data("target");
+            $(".cuadro").hide();
+            $("#" + target).show();
+        })
+    });
+</script>
+</body>
+</html>

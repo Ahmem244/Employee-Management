@@ -1,0 +1,1085 @@
+{% include 'includes/admin/header.html' %}
+{% include 'includes/admin/nav.html' %}
+{% load static %}
+<!-- add jquery ui cdn-->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+<div class="sidebar">
+    {% include 'includes/admin/sidebar.html' %}
+</div>
+<div class="main">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 col-lg-10 col-md-8 col-sm-8 col-8 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Gestión de grupos
+
+                    </h1>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4 d-flex align-items-center justify-content-end">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn-action dropdownMenuLink font-family-Inter-Regular"
+                           href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            Acción <i class="fas fa-chevron-down"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right"
+                             aria-labelledby="dropdownMenuLink">
+                           <a class="dropdown-item texto-1 font-family-Inter-Regular editgroupbtn"
+                                                           href="#" data-toggle="modal" data-target="#editgroup"
+                                                           data-url="{% url 'update_group' id=group.id %}?detail=true">Editar</a>
+                             {% if group.status == 'active' %}
+                                                            <a class="dropdown-item texto-1 font-family-Inter-Regular suspend-link"
+                                                               href="{% url 'deactivate_group' id=group.id %}?status=inactive&detail=true"
+                                                               id="suspend-link"
+                                                               data-toggle="modal"
+                                                               data-target="#modalsuspender">Suspender</a>
+                                                        {% else %}
+                                                            <a class="dropdown-item texto-1 font-family-Inter-Regular suspend-link"
+                                                               href="{% url 'deactivate_group' id=group.id %}?status=active&detail=true"
+                                                               id="suspend-link"
+                                                               data-toggle="modal"
+                                                               data-target="#modalsuspender">Activate</a>
+                                                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                            <div class="box-white">
+                                <div class="box-perfil text-center">
+                                    {% if group.image %}
+                                        <img src="{{ group.image.url }}" alt="perfil">
+                                    {% else %}
+                                        <img src="{% static 'img/user-1.png' %}" alt="perfil">
+                                    {% endif %}
+                                    <h3 class="font-family-Inter-Medium">
+                                        {{ group.name }}
+                                    </h3>
+                                    {% if group.status == 'active' %}
+
+                                        <div class="alerta boton-aceptado">
+                                            <i class="fas fa-circle"></i> {{ group.status }}
+                                        </div>
+                                    {% else %}
+                                        <div class="alerta boton-rechazada">
+                                            <i class="fas fa-circle"></i> {{ group.status }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="box-cursos">
+                                    <div class="columna w-100">
+                                        <strong class="font-family-Inter-SemiBold">
+                                            {{ group.start_date | date:"d M Y" }}
+                                        </strong>
+                                        <p class="font-family-Inter-Regular">Inicia</p>
+                                    </div>
+                                    <div class="columna w-100">
+                                        <strong class="font-family-Inter-SemiBold">
+                                            {{ group.end_date | date:"d M Y" }}
+                                        </strong>
+                                        <p class="font-family-Inter-Regular">
+                                            Finaliza
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="box-lista">
+                                    <div>
+                                        <p class="font-family-Inter-Regular">ID de grupo</p>
+                                        <h4 class="font-family-Inter-Medium">{{ group.id }}</h4>
+                                    </div>
+                                </div>
+                                <div class="box-lista">
+                                    <div>
+                                        <p class="font-family-Inter-Regular">Instructor</p>
+                                        <h4 class="font-family-Inter-Medium">{{ group.instructor }}</h4>
+                                    </div>
+                                </div>
+                                <div class="box-lista">
+                                    <div>
+                                        <p class="font-family-Inter-Regular">Estudiantes</p>
+                                        <h4 class="font-family-Inter-Medium">{{ group.members.count }}</h4>
+                                    </div>
+                                </div>
+                                <div class="box-lista">
+                                    <div>
+                                        <p class="font-family-Inter-Regular">Fecha creación</p>
+                                        <h4 class="font-family-Inter-Medium">{{ group.created_at }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills font-family-Inter-Medium lista-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#datos">Integrantes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#grupos">Detalles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#cursos">Programación y Sesiones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="groupConv" data-toggle="tab" data-group-id="{{ group.id }}" href="#calificaciones">Conversación Grupal</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="datos" class="container tab-pane active"><br>
+
+                                    <div class="box-border">
+                                        <div class="header">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <form action="" class="buscador position-relative">
+                                                        <div class="form-group position-relative">
+                                                            <i class="fal fa-search"></i>
+                                                            <input type="text" name="buscar" id="buscar"
+                                                                   placeholder="Buscar" class="w-100">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-8 text-right">
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-gris font-family-Inter-Regular">
+                                                        <i class="fal fa-filter"></i> Filtros <i
+                                                            class="far fa-chevron-down"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)" data-group-id="{{ group.id }}" data-url="{% url 'export_members' group.id %}"
+                                                       class="btn-gris font-family-Inter-Regular export_excel_button">
+                                                        Exportar Excel
+                                                    </a>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-gris font-family-Inter-Regular btn-blue"
+                                                       data-toggle="modal" data-target="#addmiembros">
+                                                        Editar
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <table data-init-by-header="0" class="table" id="group-detail-table">
+                                                    <thead class="thead-dark">
+                                                    <tr class="font-family-Outfit-SemiBold">
+                                                        <th>Estudiante</th>
+                                                        <th>Etiqueta</th>
+                                                        <th>Average/100</th>
+                                                        <th>Progreso</th>
+                                                        <th style="text-align: right;">Opciones</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for member in group.members %}
+                                                        <tr>
+                                                            <td class="texto-usuario">
+                                                                <div class="d-flex align-items-center justify-content-start">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox"
+                                                                               class="custom-control-input selected_member"
+                                                                               id="{{ member.id }}" name="selected_member">
+                                                                        <label class="custom-control-label"
+                                                                               for="{{ member.id }}"></label>
+                                                                    </div>
+                                                                    <p class="font-family-Inter-Regular">
+                                                                        {% if member.user.profile_picture %}
+                                                                            <img src="{{ member.user.profile_picture.url }}"
+                                                                                 alt="user" width="36px" height="36px"
+                                                                                 style="border-radius: 50%">
+                                                                        {% else %}
+                                                                            <img src="{% static 'img/user.png' %}"
+                                                                                 alt="user">
+                                                                        {% endif %}
+
+                                                                        <strong class="font-family-Inter-Regular">
+                                                                            {{ member.user.full_name }}
+                                                                        </strong>
+                                                                    </p>
+                                                                </div>
+                                                            </td>
+                                                            <td class="font-family-Inter-Medium texto-0 position-relative">
+                                                                <a href="javascript:void(0);"
+                                                                   class="btn-estado font-family-Inter-Medium">Sin
+                                                                    estado</a>
+                                                                <div data-member-id="{{ member.id }}" class="detalle-estado labels-container" style="display: none;">
+                                                                    <a href="javascript:void(0)"
+                                                                       class="btn-crear font-family-Inter-Medium"
+                                                                       data-toggle="modal" data-target="#crearestados"
+                                                                       data-member="{{ member.id }}">
+                                                                        +Crear Estado
+                                                                    </a>
+
+                                                                    {% for label in member.labels %}
+                                                                        <div class="espacio-estado label-item" data-member="{{ member.id }}" data-label-id="{{ label.id }}" >
+                                                                            <a href="javascript:void(0);"
+                                                                               class="btn-estado boton-reporte-4 font-family-Inter-Medium">{{ label.label }}</a>
+                                                                            <a href="#"
+                                                                               class="btn-trash del-label-item"
+                                                                               data-member="{{ member.id }}"
+                                                                               data-label-id="{{ label.id }}"
+                                                                               data-del-url = "{% url 'remove_label' id=label.id %}"
+                                                                               ><i
+                                                                                    class="fas fa-trash-alt"></i></a>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </td>
+                                                            <td class="font-family-Inter-Medium texto-0">
+                                                                {{ member.student_average.average }}/100
+                                                            </td>
+                                                            <td class="font-family-Inter-Medium texto-0">
+                                                                {{ member.progress |floatformat:"0" }}%
+                                                            </td>
+                                                            <td align="right" class="font-family-Inter-Medium texto-0">
+                                                                <div class="diplo">
+                                                                    <a href="{% url 'messages' %}?grp={{ member.user.user.id }}" class="text-decoration-none">
+                                                                        <img src="{% static 'img/instructor/chat.png' %}"
+                                                                             alt="icono">
+                                                                    </a>
+                                                                    <a href="{% url 'student_report' student_id=member.user.id group_id=member.group.id %}" class="text-decoration-none">
+                                                                        <img src="{% static 'img/instructor/diploma.png' %}"
+                                                                             alt="icono">
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-border">
+                                        <ul class="pagination d-none justify-content-end font-family-Inter-Regular"
+                                            style="margin:20px 0">
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0);">Anterior</a>
+                                            </li>
+                                            <li class="page-item active"><a class="page-link"
+                                                                            href="javascript:void(0);">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0);">Siguiente</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="grupos" class="container tab-pane fade"><br>
+                                    <div class="box-white mb-4">
+                                        <h5 class="font-family-Inter-SemiBold">Detalles</h5>
+                                        <table class="table table-borderless font-family-Inter-Regular">
+                                            <tbody>
+                                            <tr>
+                                                <td>ID de grupo</td>
+                                                <td>{{ group.id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                <td>{{ group.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Oferta de Compra</td>
+                                                <td>{{ group.purchase_offer }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Instructor</td>
+                                                <td>{{ group.instructor }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Inicio</td>
+                                                <td>{{ group.start_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Finaliza</td>
+                                                <td>{{ group.end_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tipo</td>
+                                                <td>{{ group.course.course_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Curso Afiliado</td>
+                                                <td>{{ group.course }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fecha de creación</td>
+                                                <td>{{ group.created_at }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="cursos" class="container tab-pane fade"><br>
+                                    <div class="box-white">
+                                        <form class="group-form" method="POST"
+                                              action="{% url 'group-detail' group.id %}">
+                                            {% csrf_token %}
+                                            <div class="row mb-4">
+                                                <div class="col-md-6">
+                                                    <h5 class="font-family-Outfit-SemiBold">Programación</h5>
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                    <button type="submit" id="submit-btn"
+                                                            class="btn-gris font-family-Inter-Medium btn-border"
+                                                            style="padding: 7px;">
+                                                        Editar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="demo font-family-Inter-Medium">
+                                                {{ programming_form.programming_details }}
+
+                                                {#                                            <textarea>#}
+                                                {#                                                <p>#}
+                                                {#                                                Laura Rodríguez es una apasionada maestra de diseño con más de 10 años de experiencia en la industria. Su amor por el arte y la creatividad la llevó a dedicarse a la enseñanza, compartiendo su conocimiento y fomentando el crecimiento de nuevos talentos en el campo del diseño.#}
+                                                {#                                                </p>#}
+                                                {#                                                <p>#}
+                                                {#                                                <img src="../img/instructor/materia.png" alt="Materia" width="100%"#}
+                                                {#                                                     height="auto">#}
+                                                {#                                                </p>#}
+                                                {#                                            </textarea>#}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="calificaciones" class="container tab-pane fade"><br>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <div class="boxx-chat">
+                                                <form action="">
+                                                    <div class="form-chat">
+                                                    <div id="chatFilesPreviewContainer"></div>
+                                                        <img src="{% if request.user.userprofile.profile_picture %}{{ request.user.userprofile.profile_picture.url }}{% endif %}" alt="profile">
+                                                        <input class="grp-message-input" type="text" name="comentario"
+                                                              id="grp-message-input" placeholder="Que quieres compartir con tu grupo?">
+                                                        <div>
+                                                            <label for="archivofoto" style="cursor: pointer;"
+                                                                   class="mb-0">
+                                                                <i class="fas fa-camera"></i>
+                                                            </label>
+                                                            <input type="file" class="archivofoto" id="archivofoto" accept="image/*" name="file"
+                                                                   style="display: none;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-4 text-right">
+                                                        <button type="button"
+                                                                class="btn-blue btn-gris font-family-Inter-Regular d-inline-block grp-message-submit">
+                                                            Comentar
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <div class="boxx-chat">
+                                                <!-- inicio comentario-->
+                                                {% for group_chat in group_chats %}
+                                                    <div class="cuadro-comentarios" id="group-chat-log">
+                                                    <div class="cuadro-perfil">
+                                                        <div class="cuadro-datos">
+                                                            <img src="{% if group_chat.sender.profile_picture %}{{ group_chat.sender.profile_picture.url }}{% endif %}" alt="profile" id="profile-image">
+                                                            <div class="">
+                                                                <h5 class="mb-0 font-family-Inter-Medium" id="user-name">
+                                                                    {{ group_chat.sender.user.get_full_name }}
+                                                                </h5>
+                                                                <p class="mb-0 font-family-Inter-Regular" id="group-hora">
+                                                                    {{ group_chat.created_at|date:"h:i A - d/m/Y" }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="dropdown d-inline-block">
+                                                            <a class="dropdownMenuLink d-inline-block font-family-Inter-Regular"
+                                                               href="#" role="button" id="dropdownMenuLink"
+                                                               data-toggle="dropdown" aria-haspopup="true"
+                                                               aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-h fa-2x"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right"
+                                                                 aria-labelledby="dropdownMenuLink"
+                                                                 style="will-change: transform;">
+                                                                <a class="dropdown-item texto-1 font-family-Inter-Regular"
+                                                                   href="#">Editar</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="detalle-comentarios">
+                                                        <p class="font-family-Inter-Regular" id="group-message">
+                                                            {{ group_chat.message }}
+                                                        </p>
+                                                        {% if group_chat.file %}
+                                                            <img src="{{ group_chat.file }}" alt="img" id="message-image">
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                <!-- fin comentario-->
+
+                                                <form action="">
+                                                    <div class="form-chat">
+                                                        <img src="{% if request.user.userprofile.profile_picture %}{{ request.user.userprofile.profile_picture.url }}{% endif %}" alt="profile">
+                                                        <input class="grp-message-input" type="text" name="comentario"
+                                                               placeholder="Que quieres compartir con tu grupo?">
+                                                        <div>
+                                                            <label for="archivofoto" style="cursor: pointer;"
+                                                                   class="mb-0">
+                                                                <i class="fas fa-camera"></i>
+                                                            </label>
+                                                            <input type="file" id="archivofoto" name="archivofoto"
+                                                                   style="display: none;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-4 text-right">
+                                                        <button type="button"
+                                                                class="btn-blue btn-gris font-family-Inter-Regular d-inline-block grp-message-submit">
+                                                            Comentar
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<!-- Modal  editar susuario-->
+<div class="modal fade" id="addmiembros" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Agregar miembros</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'add_users_to_group' id=group.id %}" class="form-usuario" method="post">
+                {% csrf_token %}
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <!-- Botón para agregar sección -->
+                            <a href="javascript:void(0)" class="btn btn-border d-inline-block" id="btnAgregarSeccion">
+                                + Agregar Usuario
+                            </a>
+                        </div>
+
+                        <!-- Contenedor para las secciones -->
+                        <div class="col-md-12" id="contenedorSecciones">
+                            <!-- Sección predeterminada -->
+                            
+                            {% if group.members.count == 0 %}
+                            
+                             <div class="seccionUsuario">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="iduser" class="font-family-Inter-Regular">ID Usuario</label>
+                                            <input type="text" name="user_id"
+                                                   class="font-family-Inter-Medium user_id_select"
+                                                   placeholder="Nombres" id="user_id_select">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                                            <input type="text" name="user_name"
+                                                   class="font-family-Inter-Medium user_name_select"
+                                                   placeholder="Nombres" id="user_name_select">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                        <!-- Botón para eliminar la sección -->
+                                        <button type="button" class="btn btn-primary btn-eliminar">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            {% for member in group.members %}
+                            <div class="seccionUsuario">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="iduser" class="font-family-Inter-Regular">ID Usuario</label>
+                                            <input type="text" name="user_id"
+                                                   class="font-family-Inter-Medium user_id_select" value="{{ member.user.account_id }}"
+                                                   placeholder="Nombres" id="user_id_select">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                                            <input type="text" name="user_name"
+                                                   class="font-family-Inter-Medium user_name_select" value="{{ member.user.full_name }}"
+                                                   placeholder="Nombres" id="user_name_select"> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                        <!-- Botón para eliminar la sección -->
+                                        <button type="button" class="btn btn-primary btn-eliminar">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            
+                            <!-- Fin de la sección predeterminada -->
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer align-items-center justify-content-center">
+                    <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                    <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editgroup" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+        <div class="modal-content border-radius-12">
+
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Grupo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body " id="editGroupModel">
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<!-- Modal crear estados-->
+<div class="modal fade" id="crearestados" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Estado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addLabelForm" class="form-estado" method="post">
+                <div class="modal-body">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="estado" class="d-block font-family-Inter-Regular">Crear estado</label>
+                        <input required type="text" name="label" id="estado" placeholder="Nombre de estado"
+                               class="font-family-Inter-Medium">
+
+
+                        <input type="text" name="member_id" id="member_id" placeholder="Nombre de estado"
+                               class="font-family-Inter-Medium" hidden="">
+                    </div>
+
+                </div>
+                <div class="modal-footer align-items-center justify-content-center">
+                    <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                    <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal"
+                            aria-label="Close">Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function () {
+        console.log('group_details.html')
+        // Evento para agregar una nueva sección
+        $('#btnAgregarSeccion').on('click', function () {
+            agregarSeccion();
+        });
+
+        // Evento para eliminar una sección
+        $('#contenedorSecciones').on('click', '.btn-eliminar', function () {
+            $(this).closest('.seccionUsuario').remove();
+        });
+
+        // Función para agregar una nueva sección
+        function agregarSeccion() {
+
+            var nuevaSeccion = $('.seccionUsuario:first').clone();
+
+            nuevaSeccion.find('input').val(''); // Limpiar los campos
+
+            // add
+            $('#contenedorSecciones').append(nuevaSeccion);
+
+            $('.user_id_select').autocomplete({
+                appendTo: $('#addmiembros'),
+                source: function (request, response) {
+                    $.ajax({
+                        url: "{% url 'user_autocomplete' %}?type='id'",  // replace with your API endpoint
+                        data: {
+                            query: request.term
+                        },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    console.log(ui.item.value);
+                    $(this).closest('.seccionUsuario').find('#user_name_select').val(ui.item.name);
+                }
+                // minimum number of characters to trigger the autocomplete
+            })
+
+            $('.user_name_select').autocomplete({
+                appendTo: $('#addmiembros'),
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "{% url 'user_autocomplete' %}?type=name",  // replace with your API endpoint
+                        data: {
+                            query: request.term
+                        },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    console.log(ui.item.value);
+                    $(this).closest('.seccionUsuario').find('#user_id_select').val(ui.item.id);
+                }// minimum number of characters to trigger the autocomplete
+            })
+
+
+        }
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $('#addmiembros').on('show.bs.modal', function () {
+            console.log('modal opened')
+
+
+        })
+
+        $('.group-form').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert('Group updated successfully');
+                    } else {
+                        $('#error-messages').html('');
+                        $.each(response.errors, function (key, value) {
+                            $('#error-messages').append('<p>' + key + ': ' + value + '</p>');
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', status);
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.user_id_select').autocomplete({
+            appendTo: $('#addmiembros'),
+            source: function (request, response) {
+                $.ajax({
+                    url: "{% url 'user_autocomplete' %}?type='id'",  // replace with your API endpoint
+                    data: {
+                        query: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(ui.item.value);
+                $(this).closest('.seccionUsuario').find('#user_name_select').val(ui.item.name);
+            }
+            // minimum number of characters to trigger the autocomplete
+        })
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.user_name_select').autocomplete({
+            appendTo: $('#addmiembros'),
+            source: function (request, response) {
+                $.ajax({
+                    url: "{% url 'user_autocomplete' %}?type=name",  // replace with your API endpoint
+                    data: {
+                        query: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                console.log(ui.item.value);
+                $(this).closest('.seccionUsuario').find('#user_id_select').val(ui.item.id);
+            }
+
+            // minimum number of characters to trigger the autocomplete
+        })
+    });
+</script>
+
+<script>
+    $('.btn-estado').click(function () {
+        $(this).next().toggle();
+        $(this).next().addClass('show');
+    })
+</script>
+
+<script>
+    let selectedMemberId = null;
+    $(document).ready(function () {
+        $('.btn-crear').on('click', function () {
+            var member_id = $(this).attr('data-member');
+            // assing member id to the input
+            $('#member_id').val(member_id);
+            selectedMemberId = member_id;
+
+        });
+    });
+    
+    
+    $(function () {
+
+        initDetailsTable();
+
+        function initDetailsTable() {
+            const table = $('#group-detail-table').DataTable({
+                "paging": true,
+                "info": false,
+                "lengthChange": false,
+                "pageLength": 10,
+                "language": {
+                    "paginate": {
+                        "previous": "Previous",
+                        "next": "Next",
+                        'class': 'page-link',
+                    }
+
+                },
+                "searching": true,
+            });
+
+            $('#buscar').on('keyup', function () {
+                // Filter the table
+                table.search(this.value).draw();
+            });
+            $('.dataTables_filter').hide();
+            $('.filter_button').on('click', function () {
+                console.log(this.getAttribute('value'));
+                // Filter the table
+                if (this.getAttribute('value') === 'all') {
+                    table.search('').draw();
+                    return;
+                }
+                table.search(this.getAttribute('value')).draw();
+            });
+        };
+        
+                $('#crearestados').on('hide.bs.modal',function(){
+                
+                    selectedMemberId = null;
+                    console.log('hide');
+                    const labelInput = $(this).find('input[name="label"]');
+                    $(labelInput).val('');
+                    
+                })
+        
+        
+        $('#addLabelForm').on('submit', async function (e) {
+            
+            e.preventDefault();
+            const url = "{% url 'add_label' %}";
+            const fd = new FormData();
+            const fields = $(this).find('input');
+            for (const field of fields) {
+                fd.append(field.name, field.value)
+            }
+            console.log(url, [...fd],selectedMemberId, '--payload');
+            const resp = await fetch(url, {method: 'POST', body: fd});
+            console.log(resp, '--rs')
+            if (resp.ok) {
+                const html = await resp.json();
+                console.log(html, '--html');
+                const targetContainer = $('#group-detail-table').find(`div.labels-container[data-member-id="${selectedMemberId}"]`);
+                console.log(targetContainer,'tgc');
+                $(targetContainer).append(html)
+                $('#crearestados').modal('hide');
+                for (const field of fields) {
+                    if (field.name === 'label') {
+                        $(field).val('')
+                    }
+                }
+                selectedMemberId  = null;
+            }
+
+        });
+                
+        $(document).on('click','.del-label-item',async function(){
+        const url = $(this).attr('data-del-url');
+        const labelId = $(this).attr('data-label-id');
+        
+        const targetItem = $('#group-detail-table').find(`div.label-item[data-label-id="${labelId}"]`);
+        
+        console.log(targetItem,url,'--tg');
+        
+        const resp = await fetch(url,{method:'DELETE'});
+        
+        if(resp.ok) {
+        targetItem.remove();
+        }
+        
+        
+        })
+                
+    })
+    
+    
+    
+</script>
+
+
+<script>
+    $(document).click(function (e) {
+        const item = $('.detalle-estado');
+        if (item.hasClass('show')) {
+            console.log('click');
+        }
+    });
+</script>
+
+
+<script>
+$(document).ready(function () {
+    $('.editgroupbtn').click(function (e) {
+
+        e.preventDefault();
+        var url = $(this).data('url');
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+            success: function (response) {
+                // Do something with the response
+                //insert html into modal-body
+                $('#editGroupModel').html(response)
+
+
+            }
+        });
+    });
+});
+</script>
+<script>
+    // Initialize WebSocket connection
+    let chatSocket;
+    let selectedFiles = [];
+
+
+    // Function to initialize WebSocket connection
+    function initializeWebSocket(roomName) {
+        console.log("this is receiver id=====", roomName)
+        // Construct WebSocket URL with roomName
+        const wsUrl = 'ws://' + window.location.host + '/ws/group/' + roomName + '/'
+
+        // Initialize WebSocket connection
+        chatSocket = new WebSocket(wsUrl);
+
+        // WebSocket event listener for open connection
+        chatSocket.onopen = function (event) {
+            console.log('WebSocket connection established.');
+        };
+
+        // WebSocket event listener for incoming messages
+        chatSocket.onmessage = function (event) {
+            console.log('Message received:', event.data);
+            const data = JSON.parse(event.data);
+            const groupChatLog = document.querySelector('#group-chat-log')
+            // Create a new message element
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            // Set the message content and time
+            messageElement.innerHTML = `<img id="profile-image" src="${ data.sender.user_profile }">
+                                        <h5 class="mb-0 font-family-Inter-Medium" id="user-name">${ data.sender.user_name }</h5>
+                                        <p class="mb-0 font-family-Inter-Regular" id="group-hora">${dayjs(data.message.time).format("hh:mm A")}</p>
+                                        <p class="font-family-Inter-Regular" id="group-message">${data.message}</p>
+                                        ${data.file && `<img src="${data.file}" alt="img" id="message-image">`}`;
+
+            groupChatLog.appendChild(messageElement);
+        };
+
+        // WebSocket event listener for close
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+    }
+
+    $('#groupConv').click(function () {
+        const roomName = $(this).data('group-id');
+        initializeWebSocket(roomName);
+        document.querySelector('.grp-message-input').focus();
+        document.querySelector('.grp-message-input').onkeyup = function (e) {
+        console.log(e.keyCode)
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('.grp-message-submit').click();
+        }
+        };
+        {#==========#}
+        document.querySelector('.grp-message-submit').onclick = async function (e) {
+            const messageInputDom = document.querySelector('.grp-message-input');
+
+            const message = messageInputDom.value;
+            const now = new Date();
+            const fileUploadUrl = "{{ upload_file_url }}";
+            const file = selectedFiles[0]?.file;
+
+            // Prepare the message data with the updated receiver_id
+            const payload = {
+                'message': message,
+                'group_id': roomName,
+            };
+
+            console.log(payload)
+
+            if(file) {
+                const body = new FormData();
+                body.append('file',file);
+                const resp = await fetch(fileUploadUrl,{method:'POST',body}) ;
+                if(resp.ok) {
+                const json = await resp.json();
+                console.log(json,'--resp file');
+
+                if(json?.url) {
+                    payload.file = json.url;
+                      }
+                    }
+                };
+
+            const messageBody = JSON.stringify(payload);
+
+            console.log(payload,'--msg');
+            if(message?.trim()==='' && !payload?.file) return;
+
+            // Send the message data via WebSocket
+            chatSocket.send(messageBody);
+            selectedFiles = [];
+            $('#chatFilesPreviewContainer').html('');
+
+            // Clear the message input field
+            messageInputDom.value = '';
+        };
+    });
+    </script>
+
+<a id="downloadLink" style="display: none;"></a>
+<script>
+$('.export_excel_button').click(function () {
+    var url = $(this).data('url');
+    var group_id = $(this).data('group-id');
+   console.log('exporting excel' , group_id);
+   const checkboxes = document.querySelectorAll('.selected_member');
+    const checkedIds = Array.from(checkboxes)
+      .filter(checkbox => checkbox.checked)
+      .map(checkbox => checkbox.id);
+    
+    const link = document.getElementById('downloadLink');
+    link.href = url + '?ids=' + checkedIds;
+    link.download = `group_${group_id}_members.xlsx`;
+
+    // Programmatically click on the link to trigger the download
+    link.click();
+
+    // export table to excel with the checked ids 
+    // hit url
+    
+    
+    
+    
+    console.log(checkedIds);
+});
+</script>
+<script>
+$(document).on("change",'#archivofoto',function(e){
+    const files = Array.from(e.target.files);
+    const file = files[0];
+    const id = uuid();
+    selectedFiles = [{id,file}];
+    console.log(file,selectedFiles,'--f');
+    const previewNode = $('#chatFilesPreviewContainer');
+    const localUrl = URL.createObjectURL(file);
+
+    $(previewNode).html(`
+    <span data-file-node-id="${id}" class="preview-image-container">
+    <img src="${localUrl}" style="height: inherit" width="auto"/>
+    <span data-file-id="${id}" class="clear-file"> <i class="fa fas fa-trash" style="color:red" ></i> </span>
+    </span>
+    `);
+    });
+    $(document).on('click','.clear-file',function(e){
+        const id = $(this).attr('data-file-id');
+        selectedFiles = selectedFiles.filter((item)=>item.id!==id);
+        console.log(selectedFiles,id,'--f');
+        $('#chatFilesPreviewContainer').html('');
+
+        });
+    </script>
+{% include 'includes/admin/footer.html' %}

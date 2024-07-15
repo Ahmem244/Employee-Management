@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Announcements</title>
+    <link rel="stylesheet" href="../staticfiles/announcements_manager.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<div class="container">
+    <h2>Announcements Management</h2>
+    
+    <!-- Button to Trigger New Announcement Form -->
+    <button id="new-announcement-btn" onclick="toggleAnnouncementForm()">Post New Announcement</button>
+    
+    <!-- New Announcement Form (Hidden Initially) -->
+    <div id="announcement-form" style="display: none;">
+        <h3>New Announcement</h3>
+        <form>
+            <label for="announcement-title">Title:</label>
+            <input type="text" id="announcement-title" name="announcement-title" required>
+            
+            <label for="announcement-content">Content:</label>
+            <textarea id="announcement-content" name="announcement-content" required></textarea>
+            
+            <button type="submit">Post Announcement</button>
+        </form>
+    </div>
+    
+    <!-- List of Previous Announcements -->
+    <div id="previous-announcements">
+        <h3>Previous Announcements</h3>
+        <ul>
+            <!-- Example Announcement -->
+            <li>
+                <h4>Announcement Title</h4>
+                <p>Announcement content goes here. This is a brief description of the announcement...</p>
+                <button onclick="editAnnouncement()">Edit</button>
+            </li>
+            <!-- Additional announcements can be listed here -->
+        </ul>
+    </div>
+</div>
+
+<script>
+    function toggleAnnouncementForm() {
+        var form = document.getElementById("announcement-form");
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+
+    function editAnnouncement() {
+        // Implement the functionality to edit an announcement.
+        // This could involve displaying a pre-filled form with the announcement's current details, allowing for updates.
+    }
+</script>
+
+</body>
+</html>

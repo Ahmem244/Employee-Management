@@ -1,0 +1,2228 @@
+{% load static %}
+{% include 'includes/admin/header.html' %}
+<script src="{% static 'js/script.js' %}"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+.no-pointer-events{
+pointer-events: none;
+}
+</style>
+{% include 'includes/admin/nav.html' %}
+<div class="sidebar">
+    {% include 'includes/admin/sidebar.html' %}
+</div>
+<div class="main">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 col-lg-10 col-md-8 col-sm-8 col-8 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Gestión de Cursos
+                    </h1>
+                </div>
+                <div
+                        class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4 d-flex align-items-center justify-content-end">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn-action dropdownMenuLink font-family-Inter-Regular"
+                           href="#" role="button" id="dropdownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            Acción <i class="fas fa-chevron-down"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right"
+                             aria-labelledby="dropdownMenuLink">
+                             <a class="dropdown-item texto-1 font-family-Inter-Regular editcoursebtn"
+                                                           href="#" data-toggle="modal" data-target="#editcourse"
+                                                           data-url="{% url 'update_course' id=course.id %}">Editar</a>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                            <div class="box-white">
+                                <div class="box-perfil text-center">
+                                    {% if course.cover_image %}
+                                        <img src="{{ course.cover_image.url }}" alt="curso">
+                                    {% else %}
+                                        <img src="{% static 'img/cursos.png' %}" alt="curso">
+                                    {% endif %}
+                                    <h3 class="font-family-Inter-Medium">{{ course.name }}</h3>
+                                </div>
+                                <div class="" id="datoss">
+                                    <div class="box-cursos">
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.module_set.count }}</strong>
+                                            <p class="font-family-Inter-Regular">Modulos</p>
+                                        </div>
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.total_lessons }}</strong>
+                                            <p class="font-family-Inter-Regular">Lecciones</p>
+                                        </div>
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.total_evaluations|length }}</strong>
+                                            <p class="font-family-Inter-Regular">Evaluaciones</p>
+                                        </div>
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.groups.count }}</strong>
+                                            <p class="font-family-Inter-Regular">G. Afiliados</p>
+                                        </div>
+                                    </div>
+                                    <div class="box-lista">
+                                        <div>
+                                            <p class="font-family-Inter-Regular">ID de curso</p>
+                                            <h4 class="font-family-Inter-Medium">C-{{ course.id }}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="box-lista">
+                                        <div>
+                                            <p class="font-family-Inter-Regular">Tipo</p>
+                                            <h4 class="font-family-Inter-Medium">{{ course.course_type }}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="box-lista">
+                                        <div>
+                                            <p class="font-family-Inter-Regular">Fecha creación</p>
+                                            <h4 class="font-family-Inter-Medium">{{ course.created_at }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="d-none" id="contenido">
+                                    <div class="box-cursos">
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.module_set.count }}</strong>
+                                            <p class="font-family-Inter-Regular">Modulos</p>
+                                        </div>
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.total_lessons }}</strong>
+                                            <p class="font-family-Inter-Regular">Lecciones</p>
+                                        </div>
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.total_evaluations|length }}</strong>
+                                            <p class="font-family-Inter-Regular">Evaluaciones</p>
+                                        </div>
+                                        <div class="columna">
+                                            <strong class="font-family-Inter-SemiBold">{{ course.groups.count }}</strong>
+                                            <p class="font-family-Inter-Regular">G. Afiliados</p>
+                                        </div>
+                                    </div>
+                                    <div class="box-lista">
+                                        <div>
+                                            <p class="font-family-Inter-Regular">ID de curso</p>
+                                            <h4 class="font-family-Inter-Medium">C-{{ course.id }}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="box-lista">
+                                        <div>
+                                            <p class="font-family-Inter-Regular">Tipo</p>
+                                            <h4 class="font-family-Inter-Medium">{{ course.course_type }}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="box-lista">
+                                        <div>
+                                            <p class="font-family-Inter-Regular">Fecha creación</p>
+                                            <h4 class="font-family-Inter-Medium">{{ course.created_at }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+{#                                <div class="d-none" id="contenido">#}
+{#                                    <div class="box-cursos">#}
+{#                                        <div class="columna w-100">#}
+{#                                            <strong class="font-family-Inter-SemiBold">#}
+{#                                                {{ course.start_date }}#}
+{#                                            </strong>#}
+{#                                            <p class="font-family-Inter-Regular">Inicia</p>#}
+{#                                        </div>#}
+{#                                        <div class="columna w-100">#}
+{#                                            <strong class="font-family-Inter-SemiBold">#}
+{#                                            {{ course.end_date }}   #}
+{#                                            </strong>#}
+{#                                            <p class="font-family-Inter-Regular">#}
+{#                                                Finaliza#}
+{#                                            </p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="box-lista">#}
+{#                                        <div>#}
+{#                                            <p class="font-family-Inter-Regular">ID de curso</p>#}
+{#                                            <h4 class="font-family-Inter-Medium">{{ course.id }}</h4>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="box-lista">#}
+{#                                        <div>#}
+{#                                            <p class="font-family-Inter-Regular">Tipo</p>#}
+{#                                            <h4 class="font-family-Inter-Medium">{{ course.course_type }}</h4>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="box-lista">#}
+{#                                        <div>#}
+{#                                            <p class="font-family-Inter-Regular">Estudiantes</p>#}
+{#                                            <h4 class="font-family-Inter-Medium">{{ course.total_students }}</h4>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="box-lista">#}
+{#                                        <div>#}
+{#                                            <p class="font-family-Inter-Regular">Fecha creación</p>#}
+{#                                            <h4 class="font-family-Inter-Medium">{{ course.created_at }}</h4>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills font-family-Inter-Medium lista-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#datos"
+                                       id="boton1">Detalles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#grupos"
+                                       id="boton2">Contenido</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#cursos" id="boton3">Grupos
+                                        Afiliados</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="datos" class="tab-pane active"><br>
+                                    <div class="box-white mb-4">
+                                        <h5 class="font-family-Inter-SemiBold">Detalles</h5>
+                                        <table class="table table-borderless font-family-Inter-Regular">
+                                            <tbody>
+                                            <tr>
+                                                <td>ID de curso</td>
+                                                <td>C-{{ course.id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nombres</td>
+                                                <td>{{ course.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tipo</td>
+                                                <td>{{ course.course_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Enlace</td>
+                                                {% if course.course_type == 'live' %}
+                                                    <td>
+                                                        <a href="{{ course.live_link }}"
+                                                           target="_blank"
+                                                           class="text-blue font-family-Inter-Medium">
+                                                            {{ course.live_link }}
+                                                        </a>
+                                                    </td>
+                                                {% else %}
+                                                    <td>
+                                                        <a href="{{ course.recorded_link }}"
+                                                           target="_blank"
+                                                           class="text-blue font-family-Inter-Medium">
+                                                            {{ course.recorded_link }}
+                                                        </a>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <td>Fecha de creación</td>
+                                                <td>{{ course.created_at }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="row carga-img">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <p class="fz-12 font-family-Inter-Regular">Imagen de
+                                                        Previsualización</p>
+                                                    <!-- Input file oculto -->
+                                                    <input type="file" id="inputImagen" accept="image/*"
+                                                           style="display: none;">
+                                                    <div id="vistaPrevias">
+                                                    {% if course.preview_image %}
+                                                            <img src="{{ course.preview_image.url }}" alt="curso" width="286px" height="167px">
+                                                        {% else %}
+                                                            <img src="{% static "img/560x328.png" %}" alt="curso">
+                                                        {% endif %}
+</div>
+                                                    <!-- Botón visible -->
+{#                                                    <a href="javascript:void(0)" id="btnCargarImagen"#}
+{#                                                       class="btn-gris font-family-Inter-Medium btn-border d-inline-block mt-3">#}
+{#                                                        Cargar Imagen#}
+{#                                                    </a>#}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <p class="fz-12 font-family-Inter-Regular">Imagen de
+                                                        Previsualización</p>
+                                                    <!-- Input file oculto -->
+                                                    <input type="file" id="inputImagen1" accept="image/*"
+                                                           style="display: none;">
+                                                    <div id="vistaPrevia1s">
+                                                    {% if course.cover_image %}
+                                                            <img src="{{ course.cover_image.url }}" alt="curso" width="533px" height="157px">
+                                                        {% else %}
+                                                            <img src="{% static "img/1072x312.png" %}" alt="curso">
+                                                        {% endif %}
+</div>
+                                                    <!-- Botón visible para cargar la imagen -->
+{#                                                    <a href="javascript:void(0)" id="btnCargarImagen1"#}
+{#                                                       class="btn-gris font-family-Inter-Medium btn-border d-inline-block mt-3">#}
+{#                                                        Cargar Imagen#}
+{#                                                    </a>#}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="grupos" class="tab-pane fade"><br>
+                                    <div class="box-border">
+                                        <div class="header pb-0">
+                                            <h4 class="font-family-Inter-SemiBold mb-0">Contenido</h4>
+                                        </div>
+                                    </div>
+                                    <div class="box-white">
+                                        <div id="accordion"  class="accordion content-accordion">
+                                            {% for module in course.module_set.all %}
+
+                                                <div data-module-id="{{ module.id }}" class="group position-relative" data-section-id="1">
+                                                    <h3 class="font-family-Inter-SemiBold">
+                                                        <i class="fal fa-arrows"></i>
+                                                        <span>{{ module.title }}</span>
+                                                    </h3>
+                                                    <div>
+                                                        <div class="sortable">
+                                                            <ul data-module-id="{{ module.id }}" data-list-id="1" class="sortable">
+                                                                {% for content in module.module_content %}
+
+                                                                    <li data-item-id="1"
+                                                                        data-content-node-id="{{ content.content.id }}"
+                                                                        class="font-family-Inter-SemiBold">
+                                                            <span class=" draggable"><i
+                                                                    class=" fal fa-arrows"></i></span>
+                                                                        {{ content.content.title }}
+                                                                        <strong class="float-right ">
+                                                                            <a href="#" data-toggle="modal"
+                                                                               data-target="#{{ content.type }}model"
+                                                                               data-module="{{ content.type }}"
+                                                                               data-url="{% url 'update_content' model_name=content.type id=content.content.id %}"
+                                                                               class="editar mr-3 update_content"><i
+                                                                                    class="fas fa-pen"></i></a>
+                                                                            <a data-content-id="{{ content.content.id }}"
+                                                                            data-module-id="{{ module.id }}"
+                                                                            href="#"
+                                                                            data-del-url="{% url 'delete_content' model_name=content.type id=content.content.id %}"
+                                                                               class="eliminar del-content-item"><i
+                                                                                    class="fas fa-trash"></i></a>
+                                                                        </strong>
+                                                                    </li>
+                                                                {% endfor %}
+
+                                                            </ul>
+                                                            <div class="agregar mt-3">
+                                                                <p class="font-family-Inter-Regular fz-12">Agregar:</p>
+                                                                <ul class="font-family-Inter-Medium">
+                                                                    <li><a href="#" data-toggle="modal"
+                                                                            onclick="setSelectedModuleId({{ module.id }})"
+                                                                           data-module="material"
+                                                                           data-id="{{ module.id }}"
+                                                                           class="add-content"
+                                                                           data-target="#Material">+Material</a></li>
+                                                                    <li><a href="#" data-toggle="modal"
+                                                                            onclick="setSelectedModuleId({{ module.id }})"
+                                                                           data-module="lesson"
+                                                                           data-id="{{ module.id }}"
+                                                                           class="add-content"
+                                                                           data-target="#Leccion">+Lección</a></li>
+                                                                    <li><a href="#" data-toggle="modal"
+                                                                           data-module="task"
+                                                                           data-id="{{ module.id }}"
+                                                                           class="add-content"
+                                                                           data-target="#Tarea">+Tarea</a></li>
+                                                                    <li><a href="#" data-toggle="modal"
+                                                                           data-module="evaluation"
+                                                                           data-id="{{ module.id }}"
+                                                                           class="add-content"
+                                                                           data-target="#Evaluacion">+Evaluación</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="eventos">
+                                                        <a href="#" data-toggle="modal" data-target="#editmodulemodal"
+                                                           class="editar editmodulebtn"
+                                                           data-url="{% url 'update_module' id=module.id %}"><i
+                                                                class="fas fa-pen"></i></a>
+                                                        <a href="#" data-module-id="{{ module.id }}" data-del-url="{% url 'delete_module' id=module.id %}"
+                                                           class="eliminar delete-content-module"><i class="fas fa-trash"></i></a>
+                                                    </div>
+                                                </div>
+
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                    <div class="box-border">
+                                        <div class="header">
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#ModuloTitulo"
+                                               class="btn btn-border font-family-Inter-Medium fz-14 d-inline-block">
+                                                +Agregar Módulo
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="cursos" class="tab-pane fade"><br>
+                                    <div class="box-border">
+                                        <div class="header">
+                                            <h4 class="font-family-Inter-SemiBold mb-0">Grupos</h4>
+                                        </div>
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                            <tr class="font-family-Outfit-SemiBold">
+                                                <th>GRUPO</th>
+                                                <th>INSTRUCTOR</th>
+                                                <th>MIEMBROS</th>
+                                                <th>DETALLES</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for group in course.groups %}
+                                                <tr>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        {{ group.group_id }}
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">{{ group.instructor }}</td>
+                                                    </td>
+                                                    <td class="font-family-Inter-Medium texto-0">{{ group.members.count }}</td>
+                                                    <td class="font-family-Inter-Medium texto-0">
+                                                        <a href="{% url 'group_detail' id=group.id %}">Ver detalles</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<!-- Modal modulo titulo -->
+<div class="modal fade" id="ModuloTitulo" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Módulo</h5>
+                <button type="button" class="close ModuloTitulo_close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {#action="{% url 'create_module' id=course.id %}"#}
+            <form data-course-id="{{ course.id }}" id="addContentForm" class="form-estado add_module_form" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="addContentTitle" class="d-block font-family-Inter-Regular">
+                            Nombre de Lección 
+                        </label>
+                        <input type="text" name="title" id="addContentTitle" placeholder="Ejemplo de Nombre de Lección 1"
+                        required  class="font-family-Inter-Medium">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="addContentBtn" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editmodulemodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Módulo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="editmoduletarget"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="editcourse" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document" id="editCourseFormTarget">
+
+    </div>
+</div>
+
+<!-- Modal Material -->
+<div class="modal fade" id="Material" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Material</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addMaterialForm" class="form-estado" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="tituloMaterial" class="d-block font-family-Inter-Regular">Nombre de
+                            Material</label>
+                        <input type="text" name="title" required id="tituloMaterial"
+                               placeholder="Nombre de Material" class="font-family-Inter-Medium">
+                    </div>
+
+                    <input name="module_id" id="material_id" hidden>
+                    <input name="model_name" value="studymaterial" hidden>
+                    <div class="form-group">
+                        <label class="font-family-Inter-Medium fz-12">Archivos</label>
+                        <!-- Lista para mostrar archivos cargados con botones de eliminación -->
+                        <ul class="listaArchivos"></ul>
+
+                        <!-- Botón visible para cargar archivos -->
+                        <a href="javascript:void(0)"
+                           class="btnCargarArchivos d-inline-block btn-carga font-family-Inter-Medium mt-3">
+                            +Adjuntar Archivos
+                        </a>
+
+                        <!-- Input file oculto -->
+                        <input id="materialFileInput" class="inputArchivos" type="file" accept=".pdf" multiple style="display: none;"
+                               name="file">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="studymaterialmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Material</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="targetModulestudymaterial"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Leccion -->
+<div class="modal fade" id="Leccion" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Lección</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="addLessonForm" class="form-estado" method="post">
+
+                {% csrf_token %}
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="nombreLeccion" class="d-block font-family-Inter-Regular">Nombre de
+                            Lección</label>
+                        <input type="text" name="name" id="nombreLeccion" required
+                               placeholder="Ejemplo de Nombre de Lección 1" class="font-family-Inter-Medium">
+                    </div>
+                    <input name="module_id" id="lesson_id" hidden>
+                    <input name="model_name" value="lesson" hidden>
+
+
+                    <div class="form-group">
+                        <label for="urlVideo" class="d-block font-family-Inter-Regular">URL de video</label>
+                        <input required type="text" name="url" id="urlVideo" placeholder="www.ejemplo de URL del video"
+                               class="font-family-Inter-Medium" {% if course.course_type == 'live' %} disabled{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label class="d-block font-family-Inter-Regular">Tiempo de reproducción de vídeo</label>
+                        <div id="reloj">
+                            <div class="w-100">
+                                <div class="cuadro-reloj">
+                                    <button type="button" id="menosHoras"><i class="fas fa-minus"></i></button>
+                                    <div id="horas" class="tiempo font-family-Inter-SemiBold">00</div>
+                                    <input id="hours" name="hours" hidden value="00">
+                                    <button type="button" id="masHoras"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <p class="w-100 d-block font-family-Inter-Regular">Horas</p>
+                            </div>
+                            <div class="w-100">
+                                <div class="cuadro-reloj">
+                                    <button type="button" id="menosMinutos"><i class="fas fa-minus"></i></button>
+                                    <div id="minutos" class="tiempo font-family-Inter-SemiBold">00</div>
+                                    <input id="minutes" name="minutes" hidden value="00">
+                                    <button type="button" id="masMinutos"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <p class="w-100 d-block font-family-Inter-Regular">Minutos</p>
+                            </div>
+                            <div class="w-100">
+                                <div class="cuadro-reloj">
+                                    <button type="button" id="menosSegundos"><i class="fas fa-minus"></i></button>
+                                    <div id="segundos" class="tiempo font-family-Inter-SemiBold">00</div>
+                                    <input id="seconds" name="seconds" hidden value="00">
+                                    <button type="button" id="masSegundos"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <p class="w-100 d-block font-family-Inter-Regular">Segundos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="lessonmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Lección</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+             <div id="targetModulelesson"></div>
+            
+        </div>
+    </div>
+</div>
+<!-- Modal Tarea -->
+<div class="modal fade" id="Tarea" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Tarea</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-ath-form">
+                            <div class="form-align-box">
+                                <div class="wizard wizard-task">
+                                    <div class="wizard-inner">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation">
+                                                <a href="#step1" class="active" data-toggle="tab" id="addTaskTab1"
+                                                   aria-controls="step1" role="tab" aria-expanded="true"
+                                                   data-step="1">
+                                                    <span class="round-tab font-family-Inter-Medium">1. Selecciona un tipo</span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#step2" class="disabled" data-toggle="tab" id="addTaskTab2"
+                                                   aria-controls="step2" role="tab" aria-expanded="false"
+                                                   data-step="2">
+                                                    <span class="round-tab font-family-Inter-Medium">2. Crea un título</span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#step3" class="disabled" data-toggle="tab" id="addTaskTab3"
+                                                   aria-controls="step3" role="tab" data-step="3">
+                                                    <span class="round-tab font-family-Inter-Medium">3. Preguntas y respuestas</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+
+
+                                    <form role="form" action="{% url 'create_content' %}" class="register-wizard-box" method="post">
+                                        {% csrf_token %}
+
+                                        <input name="module_id" id="task_id" hidden>
+                                         <input name="model_name" value="task" hidden>
+
+                                        <div class="tab-content" id="main_form">
+                                            <div class="tab-pane active" role="tabpanel" id="step1">
+                                                <div class="form-input-steps tipo-tareas">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="font-family-Inter-Regular fz-14">Ejemplo de
+                                                                texto descriptivo para este tipo de tarea</p>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <input type="radio" id="cuestionario" value="questionnaire"
+                                                                       name="task_type" checked />
+                                                                <label for="cuestionario">
+                                                                    <div class="vista-tarea">
+                                                                        <object data="{% static 'img/cuestionario.svg' %}"
+                                                                                width="32" height="32"
+                                                                                type="image/svg+xml"></object>
+                                                                        <div class="vista-contenido">
+                                                                            <h3 class="font-family-Inter-SemiBold fz-16">
+                                                                                Cuestionario</h3>
+                                                                            <p class="font-family-Inter-Regular fz-14">
+                                                                                Ejemplo de texto descriptivo para
+                                                                                este tipo de tarea
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <input type="radio" id="crucigrama" value="crossword"
+                                                                       name="task_type"/>
+                                                                <label for="crucigrama">
+                                                                    <div class="vista-tarea">
+                                                                        <object data="{% static 'img/crucigrama.svg' %}"
+                                                                                width="32" height="32"
+                                                                                type="image/svg+xml"></object>
+                                                                        <div class="vista-contenido">
+                                                                            <h3 class="font-family-Inter-SemiBold fz-16">
+                                                                                Crucigrama</h3>
+                                                                            <p class="font-family-Inter-Regular fz-14">
+                                                                                Ejemplo de texto descriptivo para
+                                                                                este tipo de tarea
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <input type="radio" id="unir" name="task_type" value="link_with_lines"/>
+                                                                <label for="unir">
+                                                                    <div class="vista-tarea">
+                                                                        <object data="{% static 'img/tarea-linea.svg' %}"
+                                                                                width="32" height="32"
+                                                                                type="image/svg+xml"></object>
+                                                                        <div class="vista-contenido">
+                                                                            <h3 class="font-family-Inter-SemiBold fz-16">
+                                                                                Unir
+                                                                                con Líneas</h3>
+                                                                            <p class="font-family-Inter-Regular fz-14">
+                                                                                Ejemplo de texto descriptivo para
+                                                                                este tipo de tarea
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                    <li>
+                                                        <button type="button"
+                                                                class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                            Anterior
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button type="button"
+                                                                class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                            Siguiente
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {# step 2 #}
+                                            <div class="tab-pane" role="tabpanel" id="step2">
+                                                <div class="form-input-steps">
+                                                    <div class="form-estado">
+                                                        <div class="form-group">
+                                                            <label for="nombreTarea"
+                                                                   class="d-block font-family-Inter-Regular">
+                                                                Nombre de Tarea
+                                                            </label>
+                                                            <input type="text" name="name" id="nombreTarea"
+                                                                   placeholder="Ejemplo de Nombre" required
+                                                                   class="font-family-Inter-Medium">
+                                                                   <label data-error-for="nombreTarea" class="d-none text-danger font-family-Inter-Regular">Please fill out this field!</label>
+
+                                                        </div>
+                                                        <p class="font-family-Inter-Regular fz-14 text-gris mb-5">
+                                                            Saldrá como el título de la tarea en el contenido del
+                                                            curso.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                    <li>
+                                                        <button type="button"
+                                                                class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                            Anterior
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button type="button" id="addTaskStep2SubmitBtn" disabled
+                                                                class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                            Siguiente
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {# step 3 #}
+                                            <div class="tab-pane" role="tabpanel" id="step3">
+                                                <div class="form-input-steps">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="font-family-Inter-Regular fz-14">
+                                                                Ejemplo de texto descriptivo para este tipo de tarea
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="col-md-12 mb-5">
+                                                            <div class="sortable p-0 mb-4">
+                                                                <ul data-list-id="300" class="sortable"
+                                                                    id="preguntas-lista">
+                                                                    <li data-item-id="300"
+                                                                        class="font-family-Inter-SemiBold">
+                                                                            <span class="draggable"><i
+                                                                                    class="fal fa-arrows"></i></span>
+                                                                        Ejemplo de pregunta 1
+                                                                        <strong class="float-right botones">
+                                                                            <a href="#" class="editar mr-1"><i
+                                                                                    class="fas fa-pen"></i></a>
+                                                                            <a href="#" class="eliminar"><i
+                                                                                    class="fas fa-trash"></i></a>
+                                                                        </strong>
+                                                                    </li>
+                                                                    <div class="editar-pregunta"
+                                                                         style="display: none;">
+                                                                        <div class="form-estado">
+                                                                            <div class="form-group">
+                                                                                <label for="titulodepregunto"
+                                                                                       class="d-block font-family-Inter-Regular">
+                                                                                    Escribe la pregunta
+                                                                                </label>
+                                                                                <input type="text"
+                                                                                       name="question"
+                                                                                       id="titulodepregunto"
+                                                                                       placeholder="Ejemplo de Pregunta"
+                                                                                       class="font-family-Inter-Medium"
+                                                                                       required>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label for="repuesta"
+                                                                                       class="d-block font-family-Inter-Regular">
+                                                                                    Respuesta correcta
+                                                                                </label>
+                                                                                <input type="text" name="correct_answer"
+                                                                                       id="repuesta"
+                                                                                       placeholder="Ejemplo de respuesta a Pregunta"
+                                                                                       class="font-family-Inter-Medium"
+                                                                                       required>
+                                                                            </div>
+                                                                            <div class="form-group">
+{#                                                                                <button type="button"#}
+{#                                                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">#}
+{#                                                                                    Guardar Cambios#}
+{#                                                                                </button>#}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <!-- Agrega nuevos elementos aquí -->
+
+                                                                </ul>
+                                                            </div>
+                                                            <a  id="agregar-pregunta"
+                                                               class="btn btn-border font-family-Inter-Medium d-inline-block fz-14">
+                                                                +Agregar Pregunta
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                    <li>
+                                                        <button type="button"
+                                                                class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                            Anterior
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button type="submit"
+                                                                class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                            Guardar Cambios
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </form>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+   <div class="modal fade" id="taskmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Tarea</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="targetModuletask"></div>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+
+<!-- Modal Evaluación -->
+<div class="modal fade" id="Evaluacion" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Evaluación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-ath-form">
+                            <div class="form-align-box">
+                                <div class="wizard wizard-evaluation">
+                                    <div class="wizard-inner">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation">
+                                                <a href="#step4" class="active" data-toggle="tab" id="addEvalTab1"
+                                                   aria-controls="step4" role="tab" aria-expanded="true"
+                                                   data-step="4">
+                                                    <span class="round-tab font-family-Inter-Medium">1. Selecciona un tipo</span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#step5" class="disabled" data-toggle="tab" id="addEvalTab2"
+                                                   aria-controls="step5" role="tab" aria-expanded="false"
+                                                   data-step="5">
+                                                    <span class="round-tab font-family-Inter-Medium">2. Crea un título</span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#step6" class="disabled no-pointer-events" data-toggle="tab" id="addEvalTab3"
+                                                   aria-controls="step6" role="tab" data-step="6">
+                                                    <span class="round-tab font-family-Inter-Medium">3. Preguntas y respuestas</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                        <form role="form" action="{% url 'create_content' %}" class="register-wizard-box" method="post">
+                                            {% csrf_token %}
+    
+                                        <input name="module_id" id="evaluation_id" hidden>
+                                        <input name="model_name" value="evaluation" hidden>
+                                            <div class="tab-content" id="main_form">
+                                                {# step 1 #}
+                                                <div class="tab-pane active" role="tabpanel" id="step4">
+                                                    <div class="form-input-steps tipo-tareas">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="font-family-Inter-Regular fz-14">Ejemplo de
+                                                                    texto descriptivo para este tipo de tarea</p>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="cuestionario1" value="questionnaire" checked
+                                                                           name="evaluation_type"/>
+                                                                    <label for="cuestionario1" class="add-eval-step-3-enable-trigger">
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/cuestionario.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Cuestionario</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="ensayo" value="rehearsal"
+                                                                           name="evaluation_type"/>
+                                                                    <label for="ensayo" class="add-eval-step-3-disable-trigger">
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/ensayo.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Ensayo</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" id="addEvalFormStep1Btn"
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Siguiente
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                {# step 2 #}
+                                                <div class="tab-pane" role="tabpanel" id="step5">
+                                                    <div class="form-input-steps">
+                                                        <div class="form-estado">
+                                                            <div class="form-group">
+                                                                <label for="nombreEvaluacion" class="d-block font-family-Inter-Regular">
+                                                                    Nombre de Evaluación
+                                                                </label>
+                                                                <input type="text" name="title" id="nombreEvaluacion" placeholder="Ejemplo de Nombre de Lección 1" class="font-family-Inter-Medium">
+                                                                <label data-error-for="nombreEvaluacion" class="d-none text-danger font-family-Inter-Regular">Please fill out this field!</label>
+
+                                                            </div>
+                                                            <p class="font-family-Inter-Regular fz-14 text-gris mb-5">
+                                                                Saldrá como el título de la evaluación en el contenido del curso.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" id="addEvalStep2SubmitBtn" disabled
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Siguiente
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                {# step 3 #}
+                                                <div class="tab-pane" role="tabpanel" id="step6">
+                                                    <div class="form-input-steps">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                    Ejemplo de texto descriptivo para este tipo de evaluación
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-md-12 mb-5">
+                                                                <div class="sortable p-0 mb-4" id="preguntas-lista-2">
+                                                                    <ul data-list-id="500" class="sortable">
+                                                                        <li data-item-id="500" class="font-family-Inter-SemiBold">
+                                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                                            Ejemplo de pregunta de evaluación 1
+                                                                            <strong class="float-right botones">
+                                                                                <a href="#" class="editar mr-1" id="editar-pregunta-200"><i class="fas fa-pen"></i></a>
+                                                                                <a href="#" class="eliminar" id="eliminar-pregunta-200"><i class="fas fa-trash"></i></a>
+                                                                            </strong>
+                                                                        </li>
+                                                                        <div class="editar-pregunta" style="display: none;" id="editar-pregunta-contenido-200">
+                                                                            <div class="form-estado">
+                                                                                <div class="form-group">
+                                                                                    <label for="titulodepregunto" class="d-block font-family-Inter-Regular">
+                                                                                        Escribe la pregunta
+                                                                                    </label>
+                                                                                    <input type="text" name="question" id="titulodepregunto-200" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label class="d-block font-family-Inter-Regular">
+                                                                                        Punto(s) por esta respuesta
+                                                                                    </label>
+                                                                                    <div class="cuadro-reloj w-50">
+                                                                                        <!-- Botones para ajustar los puntos -->
+                                                                                        <button type="button" id="menpoints" >
+                                                                                            <i class="fas fa-minus"></i>
+                                                                                        </button>
+                                                                                        <input id="points" name="points" hidden value="0">
+                                                                                        <span id="puntos" class="font-family-Inter-SemiBold">00</span>
+                                                                                        <button type="button" id="maspoints" >
+                                                                                            <i class="fas fa-plus"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                                        Respuesta correcta
+                                                                                    </label>
+                                                                                    <input type="text" name="correct_answer" id="repuesta-200" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                
+                                                                                <div class="form-group">
+                                                                                    <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                                        Resto de alternative
+                                                                                    </label>
+                                                                                    <input type="text" name="alt_answer_1" id="repuesta-201" placeholder="Ejemplo de alternativa a Pregunta 1" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <input type="text" name="alt_answer_2" id="repuesta-202" placeholder="Ejemplo de alternativa a Pregunta 2" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <input type="text" name="alt_answer_3" id="repuesta-203" placeholder="Ejemplo de alternativa a Pregunta 3" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <input type="text" name="alt_answer_4" id="repuesta-204" placeholder="Ejemplo de alternativa a Pregunta 4" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                {% comment %} <div class="form-group">
+                                                                                    <button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                                        Guardar Cambios
+                                                                                    </button>
+                                                                                </div> {% endcomment %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </ul>
+                                                                </div>
+                                                                <a href="#" id="agregar-pregunta-2" class="btn btn-border font-family-Inter-Medium d-inline-block fz-14">
+                                                                    +Agregar Pregunta
+                                                                </a>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="submit"
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Guardar Cambios
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <div class="modal fade" id="evaluationmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Evaluación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="targetModuleevaluation"></div>
+            
+            </div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.2.2/tinymce.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.editmodulebtn').click(function (e) {
+            console.log('clicked,,,,,,,,,,,,h,,,,,,,,,');
+            e.preventDefault();
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    // Do something with the response
+                    //insert html into modal-body
+                    $('#editmoduletarget').html(response)
+
+
+                }
+            });
+        });
+    });
+</script>
+<script>
+
+        // Funciones para ajustar manualmente los puntos
+        function incrementarHoras() {
+            var horas = parseInt($("#puntos").text());
+            horas = (horas + 1) ;
+            actualizarHora('puntos', horas);
+        }
+
+        function decrementarHoras() {
+            var horas = parseInt($("#puntos").text());
+            horas = (horas - 1 + 24) ;
+            actualizarHora('puntos', horas);
+        }
+
+        // Función para actualizar la visualización de horas
+        function actualizarHora(elemento, valor) {
+            $("#" + elemento).text(valor < 10 ? '0' + valor : valor);
+        }
+
+        $(document).ready(function () {
+            var contador = 500;
+
+            $('#agregar-pregunta-2').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-1" id="editar-pregunta-' + contador + '"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar" id="eliminar-pregunta-' + contador + '"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;" id="editar-pregunta-contenido-' + contador + '">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunta" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="question" id="titulodepregunto-' + contador + '" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label class="d-block font-family-Inter-Regular">' +
+                    'Punto(s) por esta respuesta' +
+                    '</label>' +
+                    '<div class="cuadro-reloj w-50">' +
+                    '<button type="button"  onclick="appendeddecrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-minus"></i>' +
+                    '</button>' +
+                    '<input id="append-points' + contador + '" name="points" hidden value="0">' +
+                    '<span id="append-puntos-' + contador + '" class="font-family-Inter-SemiBold">00</span>' +
+                    '<button type="button"  onclick="appendedincrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-plus"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="correct_answer" id="repuesta-' + contador + '" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Resto de alternative'+
+                    '</label>'+
+                    '<input type="text" name="alt_answer_1" id="alt_1' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 1" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="alt_answer_2" id="alt_2' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 2" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="alt_answer_3" id="alt_3' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 3" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="alt_answer_4" id="alt_4' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 4" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    {% comment %} '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' +
+                    '</div>' + {% endcomment %}
+                    '</div>' +
+                    '</div>';
+
+                $('#preguntas-lista-2 ul').append(nuevaPregunta);
+            });
+
+            $('#preguntas-lista-2').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#preguntas-lista-2').on('click', '.editar', function () {
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#preguntas-lista-2 li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                /*var iconos = $(this).find('i');
+                iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');*/
+            });
+        });
+
+
+        $(document).ready(function () {
+            var contador = 500;
+
+            $('#edit-agregar-pregunta-2').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-1" id="edit-editar-pregunta-' + contador + '"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar" id="eliminar-pregunta-' + contador + '"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;" id="edit-editar-pregunta-contenido-' + contador + '">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunta" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="titulodepregunto" id="titulodepregunto-' + contador + '" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label class="d-block font-family-Inter-Regular">' +
+                    'Punto(s) por esta respuesta' +
+                    '</label>' +
+                    '<div class="cuadro-reloj w-50">' +
+                    '<button type="button" onclick="decrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-minus"></i>' +
+                    '</button>' +
+                    '<span id="puntos-' + contador + '" class="font-family-Inter-SemiBold">00</span>' +
+                    '<button type="button" onclick="incrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-plus"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="repuesta" id="repuesta-' + contador + '" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#edit-preguntas-lista-2 ul').append(nuevaPregunta);
+            });
+
+            $('#edit-preguntas-lista-2').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#edit-preguntas-lista-2').on('click', '.editar', function () {
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#edit-preguntas-lista-2 li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                /*var iconos = $(this).find('i');
+                iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');*/
+            });
+        });
+
+
+
+        function incrementarPuntos(contador) {
+            // Obtener el elemento span que muestra los puntos
+            var puntosElement = $('#puntos-' + contador);
+
+            // Obtener el valor actual de los puntos
+            var puntos = parseInt(puntosElement.text());
+
+            // Incrementar los puntos
+            puntos++;
+
+            // Actualizar el valor mostrado
+            puntosElement.text(puntos < 10 ? '0' + puntos : puntos);
+        }
+
+        function decrementarPuntos(contador) {
+            // Obtener el elemento span que muestra los puntos
+            var puntosElement = $('#puntos-' + contador);
+
+            // Obtener el valor actual de los puntos
+            var puntos = parseInt(puntosElement.text());
+
+            // Decrementar los puntos si son mayores que cero
+            if (puntos > 0) {
+                puntos--;
+
+                // Actualizar el valor mostrado
+                puntosElement.text(puntos < 10 ? '0' + puntos : puntos);
+            }
+        }
+
+
+        $(document).ready(function () {
+            var contador = 301;
+
+            $('#agregar-pregunta').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-3"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunto" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="question" id="titulodepregunto" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="correct_answer" id="repuesta" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#preguntas-lista').append(nuevaPregunta);
+            });
+
+            $('#preguntas-lista').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#preguntas-lista').on('click', '.editar', function () {
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#preguntas-lista li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                // var iconos = $(this).find('i');
+                // iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón, activar el input file
+            $('#btnCargarImagen').click(function () {
+                $('#inputImagen').click();
+            });
+
+            // Al cargar la página, mostrar una imagen por defecto
+            mostrarVistaPreviaDefault();
+
+            // Cuando se selecciona una nueva imagen, mostrar su vista previa
+            $('#inputImagen').change(function () {
+                mostrarVistaPrevia(this);
+            });
+
+            function mostrarVistaPrevia(input) {
+                if (input.files && input.files[0]) {
+                    var lector = new FileReader();
+
+                    lector.onload = function (e) {
+                        $('#vistaPrevia').html('<img src="' + e.target.result + '" alt="Vista Previa" class="w-100">');
+                    };
+
+                    lector.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function mostrarVistaPreviaDefault() {
+                // Ruta de la imagen por defecto
+                {% if course.preview_image %}
+                var imagenPorDefecto = '{{ course.preview_image.url }}';
+                {% else %}
+                var imagenPorDefecto = '{% static "img/560x328.png" %}';
+                {% endif %}
+
+                // Mostrar la vista previa de la imagen por defecto
+                $('#vistaPrevia').html('<img src="' + imagenPorDefecto + '" alt="Vista Previa" width="286px" height="167px" >');
+            }
+        });
+
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón, activar el input file
+            $('#btnCargarImagen1').click(function () {
+                $('#inputImagen1').click();
+            });
+
+            // Al cargar la página, mostrar una imagen por defecto
+            mostrarVistaPreviaDefault1();
+
+            // Cuando se selecciona una nueva imagen, mostrar su vista previa y validar las dimensiones
+            $('#inputImagen1').change(function () {
+                var archivo = this.files[0];
+
+                // Validar dimensiones mínimas
+                if (archivo && archivo.type.startsWith('image/')) {
+                    var img = new Image();
+                    img.onload = function () {
+                        if (img.width >= 1072 && img.height >= 312) {
+                            mostrarVistaPrevia1(archivo);
+                        } else {
+                            alert('La imagen debe tener dimensiones mínimas de 1072x312.');
+                            // Restablecer el valor del input file para evitar la carga de la imagen no válida
+                            $('#inputImagen1').val('');
+                        }
+                    };
+                    img.src = URL.createObjectURL(archivo);
+                }
+            });
+
+            function mostrarVistaPrevia1(archivo) {
+                var lector = new FileReader();
+                lector.onload = function (e) {
+                    $('#vistaPrevia1').html('<img src="' + e.target.result + '" alt="Vista Previa" class="w-100">');
+                };
+                lector.readAsDataURL(archivo);
+            }
+
+            function mostrarVistaPreviaDefault1() {
+                // Ruta de la imagen por defecto
+                {% if course.cover_image %}
+                var imagenPorDefecto = '{{ course.cover_image.url }}';
+                {% else %}
+                var imagenPorDefecto = '{% static "img/1072x312.png" %}'
+                {% endif %}
+
+                // Mostrar la vista previa de la imagen por defecto
+                $('#vistaPrevia1').html('<img src="' + imagenPorDefecto + '" alt="Vista Previa" width="533px" height="157px">');
+            }
+        });
+
+        $('#boton1').click(function () {
+            $('#datoss').removeClass('d-none');
+            $('#contenido').addClass('d-none');
+        });
+        $('#boton2').click(function () {
+            $('#contenido').removeClass('d-none');
+            $('#datoss').addClass('d-none');
+        });
+        $('#boton3').click(function () {
+            $('#contenido').removeClass('d-none');
+            $('#datoss').addClass('d-none');
+        });
+
+
+        $(function () {
+            dragula([document.getElementById("left"), document.getElementById("right")], {
+                revertOnSpill: true
+            })
+                .on('drag', function (el) {
+                    // add 'is-moving' class to element being dragged
+                    el.classList.add('is-moving');
+                })
+                .on('dragend', function (el) {
+                    // remove 'is-moving' class from element after dragging has stopped
+                    el.classList.remove('is-moving');
+
+                    // add the 'is-moved' class for 600ms then remove it
+                    window.setTimeout(function () {
+                        el.classList.add('is-moved');
+                        window.setTimeout(function () {
+                            el.classList.remove('is-moved');
+                        }, 600);
+                    }, 100);
+                });
+
+        }());
+
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón, activar el input file
+            $('.btnCargarArchivos').click(function () {
+                $(this).next('.inputArchivos').click();
+            });
+
+            // Función para agregar archivos a la lista
+            function agregarArchivos(archivos, listaArchivos) {
+                // Mostrar cada archivo con un botón de eliminación
+                for (var i = 0; i < archivos.length; i++) {
+                    var archivo = archivos[i];
+                    var listItem = $('<li class="font-family-Inter-Medium">');
+                    listItem.text(archivo.name);
+
+                    // Agregar botón de eliminación con el icono de la papelera
+                    var botonEliminar = $('<button class="btn-borrar">');
+                    botonEliminar.html('<i class="fas fa-trash"></i>');
+                    botonEliminar.click(function () {
+                        listItem.remove();
+                    });
+
+                    listItem.append(botonEliminar);
+                    listaArchivos.append(listItem);
+                }
+
+// Limpiar el valor del input file para permitir la selección del mismo archivo nuevamente
+                $(this).val('');
+            }
+        });
+
+
+        function ajustarTiempo(unidad, operacion) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor + 1) % 60;
+            } else {
+                valor = (valor - 1 + 60) % 60;
+            }
+            $('#' + unidad).text(valor.toString().padStart(2, '0'));
+        }
+
+        function ajustarTiempoinput(unidad, operacion, input) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor) % 60;
+                console.log(valor, 'valor');
+            } else {
+                valor = (valor + 60) % 60;
+                console.log(valor, 'valor');
+            }
+            document.getElementById(input).setAttribute('value', valor.toString().padStart(2, '0'));
+    
+        }
+
+
+        function ajustpointvalue(unidad, operacion) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor + 1) % 100;
+            } else {
+                valor = (valor - 1  + 100) % 100 ;
+            }
+            $('#' + unidad).text(valor.toString().padStart(2, '0'));
+        }
+
+
+        function ajustpointinput(unidad, operacion, input) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor) % 100;
+                console.log(valor, 'valor');
+            } else {
+                valor = (valor + 100) % 100;
+                console.log(valor, 'valor');
+            }
+            document.getElementById(input).setAttribute('value', valor.toString().padStart(2, '0'));
+    
+        }
+    
+        $(document).ready(function () {
+            $('#masHoras').click(function () {
+                ajustarTiempo('horas', '+');
+                ajustarTiempoinput('horas', '+', 'hours');
+            });
+
+            $('#menosHoras').click(function () {
+                ajustarTiempo('horas', '-');
+                ajustarTiempoinput('horas', '-', 'hours');
+            });
+
+            $('#masMinutos').click(function () {
+                ajustarTiempo('minutos', '+');
+                ajustarTiempoinput('minutos', '+', 'minutes');
+            });
+
+            $('#menosMinutos').click(function () {
+                ajustarTiempo('minutos', '-');
+                ajustarTiempoinput('minutos', '-', 'minutes');
+            });
+
+            $('#masSegundos').click(function () {
+                ajustarTiempo('segundos', '+');
+                ajustarTiempoinput('segundos', '+', 'seconds');
+            });
+
+            $('#menosSegundos').click(function () {
+                ajustarTiempo('segundos', '-');
+                ajustarTiempoinput('segundos', '-', 'seconds');
+            });
+
+            $('#maspoints').click(function () {
+                ajustpointvalue('puntos', '+');
+                ajustpointinput('puntos', '+', 'points');
+            });
+
+            $('#menpoints').click(function () {
+                ajustpointvalue('puntos', '-');
+                ajustpointinput('puntos', '-', 'points');
+            });
+        });
+
+        function appendedincrementarPuntos(contador) {
+            ajustpointvalue('append-puntos-' + contador, '+');
+            ajustpointinput('append-puntos-' + contador, '+', 'append-points' + contador );
+        }
+
+        function appendeddecrementarPuntos(contador) {
+            ajustpointvalue('append-puntos-' + contador, '-');
+            ajustpointinput('append-puntos-' + contador, '-', 'append-points'+ contador);
+        }
+
+
+        // ------------register-steps--------------
+        $(document).ready(function () {
+            $('.nav-tabs > li a[title]').tooltip();
+            //Wizard
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var $target = $(e.target);
+                if ($target.hasClass('disabled')) {
+                    return false;
+                }
+
+                // handle with prgressbar
+                var step = $(e.target).data('step');
+                var percent = (parseInt(step) / 4) * 100;
+                $('.progress-bar').css({width: percent + '%'});
+                $('.progress-bar').text('Step ' + step + ' of 4');
+
+            });
+
+            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                var $target = $(e.target);
+                $target.parent().addClass('active');
+            });
+
+            $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
+                var $target = $(e.target);
+                $target.parent().removeClass('active');
+            });
+
+
+            $(".next-step").click(function (e) {
+                var $active = $('.wizard .nav-tabs li a.active');
+                $active.parent().next().children().removeClass('disabled');
+                $active.parent().addClass('done');
+                nextTab($active);
+            });
+
+            $(".prev-step").click(function (e) {
+                var $active = $('.wizard .nav-tabs li a.active');
+                prevTab($active);
+            });
+        });
+
+        function nextTab(elem) {
+            $(elem).parent().next().find('a[data-toggle="tab"]').click();
+        }
+
+        function prevTab(elem) {
+            $(elem).parent().prev().find('a[data-toggle="tab"]').click();
+        }
+
+
+    </script>
+
+
+<script>
+    $('.add-content').on('click', function (event) {
+        var button = $(this); // Button that triggered the modal
+        var Id = button.data('id'); // Extract info from data-* attributes
+        var module = button.data('module'); // Extract info from data-* attributes
+        console.log(Id, 'module id');
+        var input_id = module + '_id';
+        console.log(input_id, 'input id');
+        document.getElementById(input_id).setAttribute('value', Id);
+
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.update_content').click(function (e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            var module = $(this).data('module');
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    // Do something with the response
+                    //insert html into modal-body
+                    var target = 'targetModule' + module;
+                    $(`#${target}`).html(response)
+
+
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+
+    let selectedModuleId = null;
+
+    function setSelectedModuleId(id){
+    console.log(id,'target-module-id');
+    selectedModuleId = id;
+    }
+
+    $(function(){
+
+    const addContentForm = $('#addContentForm');
+
+    $(addContentForm).on('submit',async function(e){
+    
+    e.preventDefault();
+    const contentInput = $('#addContentTitle');
+    const url = "{% url 'create_module' id=course.id %}";
+    const fd = new FormData();
+    fd.append('title',contentInput.val());
+
+    const resp = await fetch(url,{method:"POST",body:fd});
+
+    if(resp.ok) {
+        const html = await  resp.json();
+        $('.content-accordion').append(html);
+        showNotification("Module created Successfully", "", "success", "fa fa-check")
+        $('#ModuloTitulo').modal('hide');
+        $(contentInput).val('');
+        refreshAccordion();
+    }else{
+        showNotification("Failed to Create", "", "error", "fa fa-cross");
+
+    }
+
+});
+
+
+
+    function refreshAccordion (){
+        $('#accordion').accordion('refresh');
+    }
+
+    let materialFiles = [];
+
+
+    function renderFilesUI(files=[], containerEl) {
+                
+                files.forEach((data)=>{
+                const listItem = $('<li class="font-family-Inter-Medium">');
+                listItem.text(data.file.name);
+
+                const delBtn = $(`<button type="button" class="btn-borrar">`);
+                delBtn.html('<i class="fas fa-trash"></i>');
+                delBtn.click(function () {                   
+                    if(containerEl.children().length === 1) {
+                        $('#materialFileInput').val('');
+                    }
+                    listItem.remove();
+                    materialFiles = materialFiles.filter((item)=>item.id!==data.id);
+                });
+
+                listItem.append(delBtn);
+                containerEl.append(listItem);
+                });
+        }
+
+    $('#materialFileInput').on('change',function(e){
+        const files = Array.from(e.target.files).map((file)=>({id:uuid(),file}));
+        renderFilesUI(files,$('.listaArchivos'));
+        files.forEach((item) => {
+            materialFiles.push(item);
+        });
+    });
+
+    
+    {#Content Material#}
+    const materialBtn = $('#addContentMaterialBtn');
+    $(materialBtn).on("click",function(){
+    selectedModuleId = $(this).attr('data-id');
+    });
+
+    $('#Material').on('hide.bs.modal',function (){
+    materialFiles.splice(0);
+    $('.listaArchivos').html('');
+    });
+    
+    $('#addMaterialForm').on('submit',async function(e){
+    e.preventDefault();
+    const url = "{% url 'create_content' %}";
+    const fd = new FormData();
+    const fields = $(this).find('input');
+
+    for (const field of fields) {
+        if(field.name!=='file') {
+            fd.append(field.name,field.value);
+        }
+    };
+
+    materialFiles.forEach((data)=>{
+    fd.append('file',data.file);
+    });
+
+    const resp = await fetch(url,{method:"POST",body:fd});
+
+    if(resp.ok) {
+        materialFiles.splice(0);
+        const html = await  resp.json();
+        const container = $(`ul[data-module-id="${selectedModuleId}"]`);
+        $(container).append(html);
+        showNotification("Material created Successfully", "", "success", "fa fa-check");
+
+        $('#Material').modal('hide');
+            for(const field of fields) {
+                if( ['file','title'].includes(field.name)) {
+                    $(field).val('');
+                }
+            }
+        refreshAccordion();
+    }else{
+        showNotification("Failed to Create", "", "error", "fa fa-cross");
+
+    }
+    
+
+});
+
+    {# delete content module #}
+
+    $(document).on('click','.delete-content-module', function (e) {
+
+    const targetUrl = $(this).attr('data-del-url');
+    const targetItem = $(`li[data-module-id="${$(this).attr('data-module-id')}"]`);
+    targetItem.remove();
+    fetch(targetUrl,{method:'DELETE'}).then((res)=>{
+    if(res.ok) {
+        showNotification("Module deleted Successfully", "", "success", "fa fa-check");
+        }else{
+        showNotification("Failed to Delete", "", "error", "fa fa-cross");
+
+    }
+    refreshAccordion();
+        });
+    });
+
+    $(document).on('click','.del-content-item',async function(e){
+    const targetUrl = $(this).attr('data-del-url');
+    console.log(targetUrl,'--target');
+    const targetItem = $(`li[data-content-node-id="${$(this).attr('data-content-id')}"]`);
+
+
+    const res = await fetch(targetUrl,{method:'DELETE'});
+
+        if(res.ok) {
+        targetItem.remove();
+        showNotification("Deleted Successfully", "", "success", "fa fa-check");
+        }else{
+        showNotification("Failed to Delete", "", "error", "fa fa-cross");
+
+        }
+
+    refreshAccordion();
+    });
+
+    $('#addLessonForm').on('submit',async function(e){
+        e.preventDefault();
+        const url = "{% url 'create_content' %}";
+        const fd = new FormData();
+        const fields = $(this).find('input');
+
+        for(const field of fields) {
+        fd.append(field.name,field.value);
+        }
+            console.log(url,[...fd]);
+
+        const resp = await fetch(url,{method:"POST",body:fd});
+        if(resp.ok) {
+            const html = await resp.json();
+            console.log(html,'--resp');
+            const container = $(`ul[data-module-id="${selectedModuleId}"]`);
+            $(container).append(html);
+            showNotification("Material created Successfully", "", "success", "fa fa-check");
+
+            $('#Leccion').modal('hide');
+            clearFields(fields)
+            refreshAccordion();
+        }else{
+            showNotification("Failed to Create", "", "error", "fa fa-cross");
+        }
+
+        function clearFields(fields){
+            for(const field of fields) {
+                if(['name','module_name','url'].includes(field.name)){
+                $(field).val('');
+                };
+
+                if(['hours','minutes','seconds'].includes(field.name)){
+                $(field).val('00');
+                }
+            }
+
+            const times = $('#segundos,#minutos,#horas');
+
+            $(times).each(function(i,el){
+                $(el).text('00');
+            })
+        }
+
+        });
+
+        {#Task form validation step2#}
+        $('#nombreTarea').on('input',function(e){
+            const errorEl = $('label[data-error-for="nombreTarea"]');
+            if(e.target.value.trim()) {
+            $('#addTaskStep2SubmitBtn').prop('disabled',false);
+            $('#addTaskTab3').removeClass('disabled');
+            errorEl.addClass('d-none');
+            }else{
+            $('#addTaskStep2SubmitBtn').prop('disabled',true);
+            errorEl.removeClass('d-none');
+            $('#addTaskTab3').addClass('disabled');
+        }
+        });
+
+        {# Evaluation form step2 validaiton  #}
+          $('#nombreEvaluacion').on('input',function(e) {
+            const isQuestionnaire = $('#cuestionario1').prop('checked');
+            const errorEl = $('label[data-error-for="nombreEvaluacion"]');
+            if(e.target.value.trim()) {
+            $('#addEvalStep2SubmitBtn').prop('disabled',false);
+            if(isQuestionnaire){
+            $('#addEvalTab3').removeClass('disabled');
+            $('#addEvalTab3').removeClass('no-pointer-events');
+            }
+            errorEl.addClass('d-none');
+            }else{
+            $('#addEvalTab3').addClass('no-pointer-events');
+            $('#addEvalStep2SubmitBtn').prop('disabled',true);
+            errorEl.removeClass('d-none');
+            $('#addEvalTab3').addClass('disabled');
+            }
+        });
+          
+          $('#addEvalStep2SubmitBtn').on('click',function(e){
+            const isQuestionnaire = $('#cuestionario1').prop('checked');
+            const errorEl = $('label[data-error-for="nombreEvaluacion"]');
+            const val = $('#nombreEvaluacion').val()?.trim();
+            const noPointerEventsActive = $('#addEvalTab3').attr('class').includes('no-pointer-events');
+            if(val) {
+            $('#addEvalStep2SubmitBtn').prop('disabled',false);
+            isQuestionnaire && $('#addEvalTab3').removeClass('disabled');
+            errorEl.addClass('d-none');
+            if(noPointerEventsActive ){
+            $('#addEvalTab3').removeClass('no-pointer-events')
+            e.target.click();
+            }
+            }else{
+            $('#addEvalStep2SubmitBtn').prop('disabled',true);
+            $('#addEvalTab3').addClass('no-pointer-events');
+            errorEl.removeClass('d-none');
+            $('#addEvalTab3').addClass('disabled');
+            }
+          });
+
+
+        $('#addEvalFormStep1Btn,#addEvalTab2').on('click',function(){
+
+            const isQuestionnaire = $('#cuestionario1').prop('checked');
+            const step2SubmitBtn = $('#addEvalStep2SubmitBtn')
+            console.log({isQuestionnaire});
+            if(isQuestionnaire) {
+                // enable 3rd step
+                step2SubmitBtn.prop('type','button');
+                step2SubmitBtn.text('Siguiente');
+                $('#addEvalTab3').removeClass('disabled');
+            } else {
+                // disable 3rd step
+                step2SubmitBtn.prop('type','submit');
+                step2SubmitBtn.text('Guardar Cambios');
+                $('#addEvalTab3').addClass('disabled');
+            }
+
+        });
+
+        $('.add-eval-step-3-disable-trigger').on('click',function(){
+            $('#addEvalTab3').addClass('disabled');
+        });
+
+        $('.add-eval-step-3-enable-trigger').on('click',function(){
+            const isStep2ActiveOrDone = $('#addEvalTab2').parent().attr('class').includes('active');
+            if(isStep2ActiveOrDone) {
+            $('#addEvalTab3').removeClass('disabled');
+            }
+        });
+
+});
+    
+
+</script>
+
+
+<!-- Include jQuery library -->
+
+{##}
+{#<script>#}
+{#    $(document).ready(function () {#}
+{#        // Intercept form submission#}
+{#        $('.add_module_form').submit(function (event) {#}
+{#            // Prevent the default form submission#}
+{#            event.preventDefault();#}
+{##}
+{#            // Serialize form data#}
+{#            var formData = $(this).serialize();#}
+{##}
+{#            // Perform AJAX request#}
+{#            $.ajax({#}
+{#                type: 'POST', // Use POST method#}
+{#                url: $(this).attr('action'), // URL from the form action attribute#}
+{#                data: formData, // Form data#}
+{#                success: function (response) {#}
+{#                    // Handle success response#}
+{#                    console.log(response); // Log response to the console#}
+{#                    $('.ModuloTitulo_close').click();#}
+{#                    $('#ajax_response').append(response);#}
+{#                    // You can do further processing here, like showing a success message#}
+{#                },#}
+{#                error: function (xhr, errmsg, err) {#}
+{#                    // Handle error response#}
+{#                    console.log(xhr.status + ": " + xhr.responseText); // Log error details#}
+{#                    // You can handle errors gracefully here, like showing an error message#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#    });#}
+{#</script>#}
+
+
+
+<script src="{% static 'js/courses.js' %}"></script>
+
+
+{% include 'includes/admin/footer.html' %}

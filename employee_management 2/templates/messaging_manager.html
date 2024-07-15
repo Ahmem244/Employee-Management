@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Messaging</title>
+    <link rel="stylesheet" href="../staticfiles/messaging.css" >
+</head>
+<body>
+
+<div class="container">
+    <h2>Internal Messaging</h2>
+    
+    <!-- New Message & Group Chat Creation -->
+    <div class="new-message-section">
+        <button id="new-message-btn">New Message</button>
+        <button id="new-group-chat-btn">Create Group Chat</button>
+    </div>
+    
+    <!-- Messaging Interface -->
+    <div class="messaging-interface">
+        <div class="contacts-list">
+            <h3>Contacts</h3>
+            <ul>
+                <li>Employee 1</li>
+                <li>Employee 2</li>
+                <!-- Additional contacts here -->
+            </ul>
+        </div>
+        
+        <div class="chat-window">
+            <h3>Chat</h3>
+            <div class="chat-history">
+                <!-- Chat messages here -->
+                <p>Employee 1: Hello!</p>
+                <!-- Additional messages -->
+            </div>
+            <textarea id="message-text" placeholder="Type your message here..."></textarea>
+            <button id="send-message-btn">Send</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

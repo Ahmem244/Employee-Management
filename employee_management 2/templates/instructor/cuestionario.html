@@ -1,0 +1,197 @@
+<?php include 'header.php'?>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-5">
+
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container" style="padding-top: 80px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-detalle-evaluacion ocultar-envio">
+                <h3 class="font-family-Inter-SemiBold">Detalles de Nombre del Cuestionario</h3>
+                <h5 class="font-family-Inter-Medium">Curso Diseño Digital</h5>
+                <div class="row mt-3 mb-3">
+                    <div class="col-md-12">
+                        <p class="font-family-Inter-Regular">
+                            <i class="fas fa-calendar-alt mr-3"></i> Horario de Inicio: 11:00 AM - 12/04/2023
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <p class="font-family-Inter-Regular">
+                            La siguiente evaluación es calificada, la nota será asignada por su profesor de Curso.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-detalle-evaluacion d-none" id="gracias">
+                <h3 class="font-family-Inter-SemiBold">Evaluación enviada Exitosamente!</h3>
+                <h5 class="font-family-Inter-Medium">Curso Diseño Digital</h5>
+                <div class="row mt-3 mb-3">
+                    <div class="col-md-12">
+                        <p class="font-family-Inter-Regular">
+                            <i class="fas fa-calendar-alt"></i> Horario de envío: 11:00 AM - 12/04/2023
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <p class="font-family-Inter-Regular">
+                            La nota será asignada en tu apartado de Calificaciones.
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <a href="detalle-curso.php" class="btn_enviar text-white d-inline-block text-center" style="padding: 15px 30px">
+                            Cerrar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box_pregunta ocultar-envio">
+                <h4 class="font-family-Outfit-SemiBold">
+                    Preguntas de Evaluación
+                </h4>
+                <div class="d-flex justify-content-start align-items-center contador">
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <div class="step font-family-Inter-SemiBold <?php echo $i === 1 ? 'active' : ''; ?>"><?php echo $i; ?></div>
+                    <?php endfor; ?>
+                </div>
+            </div>
+            <div class="box_pregunta ocultar-envio">
+                <!-- Contenido del wizard -->
+                <div class="wizard-content w-100">
+                    <div class="content-step active" id="step1">
+                        <h4 class="font-family-Inter-Medium fz-16">1. ¿Para que sirve Adobe Photoshop?</h4>
+                        <div class="custom-control custom-radio font-family-Inter-Regular">
+                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadio1">Renderizar Videos</label>
+                        </div>
+                        <div class="custom-control custom-radio font-family-Inter-Regular">
+                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadio2">Renderizar Imagenes</label>
+                        </div>
+                    </div>
+
+                    <div class="content-step" id="step2">
+                        <h4>Paso 2</h4>
+                        <p>Contenido del Paso 2</p>
+                    </div>
+
+                    <div class="content-step" id="step3">
+                        <h4>Paso 3</h4>
+                        <p>Contenido del Paso 3</p>
+                    </div>
+                    <div class="content-step" id="step4">
+                        <h4>Paso 4</h4>
+                        <p>Contenido del Paso 4</p>
+                    </div>
+                    <div class="content-step" id="step5">
+                        <h4>Paso 5</h4>
+                        <p>Contenido del Paso 5</p>
+                    </div>
+                    <div class="content-step" id="step6">
+                        <h4>Paso 6</h4>
+                        <p>Contenido del Paso 6</p>
+                    </div>
+                    <div class="content-step" id="step7">
+                        <h4>Paso 7</h4>
+                        <p>Contenido del Paso 7</p>
+                    </div>
+                    <div class="content-step" id="step8">
+                        <h4>Paso 8</h4>
+                        <p>Contenido del Paso 8</p>
+                    </div>
+                    <div class="content-step" id="step9">
+                        <h4>Paso 9</h4>
+                        <p>Contenido del Paso 9</p>
+                    </div>
+                    <div class="content-step" id="step10">
+                        <h4>Paso 10</h4>
+                        <p>Contenido del Paso 10</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 ocultar-envio">
+            <button class="btn_enviar mr-2" onclick="prevStep()" id="btnRetroceder">Anterior</button>
+        </div>
+        <div class="col-md-6 text-right ocultar-envio">
+            <button class="btn_enviar" onclick="nextStep()" id="btnSiguiente">Siguiente</button>
+            <button class="btn_enviar" onclick="finish()" id="btnFinalizar" style="display: none;">Finalizar</button>
+
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="d-block mb-2 footer-evaluacion font-family-Inter-Regular">Copyright © 2022 Eduperse Company</p>
+            <img src="../img/logo-gris.png" alt="logo">
+        </div>
+    </div>
+</div>
+<script>
+    var currentStep = 1;
+
+    function nextStep() {
+        if (currentStep < 10) {
+            deactivateStep(currentStep);
+            currentStep++;
+            activateStep(currentStep);
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            deactivateStep(currentStep);
+            currentStep--;
+            activateStep(currentStep);
+            removeCompleted(currentStep);
+        }
+    }
+
+    function deactivateStep(step) {
+        $('.step').eq(step - 1).removeClass('active').addClass('completed');
+        $('.content-step').eq(step - 1).removeClass('active');
+    }
+
+    function activateStep(step) {
+        $('.step').eq(step - 1).addClass('active');
+        $('.content-step').eq(step - 1).addClass('active');
+
+        // Mostrar u ocultar los botones según el paso actual
+        if (step === 1) {
+            $('#btnRetroceder').hide();
+        } else {
+            $('#btnRetroceder').show();
+        }
+
+        if (step === 10) {
+            $('#btnSiguiente').hide();
+            $('#btnFinalizar').show();
+        } else {
+            $('#btnSiguiente').show();
+            $('#btnFinalizar').hide();
+        }
+    }
+
+    function removeCompleted(step) {
+        // Quita la clase "completed" de los pasos anteriores al paso actual
+        for (let i = step; i <= 10; i++) {
+            $('.step').eq(i - 1).removeClass('completed');
+        }
+    }
+
+    function finish() {
+        // Realiza acciones finales o envía el formulario
+        $('#gracias').removeClass('d-none')
+        $('.ocultar-envio').addClass('d-none');
+    }
+
+
+</script>
+<?php include 'footer.php'?>

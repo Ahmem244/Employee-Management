@@ -1,0 +1,385 @@
+{% load static %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<form action="{% url 'update_content' model_name=model_name id=content.id %}" class="form-estado" method="post">
+
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-ath-form">
+                    <div class="form-align-box">
+                        <div class="wizard">
+                            <div class="wizard-inner">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation">
+                                        <a href="#edit-step1" class="active" data-toggle="tab" id="editTaskTab1"
+                                        aria-controls="edit-step1" role="tab" aria-expanded="true"
+                                        data-step="1">
+                                            <span class="round-tab font-family-Inter-Medium">1. Selecciona un tipo</span>
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#edit-step2" class="disabled" data-toggle="tab" id="editTaskTab2"
+                                        aria-controls="edit-step2" role="tab" aria-expanded="false"
+                                        data-step="2">
+                                            <span class="round-tab font-family-Inter-Medium">2. Crea un título</span>
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#edit-step3" class="disabled" data-toggle="tab" id="editTaskTab3"
+                                        aria-controls="edit-step3" role="tab" data-step="3">
+                                            <span class="round-tab font-family-Inter-Medium">3. Preguntas y respuestas</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                                <div class="tab-content" id="main_form">
+                                    <div class="tab-pane active" role="tabpanel" id="edit-step1">
+                                        <div class="form-input-steps tipo-tareas">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p class="font-family-Inter-Regular fz-14">Ejemplo de
+                                                        texto descriptivo para este tipo de tarea</p>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="radio" id="cuestionario-1" value="questionnaire"
+                                                            name="task_type"
+                                                            {% if content.task_type == 'questionnaire' %}
+                                                            checked
+                                                            {% endif %}
+                                                            />
+                                                        <label for="cuestionario-1">
+                                                            <div class="vista-tarea">
+                                                                <object data="{% static 'img/cuestionario.svg' %}"
+                                                                        width="32" height="32"
+                                                                        type="image/svg+xml"></object>
+                                                                <div class="vista-contenido">
+                                                                    <h3 class="font-family-Inter-SemiBold fz-16">Cuestionario</h3>
+                                                                    <p class="font-family-Inter-Regular fz-14">
+                                                                        Ejemplo de texto descriptivo para
+                                                                        este tipo de tarea
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="radio" id="crucigrama-1" value="crossword"
+                                                            name="task_type"
+                                                            {% if content.task_type == 'crossword' %}
+                                                            checked
+                                                            {% endif %}
+                                                            />
+                                                        <label for="crucigrama-1">
+                                                            <div class="vista-tarea">
+                                                                <object data="{% static 'img/crucigrama.svg' %}"
+                                                                        width="32" height="32"
+                                                                        type="image/svg+xml"></object>
+                                                                <div class="vista-contenido">
+                                                                    <h3 class="font-family-Inter-SemiBold fz-16">Crucigrama</h3>
+                                                                    <p class="font-family-Inter-Regular fz-14">
+                                                                        Ejemplo de texto descriptivo para
+                                                                        este tipo de tarea
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="radio" id="unir-1" value="link_with_lines" name="task_type"
+                                                        {% if content.task_type == 'link_with_lines' %}
+                                                            checked
+                                                            {% endif %}
+                                                        />
+                                                        <label for="unir-1">
+                                                            <div class="vista-tarea">
+                                                                <object data="{% static 'img/tarea-linea.svg' %}"
+                                                                        width="32" height="32"
+                                                                        type="image/svg+xml"></object>
+                                                                <div class="vista-contenido">
+                                                                    <h3 class="font-family-Inter-SemiBold fz-16">Unir con Líneas</h3>
+                                                                    <p class="font-family-Inter-Regular fz-14">
+                                                                        Ejemplo de texto descriptivo para
+                                                                        este tipo de tarea
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="align-items-center d-flex justify-content-between list-inline">
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                    Anterior
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                    Siguiente
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {# step 2 #}
+                                    <div class="tab-pane" role="tabpanel" id="edit-step2">
+                                        <div class="form-input-steps">
+                                            <div class="form-estado">
+                                                <div class="form-group">
+                                                    <label for="edit-nombreTarea" class="d-block font-family-Inter-Regular">
+                                                        Nombre de Tarea
+                                                    </label>
+                                                    <input required type="text" name="name" id="edit-nombreTarea" value="{{content.title}}" placeholder="Ejemplo de Nombre" class="font-family-Inter-Medium">
+                                                    <label data-error-for="edit-nombreTarea" class="d-none text-danger font-family-Inter-Regular">Please fill out this field!</label>
+
+                                                </div>
+                                                <p class="font-family-Inter-Regular fz-14 text-gris mb-5">
+                                                    Saldrá como el título de la tarea en el contenido del curso.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <ul class="align-items-center d-flex justify-content-between list-inline">
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                    Anterior
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" id="editTaskStep2SubmitBtn" disabled
+                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                    Siguiente
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" role="tabpanel" id="edit-step3">
+                                        <div class="form-input-steps">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p class="font-family-Inter-Regular fz-14">
+                                                        Ejemplo de texto descriptivo para este tipo de tarea
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-md-12 mb-5">
+                                                    <div class="sortable p-0 mb-4">
+                                                        <ul data-list-id="300" class="sortable" id="preguntas-lista-edit">
+                                                            {% for question in content.questions.all %}
+                                                            <li data-item-id="300" class="font-family-Inter-SemiBold">
+                                                                <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                                {{question.text}}
+                                                                <strong class="float-right botones">
+                                                                    <a href="#" class="editar mr-1"><i class="fas fa-pen"></i></a>
+                                                                    <a href="#" class="eliminar"><i class="fas fa-trash"></i></a>
+                                                                </strong>
+                                                            </li>
+                                                            <div class="editar-pregunta" style="display: none;">
+                                                                <div class="form-estado">
+                                                                    <input  name="question_id" hidden value="{{question.id}}">
+                                                                    <div class="form-group">
+                                                                        <label for="titulodepregunto" class="d-block font-family-Inter-Regular">
+                                                                            Escribe la pregunta
+                                                                        </label>
+                                                                        <input required type="text" name="question" id="titulodepregunto" value="{{question.text}}" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                            Respuesta correcta
+                                                                        </label>
+                                                                        <input required type="text" name="correct_answer" id="repuesta" value="{{question.correct_answer}}" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">
+                                                                    </div>
+                                                                    {% comment %} <div class="form-group">
+                                                                        <button type="button"
+                                                                                class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                            Guardar Cambios
+                                                                        </button>
+                                                                    </div> {% endcomment %}
+                                                                </div>
+                                                            </div>
+                                                            {% endfor %}
+
+
+                                                        </ul>
+                                                    </div>
+                                                    <a href="#" id="agregar-pregunta-edit" class="btn btn-border font-family-Inter-Medium d-inline-block fz-14">
+                                                        +Agregar Pregunta
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="align-items-center d-flex justify-content-between list-inline">
+                                            <li>
+                                                <button type="button"
+                                                        class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                    Anterior
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="submit"
+                                                        class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                    Guardar Cambios
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    $(document).ready(function () {
+        var contador = 301;
+
+        $('#agregar-pregunta-edit').click(function () {
+            contador++;
+            var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                'Nueva pregunta ' + contador +
+                '<strong class="float-right botones">' +
+                '<a href="#" class="editar mr-3"><i class="fas fa-pen"></i></a>' +
+                '<a href="#" class="eliminar"><i class="fas fa-trash"></i></a>' +
+                '</strong>' +
+                '</li>' +
+                '<div class="editar-pregunta" style="display: none;">' +
+                '<div class="form-estado">' +
+                '<div class="form-group">' +
+                '<label for="titulodepregunto" class="d-block font-family-Inter-Regular">' +
+                'Escribe la pregunta' +
+                '</label>' +
+                '<input type="text" name="new_question" id="titulodepregunto" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                'Respuesta correcta' +
+                '</label>' +
+                '<input type="text" name="new_correct_answer" id="repuesta" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                'Guardar Cambios' +
+                '</button>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            $('#preguntas-lista-edit').append(nuevaPregunta);
+        });
+
+        $('#preguntas-lista-edit').on('click', '.eliminar', function () {
+            $(this).closest('li').next('.editar-pregunta').remove();
+            $(this).closest('li').remove();
+        });
+
+        $('#preguntas-lista-edit').on('click', '.editar', function () {
+            // Cerrar las demás secciones de edición
+            $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+            // Restaurar el color original de los li
+            $('#preguntas-lista-edit li').css({
+                'background-color': '#F2F4FA',
+                'color': '#000'
+            });
+
+            // Alternar la visibilidad de la sección de edición correspondiente
+            var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+            seccionEdicion.toggle();
+
+            // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+            $(this).closest('li').css({
+                'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+            });
+
+            // Cambiar el color de los iconos de editar y eliminar
+            // var iconos = $(this).find('i');
+            // iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');
+        });
+    });
+
+
+    // ------------register-steps--------------
+    $(document).ready(function () {
+        $('.nav-tabs > li a[title]').tooltip();
+        //Wizard
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var $target = $(e.target);
+            if ($target.hasClass('disabled')) {
+                return false;
+            }
+
+            // handle with prgressbar
+            var step = $(e.target).data('step');
+            var percent = (parseInt(step) / 4) * 100;
+            $('.progress-bar').css({width: percent + '%'});
+            $('.progress-bar').text('Step ' + step + ' of 4');
+
+        });
+
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            var $target = $(e.target);
+            $target.parent().addClass('active');
+        });
+
+        $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
+            var $target = $(e.target);
+            $target.parent().removeClass('active');
+        });
+
+
+        $(".next-step").click(function (e) {
+            var $active = $('.wizard .nav-tabs li a.active');
+            $active.parent().next().children().removeClass('disabled');
+            $active.parent().addClass('done');
+            nextTab($active);
+        });
+
+        $(".prev-step").click(function (e) {
+            var $active = $('.wizard .nav-tabs li a.active');
+            prevTab($active);
+        });
+        
+        
+        {#Task form validation step2#}
+        $('#edit-nombreTarea').on('input',function(e){
+            const errorEl = $('label[data-error-for="edit-nombreTarea"]');
+            if(e.target.value.trim()) {
+            $('#editTaskStep2SubmitBtn').prop('disabled',false);
+            $('#editTaskTab3').removeClass('disabled');
+            errorEl.addClass('d-none');
+            }else{
+            $('#editTaskStep2SubmitBtn').prop('disabled',true);
+            errorEl.removeClass('d-none');
+            $('#editTaskTab3').addClass('disabled');
+        }
+        });
+    });
+
+    function nextTab(elem) {
+        $(elem).parent().next().find('a[data-toggle="tab"]').click();
+    }
+
+    function prevTab(elem) {
+        $(elem).parent().prev().find('a[data-toggle="tab"]').click();
+    }
+
+
+</script>

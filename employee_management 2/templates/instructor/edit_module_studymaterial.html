@@ -1,0 +1,34 @@
+<form action="{% url 'update-content' model_name=model_name id=content.id %}" class="form-estado" method="post"
+      enctype="multipart/form-data">
+    <div class="modal-body">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="tituloMaterial" class="d-block font-family-Inter-Regular">Nombre de
+                Material</label>
+            <input type="text" name="title" id="tituloMaterial" value="{{ content.title }}"
+                   placeholder="Nombre de Material" class="font-family-Inter-Medium" required>
+        </div>
+
+        
+        <div class="form-group">
+            <label class="font-family-Inter-Medium fz-12">Archivos</label>
+            <!-- Lista para mostrar archivos cargados con botones de eliminación -->
+            <ul class="listaArchivos"></ul>
+
+            <!-- Botón visible para cargar archivos -->
+            <label for="inputArchivos" href="javascript:void(0)"
+               class="btnCargarArchivos d-inline-block btn-carga font-family-Inter-Medium mt-3">
+                +Adjuntar Archivos
+            </label>
+
+            <!-- Input file oculto -->
+            <input type="file" class="inputArchivos" id="inputArchivos"  multiple style="display: none;"
+                   name="file">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+    </div>
+</form>

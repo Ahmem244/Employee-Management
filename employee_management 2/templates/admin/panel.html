@@ -1,0 +1,85 @@
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+{% load static %}
+<div class="sidebar">
+    {% if "is_admin" %}
+        {% include "includes/admin/sidebar.html" %}
+    {% else %}
+        {% include "includes/admin/sa_sidebar.html" %}
+    {% endif %}
+</div>
+<div class="main">
+    <section class="bg-panel dashboard next-shift">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Manager Panel, <span>{{ userprofile.user.first_name }}</span>
+                    </h1>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                    <div class="box-white">
+                        <div class="flexbox">
+
+                            <div class="">
+                                <span class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total Sales Advisors</span><br><span
+                                    class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ all_sales_advisors }}</span>
+                                <h5 class="font-family-Outfit-SemiBold">{{ student_matrix.total_students }}</h5>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                    <div class="box-white">
+                        <div class="flexbox">
+                            <div class="">
+                                {#                                <img src="{% static 'img/estudiantes.png' %}" alt="estudiantes">#}
+                            </div>
+                            <div class="">
+                                <span class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Today Shifts</span><br><span
+                                    class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ today_shifts }}</span>
+                                <h5 class="font-family-Outfit-SemiBold">{{ student_matrix.total_students }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                    <div class="box-white">
+                        <div class="flexbox">
+                            <div class="">
+                                {#                                <img src="{% static 'img/estudiantes.png' %}" alt="estudiantes">#}
+                            </div>
+                            <div class="">
+                                <span class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Today Announcements</span><br><span
+                                    class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ today_announcements }}</span>
+                                <h5 class="font-family-Outfit-SemiBold">{{ student_matrix.total_students }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                    <div class="box-white">
+                        <div class="flexbox">
+                            <div class="">
+                                {#                                <img src="{% static 'img/estudiantes.png' %}" alt="estudiantes">#}
+                            </div>
+                            <div class="">
+                                <span class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Today Requests</span><br><span
+                                    class="font-family-Inter-Regular">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ today_requests }}</span>
+                                <h5 class="font-family-Outfit-SemiBold">{{ student_matrix.total_students }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-4"></div>
+
+            </div>
+        </div>
+        {#</div>#}
+    </section>
+</div>
+
+
+
+{% include "includes/admin/footer.html" %}

@@ -1,0 +1,470 @@
+{% include "includes/instructor/header.html" %}
+{% include "includes/instructor/nav.html" %}
+{% load static %}
+
+<div class="sidebar">
+    {% include "includes/instructor/sidebar.html" %}
+</div>
+<div class="main detalles-curso">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        <a href="#" onclick="history.back()" class="mr-3 text-decoration-none">
+                            <i class="fas fa-angle-left"></i>
+                        </a> {{course.name}}
+                    </h1>
+                    <h4 class="font-family-Inter-SemiBold fz-16">
+                        {% for group in course.groups %}
+                            {% if group.instructor == userprofile %}
+                                Grupo: {{group.group_id}},<br>
+                            {% endif %}
+                        {% endfor %}
+                    </h4>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 d-flex align-items-center justify-content-end">
+                    {% if course.live_link %}
+                        <a href="{{course.live_link}}" target="_blank" class="btn_enviar text-white mr-3 font-family-Inter-Medium" id="solovideoconferencia">
+                            Ir a en vivo
+                        </a>
+                    {% else %}
+                        <a href="#" class="btn_enviar text-white mr-3 font-family-Inter-Medium" id="solovideoconferencia">
+                            Ir a en vivo
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'instructor-course-edit-content' course.id %}" class="btn_enviar text-white font-family-Inter-Medium" id="solocronograma">
+                        Editar Contenido
+                    </a>
+                    <a href="{{course.live_link}}" target="_blank" class="btn_enviar text-white font-family-Inter-Medium d-none" id="solomaterial">
+                        Videoconferencias en Vivo
+                    </a>
+
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="modulos">
+                                        <table class="table mb-0">
+                                            <tr>
+                                                <td style="border: none;" width="20">
+                                                    <div class="d-flex align-items-center justify-content-start"
+                                                         style="gap: 10px;">
+                                                        <img src="{% static 'img/instructor/modulos.png' %}" alt="icono">
+                                                        <p class="mb-0 font-family-Inter-Medium fz-14">
+                                                            Módulos
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td style="border: none;" align="right">
+                                                    <p class="mb-0 font-family-Inter-SemiBold fz-16">
+                                                        {{course.total_modules.count}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center justify-content-start"
+                                                         style="gap: 10px;">
+                                                        <img src="{% static 'img/instructor/lecciones.png' %}" alt="icono">
+                                                        <p class="mb-0 font-family-Inter-Medium fz-14">
+                                                            Lecciones
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td align="right">
+                                                    <p class="mb-0 font-family-Inter-SemiBold fz-16">
+                                                        {{course.total_lessons}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center justify-content-start"
+                                                         style="gap: 10px;">
+                                                        <img src="{% static 'img/instructor/evaluaciones.png' %}" alt="icono">
+                                                        <p class="mb-0 font-family-Inter-Medium fz-14">
+                                                            Evaluaciones
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td align="right">
+                                                    <p class="mb-0 font-family-Inter-SemiBold fz-16">
+                                                        {{course.total_evaluations|length}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="live position-relative">
+                                        {% if course.cover_image %}
+                                        <img src="{{course.cover_image.url}}" alt="head" class="w-100" style="border-radius: 4px;">
+                                        {% else %}
+                                        <img src="{% static 'img/instructor/head.png' %}" alt="head" class="w-100" style="border-radius: 4px;">
+                                        {% endif %}
+                                        <div class="abs-live">
+                                            <img src="{% static 'img/instructor/live.png' %}" alt="live">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills font-family-Inter-Medium lista-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#contenido">Contenido</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#detalles" id="crono">Brochure y Cronograma</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#material" id="materia">Material General</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#conferencia" id="videoc">Videoconferencias</a>
+                                </li>
+                                {% comment %} <li class="nav-item">
+                                    <a class="nav-link" href="mis-grupos-de-estudio.php">Ver grupo</a>
+                                </li> {% endcomment %}
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="contenido" class="tab-pane active"><br>
+                                    {% for module in course.total_modules %}
+                                    <div class="acordeon position-relative">
+                                        <div class="acordeon-titulo align-items-start">
+                                            {% comment %} <div class="">
+                                                <i class="far fa-unlock-alt fa-2x"></i>
+                                            </div> {% endcomment %}
+                                            <div class="">
+                                                <h3 class="font-family-Inter-SemiBold">{{forloop.counter}}. {{module.title}}</h3>
+                                                <p class="font-family-Inter-Regular fz-14 mb-0">{{module.total_lesson.count}} Lecciones</p>
+                                            </div>
+                                            <i class="fas fa-chevron-down flecha"></i>
+                                        </div>
+                                        <div class="acordeon-contenido">
+                                            <div class="box-modulos">
+                                                {% for material in module.studymaterial_set.all %}
+                                                <div class="head-modulos mb-3">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="font-family-Inter-Regular mb-0">
+                                                                Recursos y Actividades
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-6 d-flex align-items-center justify-content-start">
+                                                            <h6 class="font-family-Inter-Medium mb-0">
+                                                                {{material.title}}
+                                                            </h6>
+                                                        </div>
+                                                        <div class="col-md-6 text-right d-flex align-items-center justify-content-end">
+                                                            {% if material.file %}
+                                                            <a href="{{material.file.url}}"  download style="padding: 7px;" class="btn-gris font-family-Inter-Medium btn-border">
+                                                                Descargar
+                                                            </a>
+                                                            {% else %}
+                                                            <a href="#" style="padding: 7px;" class="btn-gris font-family-Inter-Medium btn-border">
+                                                                Descargar
+                                                            </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                    {% for lesson in module.lesson_set.all %}
+                                                    <tr class="habilitado">
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                 style="gap: 10px;">
+                                                                {% comment %} <div class="">
+                                                                    <img src="{% static 'img/instructor/unlock-blue.png' %}"
+                                                                         alt="icono" class="unlock">
+                                                                    <img src="{% static 'img/instructor/unlock-black.png' %}"
+                                                                         alt="icono" class="lock">
+                                                                </div> {% endcomment %}
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Lección {{forloop.counter}}
+                                                                        </span>
+                                                                        {{lesson.title}}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="{{lesson.video_url}}" target="_blank" class="btn-gris font-family-Inter-Medium">
+                                                                En vivo <i class="fal fa-play-circle ml-2"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    {% comment %} <tr>
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                 style="gap: 10px;">
+                                                                <div class="">
+                                                                    <img src="{% static 'img/instructor/unlock-blue.png' %}"
+                                                                         alt="icono" class="unlock">
+                                                                    <img src="{% static 'img/instructor/unlock-black.png' %}"
+                                                                         alt="icono" class="lock">
+                                                                </div>
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Lección 1
+                                                                        </span>
+                                                                    Fases de la Creatividad 1
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="#" class="btn-gris font-family-Inter-Medium">
+                                                                En vivo <i class="fal fa-play-circle ml-2"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr> {% endcomment %}
+                                                    {% for task in module.task_set.all %}
+                                                    <tr class="habilitado">
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                 style="gap: 10px;">
+                                                                {% comment %} <div class="">
+                                                                    <img src="{% static 'img/instructor/unlock-blue.png' %}"
+                                                                         alt="icono" class="unlock">
+                                                                    <img src="{% static 'img/instructor/unlock-black.png' %}"
+                                                                         alt="icono" class="lock">
+                                                                </div> {% endcomment %}
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Tarea
+                                                                        </span>
+                                                                        {{task.title}}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="{% url 'modlue-task' task.id %}" class="btn-gris font-family-Inter-Medium btn-border">
+                                                                Realizar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    {% comment %} <tr class="">
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                 style="gap: 10px;">
+                                                                <div class="">
+                                                                    <img src="{% static 'img/instructor/unlock-blue.png' %}"
+                                                                         alt="icono" class="unlock">
+                                                                    <img src="{% static 'img/instructor/unlock-black.png' %}"
+                                                                         alt="icono" class="lock">
+                                                                </div>
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Tarea
+                                                                        </span>
+                                                                    Nombre de Tarea
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="#" class="btn-gris font-family-Inter-Medium btn-border-gris">
+                                                                Realizar
+                                                            </a>
+                                                        </td>
+                                                    </tr> {% endcomment %}
+
+                                                    {% for evaluation in module.evaluation_set.all %}
+                                                    <tr class="habilitado">
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                style="gap: 10px;">
+                                                        
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Evaluation
+                                                                        </span>
+                                                                        {{evaluation.title}}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="#" class="btn-gris font-family-Inter-Medium btn-border">
+                                                                Descargar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% comment %} <div class="acordeon position-relative dishabilitado">
+                                        <div class="acordeon-titulo align-items-start">
+                                            <div class="">
+                                                <i class="far fa-lock-alt fa-2x"></i>
+                                            </div>
+                                            <div class="">
+                                                <h3 class="font-family-Inter-SemiBold">2. Nombre de Módulo 2</h3>
+                                                <p class="font-family-Inter-Regular fz-14 mb-0">
+                                                    3 Lecciones
+                                                </p>
+                                            </div>
+                                            <i class="fas fa-chevron-down flecha"></i>
+                                        </div>
+                                        <div class="acordeon-contenido">
+                                            <div class="box-modulos">
+                                                <div class="head-modulos mb-3">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="font-family-Inter-Regular mb-0">
+                                                                Recursos y Actividades
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-6 d-flex align-items-center justify-content-start">
+                                                            <h6 class="font-family-Inter-Medium mb-0">
+                                                                Material de Estudio
+                                                            </h6>
+                                                        </div>
+                                                        <div class="col-md-6 text-right d-flex align-items-center justify-content-end">
+                                                            <button type="button"
+                                                                    class="btn-gris font-family-Inter-Medium btn-border"
+                                                                    style="padding: 7px;">
+                                                                Descargar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                 style="gap: 10px;">
+                                                                <div class="">
+                                                                    <img src="{% static 'img/instructor/unlock-blue.png' %}"
+                                                                         alt="icono" class="unlock">
+                                                                    <img src="{% static 'img/instructor/unlock-black.png' %}"
+                                                                         alt="icono" class="lock">
+                                                                </div>
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Lección 1
+                                                                        </span>
+                                                                    Fases de la Creatividad 1
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="#" class="btn-gris font-family-Inter-Medium">
+                                                                En vivo <i class="fal fa-play-circle ml-2"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="font-family-Inter-Medium texto-0">
+                                                            <div class="d-flex align-items-start justify-content-start"
+                                                                 style="gap: 10px;">
+                                                                <div class="">
+                                                                    <img src="{% static 'img/instructor/unlock-blue.png' %}"
+                                                                         alt="icono" class="unlock">
+                                                                    <img src="{% static 'img/instructor/unlock-black.png' %}"
+                                                                         alt="icono" class="lock">
+                                                                </div>
+                                                                <div class="fz-16 font-family-Inter-Medium">
+                                                                        <span class="leccion font-family-Inter-Regular d-block fz-12">
+                                                                            Lección 1
+                                                                        </span>
+                                                                    Fases de la Creatividad 1
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="font-family-Inter-Medium texto-0" align="right">
+                                                            <a href="#" class="btn-gris font-family-Inter-Medium">
+                                                                En vivo <i class="fal fa-play-circle ml-2"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div> {% endcomment %}
+                                </div>
+                                <div id="detalles" class="tab-pane fade"><br>
+                                    <div class="box-white">
+                                        <div class="row">
+                                            <div class="col-md-12 font-family-Inter-Medium fz-14">
+                                                <p>
+                                                    Clic al enlace para ver Brochure y Cronograma del curso.
+                                                </p>
+                                                <a href="{{course.live_link}}" target="_blank" class="btn btn-border font-family-Inter-Medium">
+                                                    Ir a enlace de Google Drive
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="material" class="tab-pane fade"><br>
+                                    <div class="box-white">
+                                        <div class="row">
+                                            <div class="col-md-12 font-family-Inter-Medium fz-14">
+                                                <p>
+                                                    Clic al enlace para ver o descargar Material del curso.
+                                                </p>
+                                                <a href="{{course.general_material_link}}" target="_blank" class="btn btn-border font-family-Inter-Medium">
+                                                    Ir a enlace
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="conferencia" class="tab-pane fade"><br>
+                                    <div class="box-white">
+                                        <div class="row">
+                                            <div class="col-md-12 font-family-Inter-Medium fz-14">
+                                                <p>
+                                                    Clic al enlace para ver Videoconferencias Grabadas.
+                                                </p>
+                                                <a href="{{course.recorded_link}}" target="_blank" class="btn btn-border font-family-Inter-Medium">
+                                                    Ir a enlace
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    $('#crono').click(function () {
+        $('#solovideoconferencia').removeClass('d-none');
+        $('#solocronograma').removeClass('d-none');
+        $('#solomaterial').addClass('d-none');
+    });
+    $('#materia').click(function () {
+        $('#solovideoconferencia').addClass('d-none');
+        $('#solocronograma').addClass('d-none');
+        $('#solomaterial').removeClass('d-none');
+    });
+    $('#videoc').click(function () {
+        $('#solovideoconferencia').removeClass('d-none');
+        $('#solocronograma').addClass('d-none');
+        $('#solomaterial').addClass('d-none');
+    });
+</script>
+{% include "includes/instructor/footer.html" %}

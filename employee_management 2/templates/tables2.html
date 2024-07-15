@@ -1,0 +1,1004 @@
+{% extends 'doctor/layouts/base.html' %}
+{% load django_tables2 %}
+{% block stylesheets %}
+{% endblock stylesheets %}
+{% block content %}
+    <style>
+
+
+        .double_collapse_button.active span {
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        {#position: absolute;#}
+        }
+
+        .id_collapse_button.active span {
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        {#position: absolute;#}
+        }
+
+
+        .table-responsive {
+            max-height: 50vh;
+
+            overflow: auto;
+
+        }
+
+        td > .btn {
+            line-height: 0.1 !important;
+        }
+
+        /* Toggle button of active and deactive*/
+        .toggle {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            display: block;
+            height: auto;
+            width: 7.5rem;
+            margin: auto;
+            cursor: pointer;
+        }
+
+        .toggle-input {
+            display: none;
+            margin: 0;
+        }
+
+        .toggle-input:checked + .toggle-controller.default-success {
+            border: 0.125rem solid rgba(37, 133, 242, 0.75);
+            background: rgba(37, 133, 242, 0.375);
+        }
+
+        .toggle-input:checked + .toggle-controller.default-success:after {
+            left: 1.5625rem;
+        }
+
+        .toggle-controller.default-success {
+            position: relative;
+            display: inline-block;
+            height: 1.5625rem;
+            width: 3.125rem;
+            border: 0.125rem solid rgba(46, 45, 44, 0.05);
+            -webkit-border-radius: 1.5625rem;
+            -moz-border-radius: 1.5625rem;
+            border-radius: 1.5625rem;
+            -webkit-box-shadow: inset 0 0 0.1875rem rgba(46, 45, 44, 0.25);
+            -moz-box-shadow: inset 0 0 0.1875rem rgba(46, 45, 44, 0.25);
+            box-shadow: inset 0 0 0.1875rem rgba(46, 45, 44, 0.25);
+            background: rgba(46, 45, 44, 0.025);
+            -webkit-transition: all 0.25s ease;
+            -moz-transition: all 0.25s ease;
+            -o-transition: all 0.25s ease;
+            transition: all 0.25s ease;
+        }
+
+        .toggle-controller.default-success:after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            display: block;
+            height: 1.2rem;
+            width: 1.2rem;
+            -webkit-border-radius: 1.5625rem;
+            -moz-border-radius: 1.5625rem;
+            border-radius: 1.5625rem;
+            -webkit-box-shadow: 0 0.0625rem 0.125rem rgba(46, 45, 44, 0.2);
+            -moz-box-shadow: 0 0.0625rem 0.125rem rgba(46, 45, 44, 0.2);
+            box-shadow: 0 0.0625rem 0.125rem rgba(46, 45, 44, 0.2);
+            background: white;
+            -webkit-transition: all 0.25s ease;
+            -moz-transition: all 0.25s ease;
+            -o-transition: all 0.25s ease;
+            transition: all 0.25s ease;
+        }
+
+
+        .table-custom-head {
+            position: sticky;
+            top: 0;
+            background-color: #fff; /* Adjust the background color as needed */
+            z-index: 1; /* Ensure the header is above the table content */
+            color: black !important;
+
+        }
+
+        div.dataTables_wrapper div.dataTables_processing {
+            top: 70% !important;
+        }
+
+        .completed-order-tr {
+            background-color: rgba(0, 128, 0, 0.35);
+        }
+
+        .cancelled-order-tr {
+            background-color: rgba(255, 0, 0, 0.35);
+        }
+
+        .table-responsive {
+            min-height: 50vh;
+            max-height: 65vh;
+            overflow: auto;
+
+        }
+
+        td > .btn {
+            line-height: 0.1 !important;
+        }
+
+        /* Toggle button of active and deactive*/
+        .toggle {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            display: block;
+            height: auto;
+            width: 7.5rem;
+            margin: auto;
+            cursor: pointer;
+        }
+
+        .toggle-input {
+            display: none;
+            margin: 0;
+        }
+
+        .toggle-input:checked + .toggle-controller.default-success {
+            border: 0.125rem solid rgba(37, 133, 242, 0.75);
+            background: rgba(37, 133, 242, 0.375);
+        }
+
+        .toggle-input:checked + .toggle-controller.default-success:after {
+            left: 1.5625rem;
+        }
+
+        .toggle-controller.default-success {
+            position: relative;
+            display: inline-block;
+            height: 1.5625rem;
+            width: 3.125rem;
+            border: 0.125rem solid rgba(46, 45, 44, 0.05);
+            -webkit-border-radius: 1.5625rem;
+            -moz-border-radius: 1.5625rem;
+            border-radius: 1.5625rem;
+            -webkit-box-shadow: inset 0 0 0.1875rem rgba(46, 45, 44, 0.25);
+            -moz-box-shadow: inset 0 0 0.1875rem rgba(46, 45, 44, 0.25);
+            box-shadow: inset 0 0 0.1875rem rgba(46, 45, 44, 0.25);
+            background: rgba(46, 45, 44, 0.025);
+            -webkit-transition: all 0.25s ease;
+            -moz-transition: all 0.25s ease;
+            -o-transition: all 0.25s ease;
+            transition: all 0.25s ease;
+        }
+
+        .toggle-controller.default-success:after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            display: block;
+            height: 1.2rem;
+            width: 1.2rem;
+            -webkit-border-radius: 1.5625rem;
+            -moz-border-radius: 1.5625rem;
+            border-radius: 1.5625rem;
+            -webkit-box-shadow: 0 0.0625rem 0.125rem rgba(46, 45, 44, 0.2);
+            -moz-box-shadow: 0 0.0625rem 0.125rem rgba(46, 45, 44, 0.2);
+            box-shadow: 0 0.0625rem 0.125rem rgba(46, 45, 44, 0.2);
+            background: white;
+            -webkit-transition: all 0.25s ease;
+            -moz-transition: all 0.25s ease;
+            -o-transition: all 0.25s ease;
+            transition: all 0.25s ease;
+        }
+
+
+        .table-custom-head {
+            position: sticky;
+            top: 0;
+            background-color: #fff; /* Adjust the background color as needed */
+            z-index: 1; /* Ensure the header is above the table content */
+            color: black !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_processing {
+            top: 70% !important;
+        }
+
+        table > thead > tr > th {
+            color: #262626;
+        }
+
+        .assigned_loc {
+            max-height: 55vh;
+            overflow-y: auto;
+        }
+
+        .assigned_org {
+            font-size: 0.875em;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .assigned_org > li {
+            text-transform: capitalize;
+        }
+
+        .table-location-assign-user {
+            height: 67vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .table-view-reporting {
+            display: inline-block;
+            width: 200px !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #2585f2;
+        }
+
+        .expandable-td {
+            display: inline-block;
+            width: 150px !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #2585f2;
+        }
+
+        .label-org {
+            font-size: 0.95rem;
+            font-weight: 900;
+        }
+
+        .org-header-assigned {
+            font-size: 0.95rem;
+            font-weight: 900;
+
+            padding-left: 10px;
+        }
+
+        .min-h-lg {
+            min-height: 640px;
+        }
+
+        #expanded-items-list {
+
+        }
+
+        .expanded-list-item {
+            background-color: rgb(25 135 255 / 59%);
+            padding: 6px;
+            border-radius: 6px;
+            color: black;
+            box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+        }
+
+
+        @media screen and (min-width: 768px) {
+            .custom-modal-content {
+                min-width: 700px;
+            }
+        }
+
+        .assigned-org {
+            color: white;
+            background: rgba(58, 65, 111, 0.95);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        #all_agents, #all_locations, .assigned_loc, .assigned_agent_by_manager {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+    </style>
+
+
+    <div class="container-fluid py-4" style="padding-top: 0 !important;">
+    <div class="row">
+    <div class="col-12">
+
+    <div class="card mb-4">
+    {% include 'includes/card-header-list.html' %}
+
+    <div class="card-body px-1 pt-0 pb-3">
+        {% render_table table %}
+    </div>
+    <!-- Review Result modal -->
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModal-label" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content" style="width: 100%">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModal-label" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="right: 5%">
+
+            <div class="modal-content" style="width: fit-content !important;">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Released Result modal -->
+    <div class="modal fade" id="releasedModal" tabindex="-1" aria-labelledby="releasedModal-label" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="width: 100%">
+                <div class="modal-header bg-gradient-secondary">
+                    <h5 class="modal-title text-center" id="releasedModal">Release Results to Patient</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" enctype="multipart/form-data" class="release-form">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="expandableItemDetailModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content min-h-lg custom-modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span id="expandableItemDetailCount"></span></h5>
+                    <button type="button" class="close" onclick="closeExpandItemDetailModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-column gap-3" id="expanded-items-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+        $(function () {
+            setTimeout(() => {
+                $('.btn').on('click', function () {
+
+                    console.log("present", $(".dataTables_length > label > select").siblings('span').html())
+
+                    $(".dataTables_length > label > select").removeClass('select2-hidden-accessible')
+                    $(".dataTables_length > label >select").siblings('span').remove()
+                })
+            }, 1000);
+        })
+    </script>
+
+    <script>
+        {#let fa_loader = "<i class='fa fa-refresh fa-spin'></i>"#}
+
+        function generate_columns() {
+            let result_table_columns = []
+            {% for col in table_constants %}
+                {% if col == 'actions' %}
+                    {#console.log("-========ACTIONS======")#}
+                    result_table_columns.push({"data": "{{ col }}", 'searchable': false,})
+                {% else %}
+                    result_table_columns.push({"data": "{{ col }}"})
+                {% endif %}
+            {% endfor %}
+
+            console.log("test results==", result_table_columns)
+            return result_table_columns
+        }
+    </script>
+    <script>
+        const data_table_ajax_route = "{{ data_table_api_route|safe }}";
+        console.log(data_table_ajax_route, 'route');
+        $(document).ready(function () {
+            const table = $('.data-table').DataTable({
+                "serverSide": false,
+                "order": [],
+                "processing": true,
+                "lengthMenu": [[20, 40, 100], [20, 40, 100]],
+                "ajax": {
+                    {#"url": "#",#}
+                    "url": data_table_ajax_route,
+                    "type": "POST",
+                    "beforeSend": function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token|escapejs }}");
+                    }
+                },
+                "columns": generate_columns(),
+            });
+
+            table.on('init.dt', onTableInit);
+
+
+        });
+        setTimeout(function () {
+            $('.data-table thead tr').addClass('table-custom-head')
+            $('.data-table thead th').each(function () {
+                $(this).find('a').attr('href', 'javascript:;')
+                var title = $(this).text();
+                if (~title.indexOf("Action")) {
+                    $(this).find('input').remove()
+                    $(this).css('text-align', 'center')
+                }
+                {#if (~title.indexOf("Date of birth")) {#}
+                {#    let inputfield = $(this).find('input')#}
+                {#    inputfield.attr('type', 'date')#}
+
+            });
+        }, 100)
+
+    </script>
+    <script>
+        $(".js-form").on("submit", function () {
+            {#e.preventDefault()#}
+            let form = $(this)
+            var fd = new FormData();
+            let btn = form.find("button[type=submit]")
+            {#btn.attr("disabled", "")#}
+            let cancel = $("#outer").find("a")
+            cancel.css("pointer-events", "none")
+            btn.html("Processing...")
+            $.ajax({
+                url: form.attr("action"),
+                type: form.attr("method"),
+                data: form.serialize(),
+                success: function (response) {
+                    $('.data-table').DataTable().draw()
+                },
+                error: function () {
+                    btn.removeAttr("disabled")
+                    btn.html(`<span>Submit</span>`)
+                    cancel.removeAttr("style")
+                }
+            })
+
+            return false;
+        })
+
+    </script>
+    <script>
+        $(document).ready(function () {
+
+        });
+
+    </script>
+    <script>
+
+        function active_and_deactive(val) {
+            let checkbox = $(val);
+            checkbox.prop('disabled', true)
+            const url = checkbox.data('url');
+
+
+            $.ajax({
+                url,
+                type: 'POST',
+                data: {status: checkbox.is(':checked')},
+                success: function (response) {
+                    if (response.success) {
+                        // Use the stored reference to the checkbox
+                        if (checkbox.is(':checked')) {
+                            showNotification(response.message, "", "success");
+                        } else {
+                            showNotification(response.message, "", "success");
+                        }
+                    } else {
+                        showNotification(response.message, "", "error");
+                        checkbox.prop('checked', false)
+                    }
+                    checkbox.prop('disabled', false)
+                },
+            });
+        }
+
+    </script>
+    <script>
+        function delete_func(val, archive = null) {
+            console.log(archive, '================,')
+            let btn = $(val)
+            let link = btn.attr("href")
+            let c;
+            if (archive === null) {
+                c = confirm("Are you sure you want to delete this?")
+            } else {
+                c = confirm("Are you sure you want to archive this?")
+            }
+            if (c) {
+                let icon = btn.find("i")
+                icon.removeClass("fa-trash").addClass("fa-refresh fa-spin")
+                $.ajax({
+                    url: link,
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            let row = val.closest('tr')
+                            $(row).css('display', 'none')
+                            if (archive === null) {
+                                showNotification('Entry Deleted', "", "success")
+                            } else {
+                                showNotification('Entry Archive', "", "success")
+                            }
+
+                        } else {
+                            showNotification('Something went wrong')
+                        }
+                    },
+                })
+            }
+            return false
+        }
+    </script>
+    <script>
+        function update_status_func(val) {
+            let btn = $(val)
+            let link = btn.attr("href")
+            let c = confirm("Are you sure you want to cancel this order")
+            if (c) {
+                let icon = btn.find("i")
+                icon.removeClass("fa-ban").addClass("fa-refresh fa-spin")
+                $.ajax({
+                    url: link,
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            let row = val.closest('tr')
+                            $(row).css('display', 'none')
+                            showNotification('Order is Cancelled Successfully', "", "success")
+                        } else {
+                            showNotification('Something went wrong')
+                        }
+                    },
+                })
+            }
+            return false
+        }
+    </script>
+    <script>
+        function send_mail_and_sms(val) {
+            let btn = $(val)
+            let link = btn.attr("href")
+            let icon = btn.find("i")
+
+            icon.removeClass("fa-paper-plane").addClass("fa-refresh fa-spin")
+            $.ajax({
+                url: link,
+                type: 'POST',
+                success: function (response) {
+                    if (response.success) {
+                        showNotification('Email Sent!', "", "success")
+                    } else {
+                        showNotification('Something went wrong')
+                    }
+                    icon.removeClass(" fa-refresh fa-spin").addClass("fa-paper-plane")
+                },
+            })
+        }
+    </script>
+    <script>
+        console.log('tables2.html');
+        const closeExpandItemDetailModal = () => {
+            $('#expandableItemDetailModal').modal('hide')
+        }
+
+        function showDetails() {
+            const text = $(this).text();
+            const rowUserName = $(this).attr('data-row-username');
+            const iconClass = $(this).attr('data-icon');
+            const modalTitle = $(this).attr('data-modal-title');
+            let title;
+
+            if (!rowUserName) {
+                title = `${modalTitle}`;
+            } else {
+                title = `${rowUserName}'s ${modalTitle}`;
+            }
+            const list = text?.split(',') || [];
+            $('#expanded-items-list').html('');
+            list.forEach((t) => {
+                const n = document.createElement('div');
+                n.classList.add('expanded-list-item');
+                n.innerHTML = `<div class="d-flex align-items-center gap-2"> <i class="${iconClass}"></i> <p class="m-0">${t}</p> </div>`
+                $('#expandableItemDetailCount').text(`${title} (${list.length})`);
+                $('#expanded-items-list').append(n);
+
+            })
+
+            $('#expandableItemDetailModal').modal('show');
+        }
+
+        const openExpandItemDetailModal = () => {
+            $('.expandable-td').off('click', showDetails);
+            $('.expandable-td').on('click', showDetails);
+        }
+
+        $(function () {
+
+            $(document).on('click', '.expandable-td', showDetails)
+
+        });
+
+        $(document).on('click', '.table-view-reporting', function () {
+            $('#tableLocations').modal('show');
+            let userId = $(this).data('target');
+            let userName = $(this).data('name');
+            userName = userName.replace(/_/g, ' ');
+            $('.appended-username').html(userName)
+
+            dataFetchFromTable(userId)
+
+        })
+
+
+        function dataFetchFromTable(userId) {
+            let url_path = "/reporting/api/reporting/org/location" + "?" + "user=" + userId
+            $.ajax({
+                type: "GET",
+                url: url_path,
+
+                success: function (response) {
+                    if (response && response.length > 0) {
+
+                        checkedLocationShowInModal(response);
+
+                    } else {
+
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle errors in the AJAX request, if any
+                    console.error("Error saving simple data:", errorThrown);
+                },
+            });
+        }
+
+        function checkedLocationShowInModal(response) {
+            let main_html = '';
+
+            for (let i = 0; i < response.length; i++) {
+                let organization = response[i].organization;
+                let org_with_underscores = organization.replace(/\s/g, "_");
+                let locations = response[i].location;
+                let checkedLocations = locations.filter(location => location.checked);
+
+                if (checkedLocations.length > 0) {
+
+                    main_html += `<div class="all_locations_table">
+                <label style="margin-left: 10px" for="email"
+                    class="form-label text-uppercase label-org" ><small>${organization}</small></label>
+            </div>`;
+
+
+                    for (let j = 0; j < checkedLocations.length; j++) {
+                        let location = checkedLocations[j];
+                        console.log("this is location=================", location);
+
+                        let loc_html = `<li style="margin-left: 20px" class="li-${location.id}">${location.name}
+                                <input hidden name="permissions" value="${location.id}"/>
+                            </li>`;
+
+                        main_html += loc_html;
+                    }
+
+                }
+            }
+
+            $('.table-location-assign-user').html(main_html);
+        }
+    </script>
+
+    <script>
+        const ajax_route = "{{ api_route }}";
+
+        // Get the modal element
+        function open_modal(btn, link) {
+            console.log(ajax_route ? ajax_route + link : link, link, 'ad')
+            let modal = $("#resultModal")
+            modal.modal('toggle');
+            modal.find(".modal-content").html(`<div class="modal-body" style="text-align: center"><i class="fa fa-refresh fa-spin"></i></div`)
+
+            $.ajax({
+                url: ajax_route ? ajax_route + link : link,
+                type: 'GET',
+                success: function (response) {
+                    modal.find(".modal-content").html(response.data)
+                },
+            })
+        }
+
+        // Get the modal element
+        function open_attachment_modal(btn, link) {
+            let modal = $("#resultModal")
+            modal.modal('toggle');
+            modal.find(".modal-content").html(`<div class="modal-body" style="text-align: center"><i class="fa fa-refresh fa-spin"></i></div`)
+
+            $.ajax({
+                url: ajax_route + link,
+                type: 'GET',
+                success: function (response) {
+                    modal.find(".modal-content").html(response.data)
+                },
+            })
+        }
+
+        function open_audit_modal(btn, link) {
+            let modal = $("#resultModal")
+            modal.modal('toggle');
+            modal.find(".modal-content").html(`<div class="modal-body" style="text-align: center"><i class="fa fa-refresh fa-spin"></i></div`)
+
+            $.ajax({
+                url: link,
+                type: 'GET',
+                success: function (response) {
+                    modal.find(".modal-content").html(response.data)
+                },
+            })
+        }
+
+        function open_view_modal(btn, link) {
+            let modal = $("#orderModal")
+            modal.modal('toggle');
+            modal.find(".modal-content").html(`<div class="modal-body" style="text-align: center; max-height: 400px; width: 60vw"><i class="fa fa-refresh fa-spin"></i></div`)
+
+            $.ajax({
+                url: link,
+                type: 'GET',
+                success: function (response) {
+                    modal.find(".modal-content").html(response.data)
+                },
+            })
+        }
+
+    </script>
+    <script>
+        function status_func(val) {
+            console.log(val, '=-0987654321qwsdyuiolkjbvcvbjkioi7ytrd')
+            $.ajax({
+                url: val,
+                type: 'POST',
+                success: function (response) {
+                },
+            })
+        }
+
+        // Get the modal element
+        function open_released_modal(btn, re_url) {
+            console.log('review-result', re_url, 'Released', '=====>')
+            {#let link = re_url.attr("href")#}
+            let modal = $("#releasedModal")
+            modal.modal('toggle');
+
+            var data = `<div class="d-flex"> <input type="checkbox" required> <p> I hereby declare my consent to release these results to patient.</p></div><div style="text-align: center"> <button class="btn btn-sm btn-outline-success mb-0 me-1" type="submit" >Release</button> </div></form>`
+            $(".release-form").attr('action', re_url);
+            modal.find('.release-form').html(data)
+
+
+            {#onclick="status_func('$')"#}
+
+        }
+    </script>
+    {#===============================================collapse==================#}
+
+
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {##}
+    {#            console.log("okayy=======")#}
+    {#            let isDataAppended = false; // Flag to check if data has been appended#}
+    {#            setTimeout(function () {#}
+    {#                $('.id_collapse_button').on('click', function () {#}
+    {#                    console.log("hit=======")#}
+    {#                    console.log("this is the vale=======", $(this).data('target'))#}
+    {#                    var row = $(this).closest('tr');#}
+    {#                    console.log("this is data url ==============", $(this).data('url'), row.html())#}
+    {#                    let new_url = $(this).data('url') + '?result_id=' + $(this).data('target')#}
+    {#                    console.log("hit=======", new_url)#}
+    {#                    let active_class = row.find('.id_collapse_button').hasClass('active')#}
+    {#                    if (!isDataAppended && !active_class) {#}
+    {#                        $.ajax({#}
+    {#                            url: new_url,#}
+    {#                            type: 'POST',#}
+    {#                            success: function (response) {#}
+    {#                                if (response.success) {#}
+    {#                                    console.log("this is response====", response)#}
+    {#                                    const newRow = $('<tr><td colspan="100%" style="padding-left: 3%;padding-right: 1%">' + response.data + '</td></tr>');#}
+    {#                                    row.after(newRow);#}
+    {#row.after(`${response.data}`);#}
+    {#$('table').DataTable();#}
+    {#                                    isDataAppended = true; // Set the flag to true to prevent further appending#}
+    {#                                    row.find('.id_collapse_button').addClass('active')#}
+    {#                                } else {#}
+    {#                                    showNotification('Something went wrong')#}
+    {#                                }#}
+    {#                                icon.removeClass(" fa-refresh fa-spin").addClass("fa-paper-plane")#}
+    {#                            },#}
+    {#                        })#}
+    {#                    } else {#}
+    {##}
+    {#                        row.find('.id_collapse_button').removeClass('active')#}
+    {#                        row.next('tr').remove()#}
+    {#                        isDataAppended = false;#}
+    {#                    }#}
+    {##}
+    {#                })#}
+    {#            }, 1000)#}
+    {#        });#}
+    {#    </script>#}
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {##}
+    {#            let isDataAppended = false; // Flag to check if data has been appended#}
+    {#            console.log("Function is ready to work")#}
+    {#            setTimeout(function () {#}
+    {#                $(document).on('click', '.double_collapse_button', function () {#}
+    {#                    console.log("Dynamically appended button clicked!");#}
+    {#                    console.log("hit==2=====")#}
+    {#                    console.log("this is the vale=======", $(this).data('target'))#}
+    {#                    var row = $(this).closest('tr');#}
+    {##}
+    {#                    console.log("this is data url ==============", $(this).data('url'), row.html())#}
+    {#                    let new_url = $(this).data('url') + '?panel_id=' + $(this).data('target')#}
+    {#                    console.log("hit=======", new_url)#}
+    {#                    let active_class = row.find('.double_collapse_button').hasClass('active')#}
+    {#                    if (!isDataAppended && !active_class) {#}
+    {##}
+    {##}
+    {#                        $.ajax({#}
+    {#                            url: new_url,#}
+    {#                            type: 'POST',#}
+    {#                            success: function (response) {#}
+    {#                                if (response.success) {#}
+    {##}
+    {#                                    console.log("this is response====", response)#}
+    {#                                    const newRow = $('<tr ><td colspan="100%" style="padding-left: 7%;padding-right: 4%">' + response.data + '</td></tr>');#}
+    {#                                    row.after(newRow);#}
+    {#row.after(`${response.data}`);#}
+    {##}
+    {#$('table').DataTable();#}
+    {#                                    isDataAppended = true; // Set the flag to true to prevent further appending#}
+    {#                                    row.find('.double_collapse_button').addClass('active')#}
+    {##}
+    {#                                } else {#}
+    {#                                    showNotification('Something went wrong')#}
+    {#                                }#}
+    {#                                icon.removeClass(" fa-refresh fa-spin").addClass("fa-paper-plane")#}
+    {#                            },#}
+    {#                        })#}
+    {#                    } else {#}
+    {#                        row.siblings('tr').remove()#}
+    {#                        row.find('.double_collapse_button').removeClass('active')#}
+    {#                        isDataAppended = false; // Set the flag to true to prevent further appending#}
+    {#                    }#}
+    {#                })#}
+    {##}
+    {#            }, 1000)#}
+    {#        });#}
+    {#    </script>#}
+    <script>
+        window.toggleFields = function toggleFields() {
+            $('#fields').toggle();
+        }
+    </script>
+    <script>
+        // Initialize an empty object to store query parameters
+        let queryParams = {};
+
+        function updateRoute(selected_name = null, selected_val = null) {
+            // Remove the previous parameter, if it exists
+            delete queryParams[selected_name];
+            if (selected_name === null && selected_val === null) {
+                // Reset all query parameters
+                queryParams = {};
+            } else {
+                // Add or update the query parameter
+                if (selected_name && selected_val !== "") {
+                    queryParams[selected_name] = selected_val;
+                } else if (selected_name) {
+                    // Remove the query parameter if selected_val is empty
+                    delete queryParams[selected_name];
+                }
+            }
+            // Add the new parameter
+            {#queryParams[selected_name] = selected_val;#}
+
+            // Generate the query string
+            let queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&');
+
+            let finalRoute = data_table_ajax_route + (queryString ? '&' + queryString : '');
+            console.log(finalRoute);
+            const table = $('.data-table').DataTable();
+            table.off('init.dt', onTableInit)
+            table.destroy();
+
+            const newTable = $('.data-table').DataTable({
+                "serverSide": false,
+                "order": [],
+                "processing": true,
+                "lengthMenu": [[20, 40, 100], [20, 40, 100]],
+                "ajax": {
+                    {#"url": "#",#}
+                    "url": finalRoute,
+                    "type": "POST",
+                    "beforeSend": function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token|escapejs }}");
+                    }
+                },
+                "columns": generate_columns()
+            });
+
+            newTable.on('init.dt', onTableInit);
+
+            setTimeout(function () {
+                $('.data-table thead tr').addClass('table-custom-head')
+                $('.data-table').parent().addClass('table-responsive')
+                $('.data-table thead th').each(function () {
+                    $(this).find('a').attr('href', 'javascript:;')
+                    var title = $(this).text();
+                    if (~title.indexOf("Action")) {
+                        $(this).find('input').remove()
+                        $(this).css('text-align', 'center')
+                    }
+                    {#if (~title.indexOf("Date of birth")) {#}
+                    {#    let inputfield = $(this).find('input')#}
+                    {#    inputfield.attr('type', 'date')#}
+
+                });
+            }, 100);
+        }
+
+        $(".selected-cls").on('change', function () {
+            let selected_name = $(this).attr("name")
+            let selected_val = $(this).val()
+            // Call the updateRoute function when a filter value changes
+            updateRoute(selected_name, selected_val);
+        });
+        // Attach an event listener to the reset button
+        $(document).on("click", '#resetButton', function (event) {
+            // Reset all query parameters by calling updateRoute without arguments
+            updateRoute();
+            const form = document.getElementById("fields");
+
+            event.stopPropagation();
+            event.preventDefault();
+
+            form.reset();
+            // Reset Select2 for select elements
+            $("select").val(null).trigger("change");
+
+        });
+
+        function onTableInit(e, info, json) {
+            console.log(this, 'table-init')
+            info.aoData.forEach((item) => {
+                const data = item._aData;
+                const node = item.nTr;
+                const isCancelled = data.order_status === "Cancelled";
+                const isCompleted = data.order_status === "Completed";
+                if (isCancelled) {
+                    node.classList.add('cancelled-order-tr');
+                }
+                ;
+
+                isCompleted && node.classList.add('completed-order-tr');
+
+            })
+        }
+    </script>
+{% endblock %}

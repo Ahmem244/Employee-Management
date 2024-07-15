@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jq-datatables-styles.css' %}">
+    {#    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">#}
+
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/uuid.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/instructor.css' %}">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.10.1/css/pro.min.css">
+    
+
+
+    <style>
+        .chat-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chat-box {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        .dataTables_paginate {
+            display: flex;
+            flex-display: row;
+            align-items: center;
+            margin-block: 1rem;
+        }
+
+        .paginate_button {
+            background-color: #F2F4FA;
+            color: #000;
+            border-radius: 8px !important;
+            border: 1px solid #F2F4FA;
+            padding: 13px 16px !important;
+            font-size: 13px;
+            margin-left: 6px !important;
+        }
+
+        .dataTables_paginate {
+            gap: 5px;
+            background: #fff;
+            padding: 15px;
+        }
+
+        a.paginate_button.current {
+            background-color: #4128E6;
+            color: #ffffff !important;
+            border-color: #4128E6 !important;
+        }
+
+        .paginate_button:hover {
+            background: #4128E6 !important;
+            color: #ffffff !important;
+            border-color: #4128E6;
+        }
+
+    </style>
+
+
+    <!-- Select 2 -->
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.2.2/tinymce.min.js"></script>
+
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '.demo textarea',
+            // width: 754 - 2,
+            height: 600 - 99,
+            plugins: [
+                'advlist',
+                'autolink',
+                'lists',
+                'link',
+                'image',
+                'charmap',
+                'print',
+                'preview',
+                'anchor',
+                'searchreplace',
+                'visualblocks',
+                'code',
+                'fullscreen',
+                'insertdatetime',
+                'media',
+                'table',
+                'contextmenu',
+                'paste',
+                'imagetools'
+            ],
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image',
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tiny.cloud/css/codepen.min.css'
+            ]
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script>
+        function sendMessage() {
+            var messageInput = document.getElementById("message-input");
+            var message = messageInput.value.trim();
+            if (message !== "") {
+                var chatBox = document.getElementById("chat-box");
+                var newMessage = document.createElement("div");
+                newMessage.textContent = message;
+                chatBox.appendChild(newMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                messageInput.value = "";
+            }
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            try {
+
+                const tableEl = $('table')[0];
+
+                if ($(tableEl).attr('data-init-by-header') === '0') return;
+                const table = $(tableEl).DataTable({
+                    "paging": true,
+                    "info": false,
+                    "lengthChange": false,
+                    "pageLength": 10,
+                    "language": {
+                        "paginate": {
+                            "previous": "Previous",
+                            "next": "Next",
+                            'class': 'page-link',
+                        }
+
+                    },
+                    "searching": true,
+                });
+
+                $('#buscar').on('keyup', function () {
+                    // Filter the table
+                    table.search(this.value).draw();
+                });
+                $('.dataTables_filter').hide();
+                $('.filter_button').on('click', function () {
+                    console.log(this.getAttribute('value'));
+                    // Filter the table
+                    if (this.getAttribute('value') === 'all') {
+                        table.search('').draw();
+                        return;
+                    }
+                    table.search(this.getAttribute('value')).draw();
+                });
+
+
+            } catch (error) {
+                console.log(error?.message, '--err')
+            }
+
+        });
+
+
+    </script>
+
+
+<body>¬
+ 

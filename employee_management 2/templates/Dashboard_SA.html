@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Advisor Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+    <h2>Welcome, [Sales Advisor Name]!</h2>
+
+    <!-- Shift Schedule Snapshot -->
+    <div class="section">
+        <h3>Your Next Shift</h3>
+        <p>[Date and Time]</p>
+        <a href="{% url 'sales-advisor-shift' %}">View Full Schedule</a>
+    </div>
+
+    <!-- Task Overview -->
+    <div class="section">
+        <h3>Tasks Overview</h3>
+        <p>Task 1 - Due: [Date]</p>
+        <p>Task 2 - Completed</p>
+        <!-- Additional tasks here -->
+    </div>
+
+    <!-- Announcements -->
+    <div class="section">
+        <h3>Latest Announcements</h3>
+        <p>[Announcement details]</p>
+        <!-- Additional announcements here -->
+    </div>
+
+    <!-- Leave Request Status -->
+    <div class="section">
+        <h3>Leave Request Status</h3>
+        <p>Your latest leave request is [Status].</p>
+        <a href="#">View All Requests</a>
+    </div>
+
+    <!-- Internal Messaging Notifications -->
+    <div class="section">
+        <h3>New Messages</h3>
+        <p>You have [Number] new message(s).</p>
+        <a href="#">Go to Messages</a>
+    </div>
+
+</div>
+
+</body>
+</html>

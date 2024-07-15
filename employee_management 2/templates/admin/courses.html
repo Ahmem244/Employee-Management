@@ -1,0 +1,330 @@
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+{% load static %}
+<style>
+    #vistaPrevia img, #vistaPrevia1 img, #vistaPrevia2 img, #vistaPrevia3 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+
+<div class="sidebar">
+    {% include 'includes/admin/sidebar.html' %}
+
+</div>
+<div class="main">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Gestión de Cursos
+                    </h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="box-border">
+                        <div class="header">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form action="" class="buscador">
+                                        <div class="form-group position-relative">
+                                            <label for="buscar"><i class="fal fa-search"></i></label>
+                                            <input type="text" name="buscar" id="buscar" placeholder="Buscar Cursos">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                     <a href="javascript:void(0)" class="btn-gris font-family-Inter-Regular" href="#"
+                                       role="button" id="dropdownMenuLinkfilter"
+                                       data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">
+                                        <i class="fal fa-filter"></i> Filtros <i class="far fa-chevron-down"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right"
+                                         aria-labelledby="dropdownMenuLinkfilter">
+                                        <a class="dropdown-item texto-1 font-family-Inter-Regular filter_button"
+                                           href="#" value="all">All</a>
+                                        <a class="dropdown-item texto-1 font-family-Inter-Regular filter_button"
+                                           href="#" value="live">Live</a>
+                                        <a class="dropdown-item texto-1 font-family-Inter-Regular filter_button"
+                                           href="#" value="recorded">Recorded</a>
+
+                                    </div>
+                                    
+                                    
+                                    <a href="javascript:void(0)" class="btn-gris font-family-Inter-Regular btn-blue"
+                                       data-toggle="modal" data-target="#crearCursos">
+                                        + Crear Cursos
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table" id="coursesTable">
+                                    <thead class="thead-dark">
+                                    <tr class="font-family-Outfit-SemiBold">
+                                        <th>CURSO</th>
+                                        <th>TIPO</th>
+                                        <th>OFERTA DE COMPRA</th>
+                                        <th style="text-align: right;">ACCIONES</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for course in courses %}
+                                        <tr>
+                                            <td class="texto-usuario">
+                                                <p class="font-family-Inter-Regular">
+                                                    {% if course.cover_image %}
+                                                        <img src="{{ course.cover_image.url }}" alt="user" width="40px"
+                                                             height="40px">
+                                                    {% else %}
+                                                        <img src="{% static 'img/user-1.png' %}" alt="user" width="40px"
+                                                             height="40px">
+                                                    {% endif %}
+                                                    <strong class="font-family-Inter-Regular">
+                                                        {{ course.name }}
+                                                        <span class="d-block">C-{{ course.id }}</span>
+                                                    </strong>
+                                                </p>
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">{{ course.course_type }}</td>
+                                            <td class="font-family-Inter-Medium texto-0">{{ course.offers }}</td>
+                                            <td align="right" class="font-family-Inter-Medium texto-0">
+                                                <div class="dropdown d-inline-block">
+                                                    <a class="btn-action dropdownMenuLink font-family-Inter-Regular"
+                                                       href="#" role="button" id="dropdownMenuLink"
+                                                       data-toggle="dropdown"
+                                                       aria-haspopup="true" aria-expanded="false">
+                                                        Acción <i class="fas fa-chevron-down"></i>
+                                                    </a>
+
+                                                    <div class="dropdown-menu dropdown-menu-right"
+                                                         aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item texto-1 font-family-Inter-Regular"
+                                                           href="{% url 'course_detail' id=course.id %}">Ver
+                                                            detalles</a>
+                                                        <a class="dropdown-item texto-1 font-family-Inter-Regular editcoursebtn"
+                                                           href="#" data-toggle="modal" data-target="#editcourse"
+                                                           data-url="{% url 'update_course' id=course.id %}">Editar</a>
+                                                        <a class="dropdown-item texto-1 font-family-Inter-Regular suspend-link"
+                                                           href="{% url 'deactivate_course' id=course.id %}"
+                                                           id="suspend-link"
+                                                           data-toggle="modal"
+                                                           data-target="#modalsuspender">Suspender</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+{#                <div class="col-md-12">#}
+{#                    <ul class="pagination justify-content-end font-family-Inter-Regular"#}
+{#                        style="margin:20px 0">#}
+{#                        {% if courses.has_previous %}#}
+{#                            <li class="page-item"><a class="page-link" href="?page={{ courses.previous_page_number }}">Previous</a>#}
+{#                            </li>#}
+{#                        {% endif %}#}
+{##}
+{#                        {% for num in courses.paginator.page_range %}#}
+{#                            <li class="page-item {% if num == courses.number %}active{% endif %}">#}
+{#                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>#}
+{#                            </li>#}
+{#                        {% endfor %}#}
+{#                        {% if courses.has_next %}#}
+{#                            <li class="page-item"><a class="page-link"#}
+{#                                                     href="?page={{ courses.next_page_number }}">Next</a></li>#}
+{#                        {% endif %}#}
+{#                    </ul>#}
+{#                </div>#}
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="crearCursos" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form method="post" action="{% url 'create_course' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Curso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-usuario">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                                    <input type="text" name="name" id="nombre" class="font-family-Inter-Medium"
+                                           placeholder="Nombres">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <span class="font-family-Inter-Regular fz-12">Tipo de curso</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 font-family-Inter-Medium">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input course_type_radio" id="grabado"
+                                           name="course_type" value="recorded">
+                                    <label class="custom-control-label" for="grabado"
+                                           style="font-size: 15px;">Grabado</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 font-family-Inter-Medium">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input course_type_radio" id="vivo"
+                                           name="course_type" value="live">
+                                    <label class="custom-control-label" for="vivo" style="font-size: 15px;">En
+                                        vivo</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-4">
+                                <div class="form-group">
+                                    <label for="envivo" class="font-family-Inter-Regular">Enlace En Vivo</label>
+                                    <input type="text" name="live_link" id="envivo" class="font-family-Inter-Medium"
+                                           placeholder="Enlace En Vivo" style="background-color: #F2F4FA;">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="grabadas" class="font-family-Inter-Regular">Enlace Clases
+                                        grabadas</label>
+                                    <input type="text" name="recorded_link" id="grabadas"
+                                           class="font-family-Inter-Medium"
+                                           placeholder="Enlace Clases grabadas" style="background-color: #F2F4FA;">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="pdf" class="font-family-Inter-Regular">Programación (PDF)</label>
+                                    <input type="text" name="programming_link" id="pdf" class="font-family-Inter-Medium"
+                                           placeholder="Enlace Programación (PDF)" style="background-color: #F2F4FA;">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="material" class="font-family-Inter-Regular">Enlace de Material
+                                        general</label>
+                                    <input type="text" name="general_material_link" id="material"
+                                           class="font-family-Inter-Medium"
+                                           placeholder="Enlace de Material general" style="background-color: #F2F4FA;">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <p class="fz-12 font-family-Inter-Regular">Imagen de Previsualización</p>
+                                    <!-- Input file oculto -->
+                                    <input type="file" id="inputImagen" accept="image/*" style="display: none;"
+                                           name="preview_image">
+                                    <div id="vistaPrevia"></div>
+                                    <!-- Botón visible -->
+                                    <a href="javascript:void(0)" id="btnCargarImagen"
+                                       class="btn-gris font-family-Inter-Medium btn-border d-inline-block mt-3">
+                                        Cargar Imagen
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <p class="fz-12 font-family-Inter-Regular">Imagen de Previsualización</p>
+                                    <!-- Input file oculto -->
+                                    <input type="file" id="inputImagen1" accept="image/*" style="display: none;"
+                                           name="cover_image">
+                                    <div id="vistaPrevia1"></div>
+                                    <!-- Botón visible para cargar la imagen -->
+                                    <a href="javascript:void(0)" id="btnCargarImagen1"
+                                       class="btn-gris font-family-Inter-Medium btn-border d-inline-block mt-3">
+                                        Cargar Imagen
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer align-items-center justify-content-center">
+                    <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                    <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editcourse" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document" id="editCourseFormTarget">
+
+    </div>
+</div>
+
+<script src="{% static 'js/courses.js' %}"></script>
+<script>
+    // on check of radio button with class course_type_radio
+    $('.course_type_radio').on('change', function () {
+        if ($(this).val() == 'live') {
+            $('#envivo').prop('readonly', false);
+            $('#envivo').prop('placeholder', 'Enlace En Vivo');
+            $('#grabadas').prop('disabled', true);
+            $('#grabadas').prop('placeholder', 'Enlace Clases grabadas (disabled)');
+
+        } else {
+            $('#envivo').prop('readonly', true);
+            $('#envivo').prop('placeholder', 'Enlace En Vivo (disabled)');
+            $('#grabadas').prop('disabled', false);
+            $('#grabadas').prop('placeholder', 'Enlace Clases grabadas');
+
+        }
+    });
+    
+    console.log('courses.html')
+</script>
+
+{#<script>#}
+{#    $(document).ready(function () {#}
+{#        $('#coursesTable').DataTable({#}
+{#            "paging": true,#}
+{#            "info": false,#}
+{#            "lengthChange": false,#}
+{#            "pageLength": 10,#}
+{#            "language": {#}
+{#                "paginate": {#}
+{#                    "previous": "Previous",#}
+{#                    "next": "Next"#}
+{#                }#}
+{#            },#}
+{#            "ajax": {#}
+{#                "url": "/adminportal/courses_data/", // replace with your API endpoint#}
+{#                "dataSrc": ""#}
+{#            },#}
+{#            "columns": [#}
+{#                // replace with your table column data#}
+{#                {"data": "name"},#}
+{#                {"data": "course_type"},#}
+{##}
+{#            ]#}
+{#        });#}
+{#    });#}
+{#</script>#}
+{% include "includes/admin/footer.html" %}

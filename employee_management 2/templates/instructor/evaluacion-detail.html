@@ -1,0 +1,338 @@
+{% include "includes/instructor/header.html" %}
+{% include "includes/instructor/nav.html" %}
+{% load static %}
+    <div class="sidebar">
+        {% include "includes/instructor/sidebar.html" %}
+    </div>
+    <div class="main">
+        <section class="bg-panel">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 mb-4 mt-3">
+                        <h1 class="font-family-Outfit-SemiBold titulo">
+                            <a href="#" onclick="history.back()" class="mr-3 text-decoration-none">
+                                <i class="fas fa-angle-left"></i>
+                            </a> {{evaluacion.title}}
+                        </h1>
+                        <h4 class="font-family-Inter-SemiBold fz-16">
+                            {{group.group_id}} - {{group.name}}
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="box-border">
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="buscador">
+                                            <div class="form-group position-relative">
+                                                <label for="buscar"><i
+                                                            class="fal fa-search"></i></label>
+                                                <input type="text" name="buscar" id="buscar"
+                                                {% if search_name %} value="{{search_name}}" {% endif %}
+                                                  placeholder="Buscar">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 text-right d-flex align-items-center justify-content-end">
+                                        <p class="mb-0 font-family-Inter-Medium fz-14">
+                                            47/50 Finalizados
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <table data-search-input-id="buscar" class="table" id="studentTable">
+                                        <thead class="thead-dark">
+                                        <tr class="font-family-Outfit-SemiBold">
+                                            <th>Estudiante</th>
+                                            <th>Empezó</th>
+                                            <th>Finalizó</th>
+                                            <th>Nota</th>
+                                            <th style="text-align: right;">Realizados</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for student in members %}
+                                        <tr>
+                                            <td class="texto-usuario">
+                                                <p class="font-family-Inter-Regular">
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#detalleuser{{student.id}}">
+                                                        {% if student.user.profile_picture %}
+                                                        <img class="rounded-avatar" src="{{student.user.profile_picture.url }}" alt="user">
+                                                        {% else %}
+                                                        <img src="{% static 'img/user.png' %}" alt="user">
+                                                        {% endif %}
+                                                    </a>
+                                                    <strong class="font-family-Inter-Regular">
+                                                        {{student.user}}
+                                                    </strong>
+                                                </p>
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                {% comment %} 01:20 PM - 05/02/2023 {% endcomment %}
+                                                {{student.start_evaluation}}
+                                                
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                02:20 PM - 05/02/2023
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                {% comment %} 40/50 pts {% endcomment %}
+                                                {{student.student_average.obtained_points}}/{{student.student_average.total_points}} pts
+                                            </td>
+                                            <td align="right" class="font-family-Inter-Medium texto-0">
+                                                <a href="{% url 'student-evaluacion-detail' evaluacion.id student.id %}">Ver detalles</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% comment %} <tr>
+                                            <td class="texto-usuario">
+                                                <p class="font-family-Inter-Regular">
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#detalleuser">
+                                                        <img src="../img/user.png" alt="user">
+                                                    </a>
+                                                    <strong class="font-family-Inter-Regular">
+                                                        Fram Carla Davila Rodriguez
+                                                    </strong>
+                                                </p>
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                01:20 PM - 05/02/2023
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                02:20 PM - 05/02/2023
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                40/50 pts
+                                            </td>
+                                            <td align="right" class="font-family-Inter-Medium texto-0">
+                                                <a href="detalle-evaluacion.php">Ver detalles</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="texto-usuario">
+                                                <p class="font-family-Inter-Regular">
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#detalleuser">
+                                                        <img src="../img/user.png" alt="user">
+                                                    </a>
+                                                    <strong class="font-family-Inter-Regular">
+                                                        Fram Carla Davila Rodriguez
+                                                    </strong>
+                                                </p>
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                01:20 PM - 05/02/2023
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                02:20 PM - 05/02/2023
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                40/50 pts
+                                            </td>
+                                            <td align="right" class="font-family-Inter-Medium texto-0">
+                                                <a href="detalle-evaluacion.php">Ver detalles</a>
+                                            </td>
+                                        </tr> {% endcomment %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-md-12">
+                        <ul class="pagination justify-content-end font-family-Inter-Regular" style="margin:20px 0">
+                            
+                            {% if members.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ members.previous_page_number }}">Previous</a></li>
+                            {% endif %}
+                            {% for num in members.paginator.page_range %}
+                            <li class="page-item {% if num == members.number %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endfor %}
+                            {% if members.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ members.next_page_number }}">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </div> {% endcomment %}
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Modal  crear susuario-->
+    <div class="modal fade" id="crearusuario" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" class="form-usuario">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                                    <input type="text" name="nombre" id="nombre" class="font-family-Inter-Medium" placeholder="Nombres">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="apellidos" class="font-family-Inter-Regular">Apellidos</label>
+                                    <input type="text" name="apellidos" id="apellidos" class="font-family-Inter-Medium" placeholder="Apellidos">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nickname" class="font-family-Inter-Regular">Nombre de Usuario</label>
+                                    <input type="text" name="nickname" id="nickname" class="font-family-Inter-Medium" placeholder="Nombre de Usuario">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ciudad" class="font-family-Inter-Regular">Ciudad</label>
+                                    <select class="form-control font-family-Inter-Medium" id="ciudad" name="ciudad">
+                                        <option selected class="d-none">Selecciona ciudad</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="departamento" class="font-family-Inter-Regular">Departamento</label>
+                                    <select class="form-control font-family-Inter-Medium" id="departamento" name="departamento">
+                                        <option selected class="d-none">Selecciona departamento</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="telefono" class="font-family-Inter-Regular">Teléfono</label>
+                                    <input type="text" name="telefono" id="telefono" class="font-family-Inter-Medium" placeholder="+503 123456789">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="correo" class="font-family-Inter-Regular">Correo</label>
+                                    <input type="email" name="correo" id="correo" class="font-family-Inter-Medium" placeholder="Correo">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="dui" class="font-family-Inter-Regular">Número DUI</label>
+                                    <input type="text" name="dui" id="dui" class="font-family-Inter-Medium" placeholder="76543219">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="sexo" class="font-family-Inter-Regular">Sexo</label>
+                                    <select class="form-control font-family-Inter-Medium" id="sexo" name="sexo">
+                                        <option selected class="d-none">Selecciona sexo</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nacimiento" class="font-family-Inter-Regular">Fecha de nacimiento</label>
+                                    <input type="date" name="nacimiento" id="nacimiento" class="font-family-Inter-Medium" placeholder="DD/MM/AAAA">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="contrasena" class="font-family-Inter-Regular">Crear contraseña</label>
+                                    <input type="password" name="contrasena" id="contrasena" class="font-family-Inter-Medium" placeholder="Crear contraseña">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <span class="font-family-Inter-Regular">ROL</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 font-family-Inter-Medium">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="estudiante" name="rol">
+                                    <label class="custom-control-label" for="estudiante" style="font-size: 15px;">Estudiante</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 font-family-Inter-Medium">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="instructor" name="rol">
+                                    <label class="custom-control-label" for="instructor" style="font-size: 15px;">Instructor</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer align-items-center justify-content-center">
+                    <button type="button" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                    <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% for student in members %}
+    <!-- Modal Detalle User -->
+    <div class="modal fade" id="detalleuser{{student.id}}" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered " role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Detalle Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 text-center mb-4">
+                            {% if student.user.profile_picture %}
+                            <img src="{{student.user.profile_picture.url }}" class="modal-rounded-avatar" alt="foto">
+                            {% else %}
+                            <img src="{% static 'img/fotoperfil.png' %}" alt="foto">
+                            {% endif %}
+                            <h4 class="font-family-Inter-SemiBold fz-16 mt-3">{{student.user.full_name}}</h4>
+                        </div>
+                        <div class="col-md-9 m-auto">
+                            <table class="table table-borderless font-family-Inter-Medium">
+                                <tbody>
+                                <tr>
+                                    <td class="fz-12">Nombre de usuario</td>
+                                    <td class="fz-14">{{student.user.username}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td class="fz-12">Correo Electrónico</td>
+                                    <td class="fz-14">{{student.user.email}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td class="fz-12">Teléfono</td>
+                                    <td class="fz-14">{{student.user.phone_number}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <a href="{% url 'instructor-messages' %}" class="btn-gris font-family-Inter-Medium btn-border">Enviar mensaje</a>
+                    <a href="{% url 'certification' %}" class="btn-gris btn-gris-oscuro font-family-Inter-Medium">Ver certificado</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    {% include "includes/instructor/footer.html" %}

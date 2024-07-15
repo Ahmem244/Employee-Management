@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Sales Advisor Account</title>
+    <link rel="stylesheet" href="{% static 'account_creation.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Create Sales Advisor Account</h2>
+
+    <!-- Account Creation Form -->
+    <div class="account-creation-form">
+        <form method="post" action="">
+            {% csrf_token %}
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first_name" required>
+
+            <label for="middle-name">Middle Name:</label>
+            <input type="text" id="middle-name" name="middle_name" placeholder="Optional">
+
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="surname" required>
+
+            <label for="employee-email">Email:</label>
+            <input type="email" id="employee-email" name="employee_email" required>
+
+            <label for="employee-phone">Phone Number:</label>
+            <input type="tel" id="employee-phone" name="employee_phone" required>
+
+            <label for="employee-address">Address:</label>
+            <input type="text" id="employee-address" name="employee_address" required>
+
+            <label for="employee-number">Employee Number:</label>
+            <input type="text" id="employee-number" name="employee_number" required>
+
+            <label for="department">Department:</label>
+            <select id="department" name="department" required>
+                <option value="">Select Department</option>
+                <option value="sales">Sales</option>
+                <option value="customer_service">Customer Service</option>
+                <!-- Additional departments as needed -->
+            </select>
+
+            <label>Password:</label>
+            <input type="password" id="employee-number" name="password" required>
+            <button type="submit">Create Account</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

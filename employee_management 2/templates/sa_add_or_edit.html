@@ -1,0 +1,258 @@
+{% load static %}
+{% load django_tables2 %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {#    ======================#}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Bootstrap JS -->
+    {#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>#}
+    {#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>#}
+
+    {#    ======================#}
+    <style>
+        .float-right a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #c4baba;
+            color: #131313;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .float-right a:hover {
+            background-color: #0056b3; /* Change background color on hover */
+            color: #ffffff; /* Change font color on hover */
+        }
+
+        .float-right button {
+            background-color: #007bff; /* Set background color */
+            color: #fff; /* Set font color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Add border radius for rounded corners */
+            padding: 10px 20px; /* Add padding */
+            margin-left: 10px; /* Add margin between buttons */
+            font-size: 16px; /* Set font size */
+            cursor: pointer; /* Add pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Add transition for smooth color change */
+        }
+
+        .float-right button:hover {
+            background-color: #0056b3; /* Change background color on hover */
+        }
+
+        .form-control {
+            width: 100%; /* Set the width to 100% */
+            max-width: 300px; /* Optionally, set a maximum width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 100px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            z-index: 9999;
+        }
+
+        .alert {
+            width: 200px; /* Adjust as needed */
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+
+    </style>
+</head>
+<body>
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+<div class="sidebar">
+    {% include "includes/admin/sa_sidebar.html" %}
+</div>
+<div class="container next-shift" style="height: 500px;margin-top: 93px ; margin-right: 20%;">
+    <div class="row">
+        <div class="card col-md-12 col-sm-12 "  >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8  col-md-12 col-sm-12 "><h2 class="card-title">{{ form_title }}</h2></div>
+                    <div class="col-lg-4  col-md-12 col-sm-12 ">{% if links %}
+                        {% for link in links %}
+                            <a href="{{ link.href }}" class="float-right"
+                               style="display: inline-block;padding: 10px 20px;background-color: #c4baba;color: #131313;text-decoration: none;border-radius: 5px;transition: background-color 0.3s ease;"
+                               onmouseover="this.style.backgroundColor='#0056b3'; this.style.color='#ffffff';"
+                               onmouseout="this.style.backgroundColor=''; this.style.color='';">{{ link.button }}</a>
+                        {% endfor %}
+                    {% endif %}</div>
+                </div>
+                <br>
+
+
+                {% if form %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-lg-3 col-sm-12 form-group">
+                                    <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                                    <br>
+                                    {% render_field field class="form-control" %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </form>
+                {% endif %}
+                {% if next_shifts %}
+                    {% for next_shift in next_shifts %}
+                        <div class="card" style="border-width: 6px;">
+                            <div class="card-header" style="background: #3F28E3;color: white ">
+                                <div class="row">
+                                    <div class="col-3">{{ next_shift.date }}</div>
+
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <p>Start Time : &nbsp;&nbsp;&nbsp;{{ next_shift.start_time }}</p>
+                                <p>End Time : &nbsp;&nbsp;&nbsp;{{ next_shift.end_time }}</p>
+                                <p>Notes : &nbsp;&nbsp;&nbsp;{{ next_shift.notes }}</p>
+                                <br>
+
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+
+                {% endif %}
+                {% if announcements %}
+                    {% for announcement in announcements %}
+                        <div class="card" style="border-width: 6px;">
+                            <div class="card-header" style="background: #3F28E3;color: white ">
+                                <div class="row">
+                                    <div class="col-3">{{ announcement.title }}</div>
+
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <p>Description : &nbsp;&nbsp;&nbsp;{{ announcement.description }}</p>
+                                <p>Date: &nbsp;&nbsp;&nbsp;{{ announcement.created_at }}</p>
+                                <br>
+
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+
+                {% endif %}
+                {% if requests %}
+                    {% for request in requests %}
+                        <div class="card" style="border-width: 6px;">
+                            <div class="card-header" style="background: #3F28E3;color: white ">
+                                <div class="row">
+                                    <div class="col-3">{{ request.title }}</div>
+
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <p>Description : &nbsp;&nbsp;&nbsp;{{ request.description }}</p>
+                                <p>Date: &nbsp;&nbsp;&nbsp;{{ request.created_at }}</p>
+                                <p>Status: <span
+                                        {% if request.approval_status == 'PENDING' %}style = "color: #2585f2";
+                                        {% else %}{% if request.approval_status == 'DENIED' %}style="color: red"
+                                        {% else %}style="color: #5bda5b"
+                                        {% endif %} {% endif %}
+                                        style="background: white"> &nbsp;&nbsp;&nbsp;{{ request.approval_status }}</span>
+                                </p>
+
+                                <br>
+
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+
+                {% endif %}
+                {% if tasks %}
+                    {% for task in tasks %}
+                        <div class="card" style="border-width: 6px;">
+                            <div class="card-header" style="background: #3F28E3;color: white ">
+                                <div class="row">
+                                    <div class="col-10">{{ task.title }}</div>
+                                    <div class="col-2 font-weight-bold"
+                                    >Completed :<span {% if task.is_completed %}style="color: #5bda5b";
+                                                      {% else %}style="color: red"
+                                                      {% endif %}
+                                                      style="background: white">{% if task.is_completed %}Yes {% else %}
+                                        No{% endif %}</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <p>Description : &nbsp;&nbsp;&nbsp;{{ task.description }}</p>
+                                <p>Due Date : &nbsp;&nbsp;&nbsp;{{ task.due_date }}</p>
+                                <p>Department : &nbsp;&nbsp;&nbsp;{{ task.department }}</p>
+                                <p>Creation Time : &nbsp;&nbsp;&nbsp;{{ task.created_at }}</p>
+                                <br>
+                                {% if not task.is_completed %}
+                                    <div class="float-right">
+                                        <a href="{% url 'sa_mark_task_as_complete' task.id %}">Mark as
+                                            Complete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+    <div id="alert-container" class="alert-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        $('.userTable').DataTable();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.alert').delay(3000).fadeOut('slow', function () {
+            $(this).remove();
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<div class="group position-relative" data-section-id="1">
+    <h3 class="font-family-Inter-SemiBold">
+        <i class="fal fa-arrows"></i>
+        <span>{{ module.title }}</span>
+    </h3>
+    <div>
+        <div class="sortable">
+            <ul  id="content-items-container" data-list-id="1" class="sortable">
+                {% for content in module.module_content %}
+                    <li data-item-id="1"
+                        class="font-family-Inter-SemiBold">
+                                                            <span class=" draggable"><i
+                                                                    class=" fal fa-arrows"></i></span>
+                        {{ content.content.title }}
+                        <strong class="float-right ">
+                            <a href="#" data-toggle="modal"
+                               data-target="#{{ content.type }}model"
+                               data-module="{{ content.type }}"
+                               data-url="{% url 'update_content' model_name=content.type id=content.content.id %}"
+                               class="editar mr-3 update_content"><i
+                                    class="fas fa-pen"></i></a>
+                            <a href="{% url 'delete_content' model_name=content.type id=content.content.id %}"
+                               class="eliminar"><i
+                                    class="fas fa-trash"></i></a>
+                        </strong>
+                    </li>
+                {% endfor %}
+
+            </ul>
+            <div class="agregar mt-3">
+                <p class="font-family-Inter-Regular fz-12">Agregar:</p>
+                <ul class="font-family-Inter-Medium">
+                    <li><a href="#" data-toggle="modal"
+                           data-module="material"
+                           data-id="{{ module.id }}"
+                           class="add-content"
+                           data-target="#Material">+Material</a></li>
+                    <li><a href="#" data-toggle="modal"
+                           data-module="lesson"
+                           data-id="{{ module.id }}"
+                           class="add-content"
+                           data-target="#Leccion">+Lección</a></li>
+                    <li><a href="#" data-toggle="modal"
+                           data-module="task"
+                           data-id="{{ module.id }}"
+                           class="add-content"
+                           data-target="#Tarea">+Tarea</a></li>
+                    <li><a href="#" data-toggle="modal"
+                           data-module="evaluation"
+                           data-id="{{ module.id }}"
+                           class="add-content"
+                           data-target="#Evaluacion">+Evaluación</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="eventos">
+        <a href="#" data-toggle="modal" data-target="#editmodulemodal"
+           class="editar editmodulebtn"
+           data-url="{% url 'update_module' id=module.id %}"><i
+                class="fas fa-pen"></i></a>
+        <a href="{% url 'delete_module' id=module.id %}"
+           class="eliminar"><i class="fas fa-trash"></i></a>
+    </div>
+</div>
+
+<script>
+    $('.add-content').on('click', function (event) {
+        var button = $(this); // Button that triggered the modal
+        var Id = button.data('id'); // Extract info from data-* attributes
+        var module = button.data('module'); // Extract info from data-* attributes
+        console.log(Id, 'module id');
+        var input_id = module + '_id';
+        console.log(input_id, 'input id');
+        document.getElementById(input_id).setAttribute('value', Id);
+
+
+    });
+</script>

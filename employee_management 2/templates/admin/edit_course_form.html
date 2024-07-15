@@ -1,0 +1,202 @@
+{% load static %}
+<form method="post" action="{% url 'update_course' id=course.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-content border-radius-12">
+        <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+            <h5 class="modal-title font-family-Outfit-SemiBold">Curso</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-usuario">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                            <input type="text" name="name" id="nombre" class="font-family-Inter-Medium"
+                                   placeholder="Nombres" value="{{ course.name }}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <span class="font-family-Inter-Regular fz-12">Tipo de curso</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 font-family-Inter-Medium">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="grabado1" name="course_type"
+                                   value="recorded" {% if course.course_type == 'recorded' %} checked {% endif %}>
+                            <label class="custom-control-label" for="grabado1"
+                                   style="font-size: 15px;">Grabado</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 font-family-Inter-Medium">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" id="vivo1" name="course_type" value="live" {% if course.course_type == 'live' %} checked {% endif %}>
+                            <label class="custom-control-label" for="vivo1" style="font-size: 15px;">En vivo</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="form-group">
+                            <label for="envivo" class="font-family-Inter-Regular">Enlace En Vivo</label>
+                            <input type="text" name="live_link" id="envivo" class="font-family-Inter-Medium"
+                                   placeholder="Enlace En Vivo" style="background-color: #F2F4FA;" value="{{ course.live_link }}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="grabadas" class="font-family-Inter-Regular">Enlace Clases grabadas</label>
+                            <input type="text" name="recorded_link" id="grabadas" class="font-family-Inter-Medium"
+                                   placeholder="Enlace Clases grabadas" style="background-color: #F2F4FA;" value="{{ course.recorded_link }}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="pdf" class="font-family-Inter-Regular">Programación (PDF)</label>
+                            <input type="text" name="programming_link" id="pdf" class="font-family-Inter-Medium"
+                                   placeholder="Enlace Programación (PDF)" style="background-color: #F2F4FA;" value="{{ course.programming_link }}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="material" class="font-family-Inter-Regular">Enlace de Material
+                                general</label>
+                            <input type="text" name="general_material_link" id="material"
+                                   class="font-family-Inter-Medium"
+                                   placeholder="Enlace de Material general" style="background-color: #F2F4FA;" value="{{ course.general_material_link }}">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <p class="fz-12 font-family-Inter-Regular">Imagen de Previsualización</p>
+                            <!-- Input file oculto -->
+                            <input type="file" id="inputImagen3" accept="image/*" style="display: none;"
+                                   name="cover_image">
+                            <div id="vistaPrevia3"></div>
+                            <!-- Botón visible -->
+                            <a href="javascript:void(0)" id="btnCargarImagen3"
+                               class="btn-gris font-family-Inter-Medium btn-border d-inline-block mt-3">
+                                Cargar Imagen
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <p class="fz-12 font-family-Inter-Regular">Imagen de Previsualización</p>
+                            <!-- Input file oculto -->
+                            <input type="file" id="inputImagen2" accept="image/*" style="display: none;"
+                                   name="preview_image">
+                            <div id="vistaPrevia2"></div>
+                            <!-- Botón visible para cargar la imagen -->
+                            <a href="javascript:void(0)" id="btnCargarImagen2"
+                               class="btn-gris font-family-Inter-Medium btn-border d-inline-block mt-3">
+                                Cargar Imagen
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer align-items-center justify-content-center">
+            <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+            <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        // Al hacer clic en el botón, activar el input file
+        $('#btnCargarImagen3').click(function () {
+            $('#inputImagen3').click();
+        });
+
+        // Al cargar la página, mostrar una imagen por defecto
+        mostrarVistaPreviaDefault();
+
+        // Cuando se selecciona una nueva imagen, mostrar su vista previa
+        $('#inputImagen3').change(function () {
+            mostrarVistaPrevia3(this);
+        });
+
+        function mostrarVistaPrevia3(input) {
+            if (input.files && input.files[0]) {
+                var lector = new FileReader();
+
+                lector.onload = function (e) {
+                    $('#vistaPrevia3').html('<img src="' + e.target.result + '" alt="Vista Previa" >');
+                };
+
+                lector.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function mostrarVistaPreviaDefault() {
+            // Ruta de la imagen por defecto
+
+            {% if course.cover_image %}
+            var imagenPorDefecto = '{{ course.cover_image.url }}';
+            {% else %}
+            var imagenPorDefecto = '/static/img/1072x312.png';
+            {% endif %}
+
+            // Mostrar la vista previa de la imagen por defecto
+            $('#vistaPrevia3').html('<img src="' + imagenPorDefecto + '" alt="Vista Previa" width="100%">');
+        }
+    });
+
+
+    $(document).ready(function () {
+        // Al hacer clic en el botón, activar el input file
+        $('#btnCargarImagen2').click(function () {
+            $('#inputImagen2').click();
+        });
+
+        // Al cargar la página, mostrar una imagen por defecto
+        mostrarVistaPreviaDefault1();
+
+        // Cuando se selecciona una nueva imagen, mostrar su vista previa y validar las dimensiones
+        $('#inputImagen2').change(function () {
+            var archivo = this.files[0];
+
+            // Validar dimensiones mínimas
+            if (archivo && archivo.type.startsWith('image/')) {
+                var img = new Image();
+                img.onload = function () {
+                    if (img.width >= 1072 && img.height >= 312) {
+                        mostrarVistaPrevia2(archivo);
+                    } else {
+                        alert('La imagen debe tener dimensiones mínimas de 1072x312.');
+                        // Restablecer el valor del input file para evitar la carga de la imagen no válida
+                        $('#inputImagen2').val('');
+                    }
+                };
+                img.src = URL.createObjectURL(archivo);
+            }
+        });
+
+        function mostrarVistaPrevia2(archivo) {
+            var lector = new FileReader();
+            lector.onload = function (e) {
+                $('#vistaPrevia2').html('<img src="' + e.target.result + '" alt="Vista Previa">');
+            };
+            lector.readAsDataURL(archivo);
+        }
+
+        function mostrarVistaPreviaDefault1() {
+            // Ruta de la imagen por defecto
+            {% if course.preview_image %}
+            var imagenPorDefecto = '{{ course.preview_image.url }}';
+            {% else %}
+            var imagenPorDefecto = '/static/img/1072x312.png';
+            {% endif %}
+
+            // Mostrar la vista previa de la imagen por defecto
+            $('#vistaPrevia2').html('<img src="' + imagenPorDefecto + '" alt="Vista Previa" width="100%">');
+        }
+    });
+</script>

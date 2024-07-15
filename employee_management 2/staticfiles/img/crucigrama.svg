@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectángulo_10707" data-name="Rectángulo 10707" width="32" height="32" fill="#39393d" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Enmascarar_grupo_57883" data-name="Enmascarar grupo 57883" clip-path="url(#clip-path)">
+    <path id="dots-square" d="M24,32a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4M24,8a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4M36,32a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4m0-12a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4M36,8a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4M12,32a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4m0-12a4,4,0,1,0,4,4,4.012,4.012,0,0,0-4-4M12,8a4,4,0,1,0,4,4A4.012,4.012,0,0,0,12,8Z" transform="translate(-8 -8)" fill="#39393d"/>
+  </g>
+</svg>

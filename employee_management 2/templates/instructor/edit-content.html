@@ -1,0 +1,1735 @@
+{% include "includes/instructor/header.html" %}
+{% load static %}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% include "includes/instructor/nav.html" %}
+
+
+    <div class="sidebar">
+        {% include "includes/instructor/sidebar.html" %}
+    </div>
+    <div class="main">
+        <section class="bg-panel">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-10 col-md-8 col-sm-8 col-8 mb-4 mt-3">
+                        <h1 class="font-family-Outfit-SemiBold titulo">
+                            <a href="#" onclick="history.back()" class="mr-3 text-decoration-none">
+                                <i class="fas fa-angle-left"></i>
+                            </a> Editar Contenido
+                        </h1>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                                <div class="box-border mb-4">
+                                    <div class="header pb-0">
+                                        <h4 class="font-family-Inter-SemiBold mb-0">Curso</h4>
+                                    </div>
+                                    <div class="box-white">
+                                        <form action="" class="form-estado desabilitado">
+                                            <div class="form-group">
+                                                <label for="tituloMaterial" class="d-block font-family-Inter-Regular">Nombre de Curso</label>
+                                                <input type="text" name="tituloMaterial" id="tituloMaterial" placeholder="{{course.name}}" class="font-family-Inter-Medium" disabled>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="box-border">
+                                    <div class="header pb-0">
+                                        <h4 class="font-family-Inter-SemiBold mb-0">Contenido</h4>
+                                    </div>
+                                </div>
+                                <div class="box-white">
+                                    <div id="accordion" class="w-100">
+                                        {% for module in course.total_modules %}
+                                        <div class="group position-relative" data-section-id="1">
+                                            <h3 class="font-family-Inter-SemiBold">
+                                                <i class="fal fa-arrows"></i> <span>{{module.title}}</span>
+                                            </h3>
+                                            <div>
+                                                <div class="sortable">
+                                                    <ul data-list-id="1" class="sortable">
+                                                        {% for content in module.module_content %}
+                                                        <li data-item-id="1" class="font-family-Inter-SemiBold">
+                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                            {{ content.content.title }}
+                                                            <strong class="float-right">
+                                                                <a href="#" data-toggle="modal" data-target="#{{ content.type }}model" 
+                                                                data-module="{{ content.type }}" 
+                                                                data-url="{% url 'update-content' model_name=content.type id=content.content.id %}"
+                                                                class="editar mr-3 update_content"><i
+                                                                            class="fas fa-pen"></i></a>
+                                                                <a  href="{% url 'delete-content' model_name=content.type id=content.content.id %}" class="eliminar"><i
+                                                                            class="fas fa-trash"></i></a>
+                                                            </strong>
+                                                        </li>
+                                                        {% endfor %}
+                                                        {% comment %} <li data-item-id="2" class="font-family-Inter-SemiBold">
+                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                            Material de Estudio 1
+                                                            <strong class="float-right">
+                                                                <a href="#" data-toggle="modal" data-target="#Material" class="editar mr-3"><i
+                                                                            class="fas fa-pen"></i></a>
+                                                                <a href="#" class="eliminar"><i
+                                                                            class="fas fa-trash"></i></a>
+                                                            </strong>
+                                                        </li>
+                                                        <li data-item-id="3" class="font-family-Inter-SemiBold">
+                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                            Material de Estudio 2
+                                                            <strong class="float-right">
+                                                                <a href="#" data-toggle="modal" data-target="#Material" class="editar mr-3"><i
+                                                                            class="fas fa-pen"></i></a>
+                                                                <a href="#" class="eliminar"><i
+                                                                            class="fas fa-trash"></i></a>
+                                                            </strong>
+
+                                                        </li> {% endcomment %}
+                                                        
+                                                    </ul>
+                                                    <div class="agregar mt-3">
+                                                        <p class="font-family-Inter-Regular fz-12">Agregar:</p>
+                                                        <ul class="font-family-Inter-Medium">
+                                                            <li><a href="#" data-toggle="modal"
+                                                                    data-module="material"
+                                                                    data-id="{{ module.id }}"
+                                                                    class="add-content"
+                                                                   data-target="#Material">+Material</a></li>
+                                                            <li><a href="#" data-toggle="modal"
+                                                                    data-module="lesson"
+                                                                    data-id="{{ module.id }}"
+                                                                    class="add-content"
+                                                                    data-target="#Leccion">+Lección</a></li>
+                                                            <li><a href="#" data-toggle="modal"
+                                                                    data-module="task"
+                                                                    data-id="{{ module.id }}"
+                                                                    class="add-content"
+                                                                   data-target="#Tarea">+Tarea</a></li>
+                                                            <li><a href="#" data-toggle="modal"
+                                                                    data-module="evaluation"
+                                                                    data-id="{{ module.id }}"
+                                                                    class="add-content"
+                                                                   data-target="#Evaluacion">+Evaluación</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="eventos">
+                                                <a href="#" data-toggle="modal" data-target="#editmodulemodal" class="editar editmodulebtn" data-url="{% url 'update-module' module.id %}"><i class="fas fa-pen"></i></a>
+                                                <a href="{% url 'delete-module' module.id %}" class="eliminar"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% comment %} <div class="group position-relative" data-section-id="2">
+                                            <h3 class="font-family-Inter-SemiBold">
+                                                <i class="fal fa-arrows"></i> Nombre de Módulo 2
+                                            </h3>
+                                            <div>
+                                                <div class="sortable">
+                                                    <ul class="sortable" data-list-id="2">
+                                                        <li data-item-id="11" class="font-family-Inter-SemiBold"">
+                                                        <span class="draggable"><i
+                                                                    class="fal fa-arrows"></i></span>
+                                                        Material de Estudio
+                                                        <strong class="float-right">
+                                                            <a href="#" data-toggle="modal" data-target="#Material" class="editar mr-3"><i
+                                                                        class="fas fa-pen"></i></a>
+                                                            <a href="#" class="eliminar"><i
+                                                                        class="fas fa-trash"></i></a>
+                                                        </strong>
+                                                        </li>
+                                                        <li data-item-id="12" class="font-family-Inter-SemiBold"">
+                                                        <span class="draggable"><i
+                                                                    class="fal fa-arrows"></i></span>
+                                                        Material de Estudio 1
+                                                        <strong class="float-right">
+                                                            <a href="#" data-toggle="modal" data-target="#Material" class="editar mr-3"><i
+                                                                        class="fas fa-pen"></i></a>
+                                                            <a href="#" class="eliminar"><i
+                                                                        class="fas fa-trash"></i></a>
+                                                        </strong>
+                                                        </li>
+                                                        <li data-item-id="13" class="font-family-Inter-SemiBold"">
+                                                        <span class="draggable"><i
+                                                                    class="fal fa-arrows"></i></span>
+                                                        Material de Estudio 2
+                                                        <strong class="float-right">
+                                                            <a href="#" data-toggle="modal" data-target="#Material" class="editar mr-3"><i
+                                                                        class="fas fa-pen"></i></a>
+                                                            <a href="#" class="eliminar"><i
+                                                                        class="fas fa-trash"></i></a>
+                                                        </strong>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="agregar mt-3">
+                                                        <p class="font-family-Inter-Regular fz-12">Agregar:</p>
+                                                        <ul class="font-family-Inter-Medium">
+                                                            <li><a href="#" data-toggle="modal"
+                                                                   data-target="#Material">+Material</a></li>
+                                                            <li><a href="#" data-toggle="modal"
+                                                                   data-target="#Leccion">+Lección</a></li>
+                                                            <li><a href="#" data-toggle="modal"
+                                                                   data-target="#Tarea">+Tarea</a></li>
+                                                            <li><a href="#" data-toggle="modal"
+                                                                   data-target="#Evaluacion">+Evaluación</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="eventos">
+                                                <a href="#" data-toggle="modal" data-target="#ModuloTitulo" class="editar"><i class="fas fa-pen"></i></a>
+                                                <a href="#" class="eliminar"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div> {% endcomment %}
+                                    </div>
+                                </div>
+                                <div class="box-border">
+                                    <div class="header">
+                                        <a href="#" data-toggle="modal" data-target="#ModuloTitulo" class="btn btn-border font-family-Inter-Medium fz-14 d-inline-block">
+                                            +Agregar Módulo
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- Modal modulo titulo -->
+    <div class="modal fade" id="ModuloTitulo" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Módulo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'add-module' course.id %}" class="form-estado" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="module_name" class="d-block font-family-Inter-Regular">
+                                    Nombre de Módulo
+                                </label>
+                                <input type="text" name="module_name" id="module_name"
+                                    placeholder="Ejemplo de Nombre de Módulo 1" class="font-family-Inter-Medium" required>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- module update--> 
+    <div class="modal fade" id="editmodulemodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Módulo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="editmoduletarget"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Material -->
+    <div class="modal fade" id="Material" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Material</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="addMaterialForm" action="{% url 'create-content' %}" class="form-estado" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="tituloMaterial" class="d-block font-family-Inter-Regular">Nombre de
+                                    Material</label>
+                                <input type="text" name="title" id="tituloMaterial"
+                                    placeholder="Nombre de Material" class="font-family-Inter-Medium" required>
+                            </div>
+                            <input name="module_id" id="material_id" hidden>
+                            <input name="model_name" value="studymaterial" hidden>
+                            <div class="form-group">
+                                <label class="font-family-Inter-Medium fz-12">Archivos</label>
+                                <!-- Lista para mostrar archivos cargados con botones de eliminación -->
+                                <ul class="listaArchivos"></ul>
+
+                                <!-- Botón visible para cargar archivos -->
+                                <a href="javascript:void(0)"
+                                class="btnCargarArchivos d-inline-block btn-carga font-family-Inter-Medium mt-3">
+                                    +Adjuntar Archivos
+                                </a>
+
+                                <!-- Input file oculto -->
+                                <input type="file" class="inputArchivos" id ="materialFilesInput" accept=".pdf" multiple style="display: none;" name="materialFile">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Leccion -->
+    <div class="modal fade" id="Leccion" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Lección</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'create-content' %}" class="form-estado" method="post" >
+                    {% csrf_token %}
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <label for="nombreLeccion" class="d-block font-family-Inter-Regular">Nombre de
+                                    Lección</label>
+                                <input type="text" name="name" id="nombreLeccion"
+                                    placeholder="Ejemplo de Nombre de Lección 1" class="font-family-Inter-Medium" required>
+                            </div>
+                            <input name="module_id" id="lesson_id" hidden>
+                            <input name="model_name" value="lesson" hidden>
+                            <div class="form-group">
+                                <label for="urlVideo" class="d-block font-family-Inter-Regular">URL de video</label>
+                                <input type="text" name="url" id="urlVideo" placeholder="www.ejemplo de URL del video"
+                                    class="font-family-Inter-Medium" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="d-block font-family-Inter-Regular">Tiempo de reproducción de vídeo</label>
+                                <div id="reloj">
+                                    <div class="w-100">
+                                        <div class="cuadro-reloj">
+                                            <button type="button" id="menosHoras"><i class="fas fa-minus"></i></button>
+                                            <div id="horas" class="tiempo font-family-Inter-SemiBold">00</div>
+                                            <input id="hours" name="hours" hidden value="00">
+                                            <button type="button" id="masHoras"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        <p class="w-100 d-block font-family-Inter-Regular">Horas</p>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="cuadro-reloj">
+                                            <button type="button" id="menosMinutos"><i class="fas fa-minus"></i></button>
+                                            <div id="minutos" class="tiempo font-family-Inter-SemiBold">00</div>
+                                            <input id="minutes" name="minutes" hidden value="00">
+                                            <button type="button" id="masMinutos"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        <p class="w-100 d-block font-family-Inter-Regular">Minutos</p>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="cuadro-reloj">
+                                            <button type="button" id="menosSegundos"><i class="fas fa-minus"></i></button>
+                                            <div id="segundos" class="tiempo font-family-Inter-SemiBold">00</div>
+                                            <input id="seconds" name="seconds" hidden value="00">
+                                            <button type="button" id="masSegundos"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        <p class="w-100 d-block font-family-Inter-Regular">Segundos</p>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tarea -->
+    <div class="modal fade" id="Tarea" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Tarea curr-</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-ath-form">
+                                <div class="form-align-box">
+                                    <div class="wizard">
+                                        <div class="wizard-inner">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li role="presentation">
+                                                    <a href="#step1" class="active" data-toggle="tab"
+                                                       aria-controls="step1" role="tab" aria-expanded="true"
+                                                       data-step="1">
+                                                        <span class="round-tab font-family-Inter-Medium">1. Selecciona un tipo</span>
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#step2" id="addTaskTab2" class="disabled" data-toggle="tab"
+                                                       aria-controls="step2" role="tab" aria-expanded="false"
+                                                       data-step="2">
+                                                        <span class="round-tab font-family-Inter-Medium">2. Crea un título</span>
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#step3" id="addTaskTab3" class="disabled" data-toggle="tab"
+                                                       aria-controls="step3" role="tab" data-step="3">
+                                                        <span class="round-tab font-family-Inter-Medium">3. Preguntas y respuestas</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <form role="form" action="{% url 'create-content' %}" class="register-wizard-box" method="post">
+                                            {% csrf_token %}
+
+                                            <input name="module_id" id="task_id" hidden>
+                                            <input name="model_name" value="task" hidden>
+                                            <div class="tab-content" id="main_form">
+                                                {#step 1 #}                                              
+                                                <div class="tab-pane active" role="tabpanel" id="step1">
+                                                    <div class="form-input-steps tipo-tareas">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="font-family-Inter-Regular fz-14">Ejemplo de
+                                                                    texto descriptivo para este tipo de tarea</p>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="cuestionario" value="questionnaire"
+
+                                                                           name="task_type" checked/>
+                                                                    <label for="cuestionario" class="step-3-enable-trigger">
+
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/cuestionario.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Cuestionario</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="crucigrama" value="crossword"
+                                                                           name="task_type"/>
+                                                                    <label for="crucigrama" class="step-3-disable-trigger">
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/crucigrama.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Crucigrama</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="unir" name="task_type" value="link_with_lines"/>
+                                                                    <label for="unir" class="step-3-disable-trigger">
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/tarea-linea.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Unir con Líneas</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button id="addTaskFormStep1Btn" type="button"
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Siguiente
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                {#step 2 #}                                              
+                                                <div class="tab-pane" role="tabpanel" id="step2">
+                                                    <div class="form-input-steps">
+                                                        <div class="form-estado">
+                                                            <div class="form-group">
+                                                                <label for="nombreTarea" class="d-block font-family-Inter-Regular">
+                                                                    Nombre de Tarea
+                                                                </label>
+
+                                                                <input required type="text" name="name" id="nombreTarea" placeholder="Ejemplo de Nombre" class="font-family-Inter-Medium" required>
+                                                                <label data-error-for="nombreTarea" class="d-none text-danger font-family-Inter-Regular">Please fill out this field!</label>
+
+                                                            </div>
+                                                            <p class="font-family-Inter-Regular fz-14 text-gris mb-5">
+                                                                Saldrá como el título de la tarea en el contenido del curso.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" id="addTaskStep2SubmitBtn" disabled
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Siguiente
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                {#step 3 #}
+                                                <div class="tab-pane" role="tabpanel" id="step3">
+                                                    <div class="form-input-steps">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                    Ejemplo de texto descriptivo para este tipo de tarea
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-md-12 mb-5">
+                                                                <div class="sortable p-0 mb-4">
+                                                                    <ul data-list-id="300" class="sortable" id="preguntas-lista">
+                                                                        <li data-item-id="300" class="font-family-Inter-SemiBold">
+                                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                                            Ejemplo de pregunta 1
+                                                                            <strong class="float-right botones">
+                                                                                <a href="#" class="editar mr-1"><i class="fas fa-pen"></i></a>
+                                                                                <a href="#" class="eliminar"><i class="fas fa-trash"></i></a>
+                                                                            </strong>
+                                                                        </li>
+                                                                        <div class="editar-pregunta" style="display: none;">
+                                                                            <div class="form-estado">
+                                                                                <div class="form-group">
+                                                                                    <label for="titulodepregunto" class="d-block font-family-Inter-Regular">
+                                                                                        Escribe la pregunta
+                                                                                    </label>
+                                                                                    <input type="text" name="question" id="titulodepregunto" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                                        Respuesta correcta
+                                                                                    </label>
+                                                                                    <input type="text" name="correct_answer" id="repuesta" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    {% comment %} <button type="button"
+                                                                                            class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                                        Guardar Cambios
+                                                                                    </button> {% endcomment %}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {% comment %} <li data-item-id="301" class="font-family-Inter-SemiBold">
+                                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                                            Ejemplo de pregunta 2
+                                                                            <strong class="float-right botones">
+                                                                                <a href="#" class="editar mr-1"><i class="fas fa-pen"></i></a>
+                                                                                <a href="#" class="eliminar"><i class="fas fa-trash"></i></a>
+                                                                            </strong>
+                                                                        </li>
+                                                                        <div class="editar-pregunta" style="display: none;">
+                                                                            <div class="form-estado">
+                                                                                <div class="form-group">
+                                                                                    <label for="titulodepregunto" class="d-block font-family-Inter-Regular">
+                                                                                        Escribe la pregunta
+                                                                                    </label>
+                                                                                    <input type="text" name="question" id="titulodepregunto" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                                        Respuesta correcta
+                                                                                    </label>
+                                                                                    <input type="text" name="correct_answer" id="repuesta" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                        </div> {% endcomment %}
+
+                                                                        <!-- Agrega nuevos elementos aquí -->
+
+                                                                    </ul>
+                                                                </div>
+                                                                <a href="#" id="agregar-pregunta" class="btn btn-border font-family-Inter-Medium d-inline-block fz-14">
+                                                                    +Agregar Pregunta
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="submit"
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Guardar Cambios
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Evaluación -->
+    <div class="modal fade" id="Evaluacion" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Evaluación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-ath-form">
+                                <div class="form-align-box">
+                                    <div class="wizard">
+                                        <div class="wizard-inner">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li role="presentation">
+                                                    <a href="#step4" class="active" data-toggle="tab"
+                                                       aria-controls="step4" role="tab" aria-expanded="true"
+                                                       data-step="4">
+                                                        <span class="round-tab font-family-Inter-Medium">1. Selecciona un tipo</span>
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#step5" id="addEvalTab2" class="disabled" data-toggle="tab"
+                                                       aria-controls="step5" role="tab" aria-expanded="false"
+                                                       data-step="5">
+                                                        <span class="round-tab font-family-Inter-Medium">2. Crea un título</span>
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#step6" class="disabled" data-toggle="tab" id="addEvalTab3"
+                                                       aria-controls="step6" role="tab" data-step="6">
+                                                        <span class="round-tab font-family-Inter-Medium">3. Preguntas y respuestas</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <form role="form" action="{% url 'create-content' %}" class="register-wizard-box" method="post">
+                                            {% csrf_token %}
+    
+                                        <input name="module_id" id="evaluation_id" hidden>
+                                        <input name="model_name" value="evaluation" hidden>
+                                            <div class="tab-content" id="main_form">
+                                                    {# step 1 #}
+                                                <div class="tab-pane active" role="tabpanel" id="step4">
+                                                    <div class="form-input-steps tipo-tareas">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="font-family-Inter-Regular fz-14">Ejemplo de
+                                                                    texto descriptivo para este tipo de tarea</p>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="cuestionario1" value="questionnaire"
+
+                                                                           name="evaluation_type" checked/>
+                                                                    <label for="cuestionario1" class="eval-step-3-enable-trigger">
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/cuestionario.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Cuestionario</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="radio" id="ensayo" value="rehearsal"
+                                                                           name="evaluation_type"/>
+                                                                    <label for="ensayo" class="eval-step-3-disable-trigger">
+                                                                        <div class="vista-tarea">
+                                                                            <object data="{% static 'img/ensayo.svg' %}"
+                                                                                    width="32" height="32"
+                                                                                    type="image/svg+xml"></object>
+                                                                            <div class="vista-contenido">
+                                                                                <h3 class="font-family-Inter-SemiBold fz-16">Ensayo</h3>
+                                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                                    Ejemplo de texto descriptivo para
+                                                                                    este tipo de tarea
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" id="addEvalFormStep1Btn"
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Siguiente
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                    {# step 2 #}
+                                                <div class="tab-pane" role="tabpanel" id="step5">
+                                                    <div class="form-input-steps">
+                                                        <div class="form-estado">
+                                                            <div class="form-group">
+                                                                <label for="nombreEvaluacion" class="d-block font-family-Inter-Regular">
+                                                                    Nombre de Evaluación
+                                                                </label>
+                                                                <input type="text" name="title" id="nombreEvaluacion" placeholder="Ejemplo de Nombre de Lección 1" class="font-family-Inter-Medium" required>
+                                                                <label data-error-for="nombreEvaluacion" class="d-none text-danger font-family-Inter-Regular">Please fill out this field!</label>
+                                                            </div>
+                                                            <p class="font-family-Inter-Regular fz-14 text-gris mb-5">
+                                                                Saldrá como el título de la evaluación en el contenido del curso.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" id="addEvalStep2SubmitBtn" disabled
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Siguiente
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                    {# step 3 #}
+                                                <div class="tab-pane" role="tabpanel" id="step6">
+                                                    <div class="form-input-steps">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="font-family-Inter-Regular fz-14">
+                                                                    Ejemplo de texto descriptivo para este tipo de evaluación
+                                                                </p>
+                                                            </div>
+
+                                                            <div class="col-md-12 mb-5">
+                                                                <div class="sortable p-0 mb-4" id="preguntas-lista-2">
+                                                                    <ul data-list-id="500" class="sortable">
+                                                                        <li data-item-id="500" class="font-family-Inter-SemiBold">
+                                                                            <span class="draggable"><i class="fal fa-arrows"></i></span>
+                                                                            Ejemplo de pregunta de evaluación 1
+                                                                            <strong class="float-right botones">
+                                                                                <a href="#" class="editar mr-1" id="editar-pregunta-200"><i class="fas fa-pen"></i></a>
+                                                                                <a href="#" class="eliminar" id="eliminar-pregunta-200"><i class="fas fa-trash"></i></a>
+                                                                            </strong>
+                                                                        </li>
+                                                                        <div class="editar-pregunta" style="display: none;" id="editar-pregunta-contenido-200">
+                                                                            <div class="form-estado">
+                                                                                <div class="form-group">
+                                                                                    <label for="titulodepregunto" class="d-block font-family-Inter-Regular">
+                                                                                        Escribe la pregunta
+                                                                                    </label>
+                                                                                    <input type="text" name="question" id="titulodepregunto-200" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label class="d-block font-family-Inter-Regular">
+                                                                                        Punto(s) por esta respuesta
+                                                                                    </label>
+                                                                                    <div class="cuadro-reloj w-50">
+                                                                                        <!-- Botones para ajustar los puntos -->
+                                                                                        <button type="button" id="menpoints" >
+                                                                                            <i class="fas fa-minus"></i>
+                                                                                        </button>
+                                                                                        <input id="points" name="points" hidden value="0">
+                                                                                        <span id="puntos" class="font-family-Inter-SemiBold">00</span>
+                                                                                        <button type="button" id="maspoints" >
+                                                                                            <i class="fas fa-plus"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                                        Respuesta correcta
+                                                                                    </label>
+                                                                                    <input type="text" name="correct_answer" id="repuesta-200" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium" required>
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label for="repuesta" class="d-block font-family-Inter-Regular">
+                                                                                        Resto de alternative
+                                                                                    </label>
+                                                                                    <input type="text" name="alt_answer_1" id="repuesta-201" placeholder="Ejemplo de alternativa a Pregunta 1" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <input type="text" name="alt_answer_2" id="repuesta-202" placeholder="Ejemplo de alternativa a Pregunta 2" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <input type="text" name="alt_answer_3" id="repuesta-203" placeholder="Ejemplo de alternativa a Pregunta 3" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <input type="text" name="alt_answer_4" id="repuesta-204" placeholder="Ejemplo de alternativa a Pregunta 4" class="font-family-Inter-Medium" required>
+                                                                                </div>
+                                                                                {% comment %} <div class="form-group">
+                                                                                    <button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                                        Guardar Cambios
+                                                                                    </button>
+                                                                                </div> {% endcomment %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </ul>
+                                                                </div>
+                                                                <a href="#" id="agregar-pregunta-2" class="btn btn-border font-family-Inter-Medium d-inline-block fz-14">
+                                                                    +Agregar Pregunta
+                                                                </a>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <ul class="align-items-center d-flex justify-content-between list-inline">
+                                                        <li>
+                                                            <button type="button"
+                                                                    class="step-btn prev-step btn-gris font-family-Inter-Medium btn-border">
+                                                                Anterior
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="submit"
+                                                                    class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">
+                                                                Guardar Cambios
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="studymaterialmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Material</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="targetModulestudymaterial"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="lessonmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Lección</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="targetModulelesson"></div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tarea update -->
+    <div class="modal fade" id="taskmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Tarea</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="targetModuletask"></div>
+                
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Evaluación -->
+    <div class="modal fade" id="evaluationmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-radius-12">
+                <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                    <h5 class="modal-title font-family-Outfit-SemiBold">Evaluación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="targetModuleevaluation"></div>
+            
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+
+        // Funciones para ajustar manualmente los puntos
+        function incrementarHoras() {
+            var horas = parseInt($("#puntos").text());
+            horas = (horas + 1) ;
+            actualizarHora('puntos', horas);
+        }
+
+        function decrementarHoras() {
+            var horas = parseInt($("#puntos").text());
+            horas = (horas - 1 + 24) ;
+            actualizarHora('puntos', horas);
+        }
+
+        // Función para actualizar la visualización de horas
+        function actualizarHora(elemento, valor) {
+            $("#" + elemento).text(valor < 10 ? '0' + valor : valor);
+        }
+
+        $(document).ready(function () {
+            var contador = 500;
+
+            $('#agregar-pregunta-2').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-1" id="editar-pregunta-' + contador + '"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar" id="eliminar-pregunta-' + contador + '"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;" id="editar-pregunta-contenido-' + contador + '">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunta" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="question" id="titulodepregunto-' + contador + '" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label class="d-block font-family-Inter-Regular">' +
+                    'Punto(s) por esta respuesta' +
+                    '</label>' +
+                    '<div class="cuadro-reloj w-50">' +
+                    '<button type="button"  onclick="appendeddecrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-minus"></i>' +
+                    '</button>' +
+                    '<input id="append-points' + contador + '" name="points" hidden value="0">' +
+                    '<span id="append-puntos-' + contador + '" class="font-family-Inter-SemiBold">00</span>' +
+                    '<button type="button"  onclick="appendedincrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-plus"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="correct_answer" id="repuesta-' + contador + '" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Resto de alternative'+
+                    '</label>'+
+                    '<input type="text" name="alt_answer_1" id="alt_1' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 1" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="alt_answer_2" id="alt_2' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 2" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="alt_answer_3" id="alt_3' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 3" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    '<div class="form-group">'+
+                    '<input type="text" name="alt_answer_4" id="alt_4' + contador + '" placeholder="Ejemplo de alternativa a Pregunta 4" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    {% comment %} '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' +
+                    '</div>' + {% endcomment %}
+                    '</div>' +
+                    '</div>';
+
+                $('#preguntas-lista-2 ul').append(nuevaPregunta);
+            });
+
+            $('#preguntas-lista-2').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#preguntas-lista-2').on('click', '.editar', function () {
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#preguntas-lista-2 li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                /*var iconos = $(this).find('i');
+                iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');*/
+            });
+        });
+
+
+        $(document).ready(function () {
+            var contador = 500;
+
+            $('#edit-agregar-pregunta-2').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-1" id="edit-editar-pregunta-' + contador + '"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar" id="eliminar-pregunta-' + contador + '"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;" id="edit-editar-pregunta-contenido-' + contador + '">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunta" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="titulodepregunto" id="titulodepregunto-' + contador + '" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label class="d-block font-family-Inter-Regular">' +
+                    'Punto(s) por esta respuesta' +
+                    '</label>' +
+                    '<div class="cuadro-reloj w-50">' +
+                    '<button type="button" onclick="decrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-minus"></i>' +
+                    '</button>' +
+                    '<span id="puntos-' + contador + '" class="font-family-Inter-SemiBold">00</span>' +
+                    '<button type="button" onclick="incrementarPuntos(' + contador + ')">' +
+                    '<i class="fas fa-plus"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="repuesta" id="repuesta-' + contador + '" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium">' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+
+                $('#edit-preguntas-lista-2 ul').append(nuevaPregunta);
+            });
+
+            $('#edit-preguntas-lista-2').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#edit-preguntas-lista-2').on('click', '.editar', function () {
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#edit-preguntas-lista-2 li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                /*var iconos = $(this).find('i');
+                iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');*/
+            });
+        });
+
+
+
+        function incrementarPuntos(contador) {
+            // Obtener el elemento span que muestra los puntos
+            var puntosElement = $('#puntos-' + contador);
+
+            // Obtener el valor actual de los puntos
+            var puntos = parseInt(puntosElement.text());
+
+            // Incrementar los puntos
+            puntos++;
+
+            // Actualizar el valor mostrado
+            puntosElement.text(puntos < 10 ? '0' + puntos : puntos);
+        }
+
+        function decrementarPuntos(contador) {
+            // Obtener el elemento span que muestra los puntos
+            var puntosElement = $('#puntos-' + contador);
+
+            // Obtener el valor actual de los puntos
+            var puntos = parseInt(puntosElement.text());
+
+            // Decrementar los puntos si son mayores que cero
+            if (puntos > 0) {
+                puntos--;
+
+                // Actualizar el valor mostrado
+                puntosElement.text(puntos < 10 ? '0' + puntos : puntos);
+            }
+        }
+
+
+        $(document).ready(function () {
+            var contador = 301;
+
+            $('#agregar-pregunta').click(function () {
+                contador++;
+                var nuevaPregunta = '<li data-item-id="' + contador + '" class="font-family-Inter-SemiBold">' +
+                    '<span class="draggable"><i class="fal fa-arrows"></i></span>' +
+                    'Nueva pregunta ' + contador +
+                    '<strong class="float-right botones">' +
+                    '<a href="#" class="editar mr-3"><i class="fas fa-pen"></i></a>' +
+                    '<a href="#" class="eliminar"><i class="fas fa-trash"></i></a>' +
+                    '</strong>' +
+                    '</li>' +
+                    '<div class="editar-pregunta" style="display: none;">' +
+                    '<div class="form-estado">' +
+                    '<div class="form-group">' +
+                    '<label for="titulodepregunto" class="d-block font-family-Inter-Regular">' +
+                    'Escribe la pregunta' +
+                    '</label>' +
+                    '<input type="text" name="question" id="titulodepregunto" placeholder="Ejemplo de Pregunta" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label for="repuesta" class="d-block font-family-Inter-Regular">' +
+                    'Respuesta correcta' +
+                    '</label>' +
+                    '<input type="text" name="correct_answer" id="repuesta" placeholder="Ejemplo de respuesta a Pregunta" class="font-family-Inter-Medium" required>' +
+                    '</div>' +
+                    {% comment %} '<div class="form-group">' +
+                    '<button type="button" class="step-btn next-step btn-gris font-family-Inter-Medium btn-blue">' +
+                    'Guardar Cambios' +
+                    '</button>' +
+                    '</div>' + {% endcomment %}
+                    '</div>' +
+                    '</div>';
+
+                $('#preguntas-lista').append(nuevaPregunta);
+            });
+
+            $('#preguntas-lista').on('click', '.eliminar', function () {
+                $(this).closest('li').next('.editar-pregunta').remove();
+                $(this).closest('li').remove();
+            });
+
+            $('#preguntas-lista').on('click', '.editar', function () {
+                // Cerrar las demás secciones de edición
+                $('.editar-pregunta').not($(this).closest('li').next('.editar-pregunta')).hide();
+
+                // Restaurar el color original de los li
+                $('#preguntas-lista li').css({
+                    'background-color': '#F2F4FA',
+                    'color': '#000'
+                });
+
+                // Alternar la visibilidad de la sección de edición correspondiente
+                var seccionEdicion = $(this).closest('li').next('.editar-pregunta');
+                seccionEdicion.toggle();
+
+                // Cambiar el color de fondo y texto del li según si la sección de edición está abierta o cerrada
+                $(this).closest('li').css({
+                    'background-color': seccionEdicion.is(':visible') ? '#4128E6' : '#F2F4FA',
+                    'color': seccionEdicion.is(':visible') ? '#FFFFFF' : '#000'
+                });
+
+                // Cambiar el color de los iconos de editar y eliminar
+                // var iconos = $(this).find('i');
+                // iconos.css('color', seccionEdicion.is(':visible') ? '#FFFFFF' : '');
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón, activar el input file
+            $('#btnCargarImagen').click(function () {
+                $('#inputImagen').click();
+            });
+
+            // Al cargar la página, mostrar una imagen por defecto
+            mostrarVistaPreviaDefault();
+
+            // Cuando se selecciona una nueva imagen, mostrar su vista previa
+            $('#inputImagen').change(function () {
+                mostrarVistaPrevia(this);
+            });
+
+            function mostrarVistaPrevia(input) {
+                if (input.files && input.files[0]) {
+                    var lector = new FileReader();
+
+                    lector.onload = function (e) {
+                        $('#vistaPrevia').html('<img src="' + e.target.result + '" alt="Vista Previa" class="w-100">');
+                    };
+
+                    lector.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function mostrarVistaPreviaDefault() {
+                // Ruta de la imagen por defecto
+                var imagenPorDefecto = '{% static "img/560x328.png" %}';
+
+                // Mostrar la vista previa de la imagen por defecto
+                $('#vistaPrevia').html('<img src="' + imagenPorDefecto + '" alt="Vista Previa">');
+            }
+        });
+
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón, activar el input file
+            $('#btnCargarImagen1').click(function () {
+                $('#inputImagen1').click();
+            });
+
+            // Al cargar la página, mostrar una imagen por defecto
+            mostrarVistaPreviaDefault1();
+
+            // Cuando se selecciona una nueva imagen, mostrar su vista previa y validar las dimensiones
+            $('#inputImagen1').change(function () {
+                var archivo = this.files[0];
+
+                // Validar dimensiones mínimas
+                if (archivo && archivo.type.startsWith('image/')) {
+                    var img = new Image();
+                    img.onload = function () {
+                        if (img.width >= 1072 && img.height >= 312) {
+                            mostrarVistaPrevia1(archivo);
+                        } else {
+                            alert('La imagen debe tener dimensiones mínimas de 1072x312.');
+                            // Restablecer el valor del input file para evitar la carga de la imagen no válida
+                            $('#inputImagen1').val('');
+                        }
+                    };
+                    img.src = URL.createObjectURL(archivo);
+                }
+            });
+
+            function mostrarVistaPrevia1(archivo) {
+                var lector = new FileReader();
+                lector.onload = function (e) {
+                    $('#vistaPrevia1').html('<img src="' + e.target.result + '" alt="Vista Previa" class="w-100">');
+                };
+                lector.readAsDataURL(archivo);
+            }
+
+            function mostrarVistaPreviaDefault1() {
+                // Ruta de la imagen por defecto
+                var imagenPorDefecto = '{% static "img/1072x312.png" %}'
+
+                // Mostrar la vista previa de la imagen por defecto
+                $('#vistaPrevia1').html('<img src="' + imagenPorDefecto + '" alt="Vista Previa">');
+            }
+        });
+
+        $('#boton1').click(function () {
+            $('#datoss').removeClass('d-none');
+            $('#contenido').addClass('d-none');
+        });
+        $('#boton2').click(function () {
+            $('#contenido').removeClass('d-none');
+            $('#datoss').addClass('d-none');
+        });
+        $('#boton3').click(function () {
+            $('#contenido').removeClass('d-none');
+            $('#datoss').addClass('d-none');
+        });
+
+
+        $(function () {
+            dragula([document.getElementById("left"), document.getElementById("right")], {
+                revertOnSpill: true
+            })
+                .on('drag', function (el) {
+                    // add 'is-moving' class to element being dragged
+                    el.classList.add('is-moving');
+                })
+                .on('dragend', function (el) {
+                    // remove 'is-moving' class from element after dragging has stopped
+                    el.classList.remove('is-moving');
+
+                    // add the 'is-moved' class for 600ms then remove it
+                    window.setTimeout(function () {
+                        el.classList.add('is-moved');
+                        window.setTimeout(function () {
+                            el.classList.remove('is-moved');
+                        }, 600);
+                    }, 100);
+                });
+
+        }());
+
+
+        $(document).ready(function () {
+            // Al hacer clic en el botón, activar el input file
+            $('.btnCargarArchivos').click(function () {
+                $(this).next('.inputArchivos').click();
+            });
+
+            // Al seleccionar archivos, mostrar la lista y procesar cada archivo
+            $('.inputArchivos').change(function () {
+                agregarArchivos(this.files, $(this).siblings('.listaArchivos'));
+            });
+
+            // Función para agregar archivos a la lista
+            function agregarArchivos(archivos, listaArchivos) {
+                // Mostrar cada archivo con un botón de eliminación
+                for (var i = 0; i < archivos.length; i++) {
+                    var archivo = archivos[i];
+                    var listItem = $('<li class="font-family-Inter-Medium">');
+                    listItem.text(archivo.name);
+
+                    // Agregar botón de eliminación con el icono de la papelera
+                    var botonEliminar = $('<button class="btn-borrar">');
+                    botonEliminar.html('<i class="fas fa-trash"></i>');
+                    botonEliminar.click(function () {
+                        listItem.remove();
+                    });
+                    const fileField = document.createElement('input');
+                    fileField.type ='file';
+                    fileField.name='file';
+                    fileField.style.display = 'none';
+                    const df = new DataTransfer();
+                    df.items.add(archivo);
+                    fileField.files = df.files;
+                    listItem.append(botonEliminar,fileField);
+                    listaArchivos.append(listItem);
+                }
+
+                // Limpiar el valor del input file para permitir la selección del mismo archivo nuevamente
+                $(this).val('');
+            }
+        });
+
+
+        function ajustarTiempo(unidad, operacion) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor + 1) % 60;
+            } else {
+                valor = (valor - 1 + 60) % 60;
+            }
+            $('#' + unidad).text(valor.toString().padStart(2, '0'));
+        }
+
+        function ajustarTiempoinput(unidad, operacion, input) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor) % 60;
+                console.log(valor, 'valor');
+            } else {
+                valor = (valor + 60) % 60;
+                console.log(valor, 'valor');
+            }
+            document.getElementById(input).setAttribute('value', valor.toString().padStart(2, '0'));
+    
+        }
+
+
+        function ajustpointvalue(unidad, operacion) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor + 1) % 100;
+            } else {
+                valor = (valor - 1  + 100) % 100 ;
+            }
+            $('#' + unidad).text(valor.toString().padStart(2, '0'));
+        }
+
+
+        function ajustpointinput(unidad, operacion, input) {
+            var valor = parseInt($('#' + unidad).text());
+            if (operacion === '+') {
+                valor = (valor) % 100;
+                console.log(valor, 'valor');
+            } else {
+                valor = (valor + 100) % 100;
+                console.log(valor, 'valor');
+            }
+            document.getElementById(input).setAttribute('value', valor.toString().padStart(2, '0'));
+    
+        }
+    
+        $(document).ready(function () {
+            $('#masHoras').click(function () {
+                ajustarTiempo('horas', '+');
+                ajustarTiempoinput('horas', '+', 'hours');
+            });
+
+            $('#menosHoras').click(function () {
+                ajustarTiempo('horas', '-');
+                ajustarTiempoinput('horas', '-', 'hours');
+            });
+
+            $('#masMinutos').click(function () {
+                ajustarTiempo('minutos', '+');
+                ajustarTiempoinput('minutos', '+', 'minutes');
+            });
+
+            $('#menosMinutos').click(function () {
+                ajustarTiempo('minutos', '-');
+                ajustarTiempoinput('minutos', '-', 'minutes');
+            });
+
+            $('#masSegundos').click(function () {
+                ajustarTiempo('segundos', '+');
+                ajustarTiempoinput('segundos', '+', 'seconds');
+            });
+
+            $('#menosSegundos').click(function () {
+                ajustarTiempo('segundos', '-');
+                ajustarTiempoinput('segundos', '-', 'seconds');
+            });
+
+            $('#maspoints').click(function () {
+                ajustpointvalue('puntos', '+');
+                ajustpointinput('puntos', '+', 'points');
+            });
+
+            $('#menpoints').click(function () {
+                ajustpointvalue('puntos', '-');
+                ajustpointinput('puntos', '-', 'points');
+            });
+        });
+
+        function appendedincrementarPuntos(contador) {
+            ajustpointvalue('append-puntos-' + contador, '+');
+            ajustpointinput('append-puntos-' + contador, '+', 'append-points' + contador );
+        }
+
+        function appendeddecrementarPuntos(contador) {
+            ajustpointvalue('append-puntos-' + contador, '-');
+            ajustpointinput('append-puntos-' + contador, '-', 'append-points'+ contador);
+        }
+
+
+        // ------------register-steps--------------
+        $(document).ready(function () {
+            $('.nav-tabs > li a[title]').tooltip();
+            //Wizard
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var $target = $(e.target);
+                if ($target.hasClass('disabled')) {
+                    return false;
+                }
+
+                // handle with prgressbar
+                var step = $(e.target).data('step');
+                var percent = (parseInt(step) / 4) * 100;
+                $('.progress-bar').css({width: percent + '%'});
+                $('.progress-bar').text('Step ' + step + ' of 4');
+
+            });
+
+            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                var $target = $(e.target);
+                $target.parent().addClass('active');
+            });
+
+            $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
+                var $target = $(e.target);
+                $target.parent().removeClass('active');
+            });
+
+
+            $(".next-step").click(function (e) {
+                var $active = $('.wizard .nav-tabs li a.active');
+                $active.parent().next().children().removeClass('disabled');
+                $active.parent().addClass('done');
+                nextTab($active);
+            });
+
+            $(".prev-step").click(function (e) {
+                var $active = $('.wizard .nav-tabs li a.active');
+                prevTab($active);
+            });
+        });
+
+        function nextTab(elem) {
+            $(elem).parent().next().find('a[data-toggle="tab"]').click();
+        }
+
+        function prevTab(elem) {
+            $(elem).parent().prev().find('a[data-toggle="tab"]').click();
+        }
+
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.editmodulebtn').click(function (e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        // Do something with the response
+                        //insert html into modal-body
+                        $('#editmoduletarget').html(response)
+    
+    
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $('.add-content').on('click', function (event) {
+            var button = $(this); // Button that triggered the modal
+            var Id = button.data('id'); // Extract info from data-* attributes
+            var module = button.data('module'); // Extract info from data-* attributes
+            console.log(Id, 'module id');
+            var input_id = module + '_id';
+            console.log(input_id, 'input id');
+            document.getElementById(input_id).setAttribute('value', Id);
+    
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.update_content').click(function (e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                var module = $(this).data('module');
+                $.ajax({
+                    url: url,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (response) {
+                        // Do something with the response
+                        //insert html into modal-body
+                        var target = 'targetModule' + module;
+                        $(`#${target}`).html(response)
+    
+    
+                    }
+                });
+            });
+
+
+        {# Task #}
+        const taskEnabled = false;
+        if(taskEnabled) {
+        $('#addTaskFormStep1Btn,#addTaskTab2').on('click',function(){
+            
+            const isQuestionnaire = $('#cuestionario').prop('checked');
+            const step2SubmitBtn = $('#addTaskStep2SubmitBtn')
+            console.log({isQuestionnaire});
+            if(isQuestionnaire) {
+                // enable 3rd step
+                step2SubmitBtn.prop('type','button');
+                step2SubmitBtn.text('Siguiente');
+                $('#addTaskTab3').removeClass('disabled');
+            } else {
+                // disable 3rd step
+                step2SubmitBtn.prop('type','submit');
+                step2SubmitBtn.text('Guardar Cambios');
+                $('#addTaskTab3').addClass('disabled');
+            }
+        
+        });
+        
+        $('.step-3-disable-trigger').on('click',function(){
+            $('#addTaskTab3').addClass('disabled');
+        });
+        
+        $('.step-3-enable-trigger').on('click',function(){
+            const isStep2ActiveOrDone = $('#addTaskTab2').parent().attr('class').includes('active');
+            if(isStep2ActiveOrDone) {
+            $('#addTaskTab3').removeClass('disabled');
+            }
+        });
+        };
+
+        $('#nombreTarea').on('input',function(e){
+            const errorEl = $('label[data-error-for="nombreTarea"]');
+            if(e.target.value.trim()) {
+            $('#addTaskStep2SubmitBtn').prop('disabled',false);
+            $('#addTaskTab3').removeClass('disabled');
+            errorEl.addClass('d-none');
+            }else{
+            $('#addTaskStep2SubmitBtn').prop('disabled',true);
+            errorEl.removeClass('d-none');
+            $('#addTaskTab3').addClass('disabled');
+        }
+        });
+        {# Evaluation #}
+        $('#addEvalFormStep1Btn,#addEvalTab2').on('click',function(){
+
+            const isQuestionnaire = $('#cuestionario1').prop('checked');
+            const step2SubmitBtn = $('#addEvalStep2SubmitBtn')
+            console.log({isQuestionnaire});
+            if(isQuestionnaire) {
+                // enable 3rd step
+                step2SubmitBtn.prop('type','button');
+                step2SubmitBtn.text('Siguiente');
+                $('#addEvalTab3').removeClass('disabled');
+            } else {
+                // disable 3rd step
+                step2SubmitBtn.prop('type','submit');
+                step2SubmitBtn.text('Guardar Cambios');
+                $('#addEvalTab3').addClass('disabled');
+            }
+
+        });
+          $('#nombreEvaluacion').on('input',function(e) {
+            const isQuestionnaire = $('#cuestionario1').prop('checked');
+            const errorEl = $('label[data-error-for="nombreEvaluacion"]');
+            if(e.target.value.trim()) {
+            $('#addEvalStep2SubmitBtn').prop('disabled',false);
+            isQuestionnaire && $('#addEvalTab3').removeClass('disabled');
+            errorEl.addClass('d-none');
+            }else{
+            $('#addEvalStep2SubmitBtn').prop('disabled',true);
+            errorEl.removeClass('d-none');
+            $('#addEvalTab3').addClass('disabled');
+            }
+        });
+
+        $('.eval-step-3-disable-trigger').on('click',function(){
+            $('#addEvalTab3').addClass('disabled');
+        });
+
+        $('.eval-step-3-enable-trigger').on('click',function(){
+            const isStep2ActiveOrDone = $('#addEvalTab2').parent().attr('class').includes('active');
+            if(isStep2ActiveOrDone) {
+            $('#addEvalTab3').removeClass('disabled');
+            }
+        });
+    });
+
+    </script>
+    {% include "includes/instructor/footer.html" %}

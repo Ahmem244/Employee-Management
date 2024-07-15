@@ -1,0 +1,580 @@
+{% load static %}
+{% load django_tables2 %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbox</title>
+    <style>
+        .primary-background {
+            background-color: #4028E6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            font-size: 20px;
+            text-align: center;
+
+        }
+
+        .selected-user {
+            background-color: #46485d;
+            color: white; /* Adjust text color for better visibility */
+        }
+
+
+        .sent-message-box {
+            width: 300px; /* Fixed width */
+            background-color: #4028E6; /* Blue for sent messages, adjust as needed */
+            color: white;
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 10px;
+            word-wrap: break-word; /* Allow text wrapping */
+            display: inline-block; /* Display inline-block to wrap text */
+            margin-left: 55%;
+        }
+
+        .received-message-box {
+            width: 300px; /* Fixed width */
+            background-color: rgba(64, 40, 230, 0.73); /* Blue for sent messages, adjust as needed */
+            color: white;
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 10px;
+            word-wrap: break-word; /* Allow text wrapping */
+        display: block;
+
+        }
+
+        .sent-message {
+            text-align: right;
+            margin-left: 250px;
+            /* Add additional styles as needed */
+        }
+
+        .received-message {
+            text-align: left;
+            /* Add additional styles as needed */
+        }
+
+        .float-right a {
+            display: inline-block; /* Make anchor tags behave like block elements */
+            padding: 10px 20px; /* Add padding */
+            background-color: #c4baba; /* Set background color */
+            color: #131313; /* Set font color */
+            text-decoration: none; /* Remove default underline */
+            border-radius: 5px; /* Add border radius for rounded corners */
+            transition: background-color 0.3s ease; /* Add transition for smooth color change */
+        }
+
+        .float-right a:hover {
+            background-color: #0056b3; /* Change background color on hover */
+            color: #ffffff; /* Change font color on hover */
+        }
+
+        .float-right button {
+            background-color: #007bff; /* Set background color */
+            color: #fff; /* Set font color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Add border radius for rounded corners */
+            padding: 10px 20px; /* Add padding */
+            margin-left: 10px; /* Add margin between buttons */
+            font-size: 16px; /* Set font size */
+            cursor: pointer; /* Add pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Add transition for smooth color change */
+        }
+
+        .float-right button:hover {
+            background-color: #0056b3; /* Change background color on hover */
+        }
+
+        .form-control {
+            width: 100%; /* Set the width to 100% */
+            max-width: 300px; /* Optionally, set a maximum width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 100px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            z-index: 9999;
+        }
+
+        .alert {
+            width: 200px; /* Adjust as needed */
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebara {
+            width: 450px;
+            margin-left: 5px;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .sidebara h2 {
+            margin-bottom: 10px;
+        }
+
+        #user-list,
+        #group-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #user-list li,
+        #group-list li {
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        #create-group-btn {
+            background-color: #4028E6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .chat-container {
+            flex: 1;
+            padding: 20px;
+            height: calc(100vh - 120px); /* Account for top and bottom borders */
+            border-left: 1px solid #ddd;
+            overflow-y: scroll; /* Enable scrolling for chat history */
+            max-width: 750px !important;
+        }
+
+        #chat-history {
+            margin-bottom: 20px;
+        }
+
+        #message-form {
+            display: flex;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #message-form button {
+            background-color: #4028E6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .modal {
+            display: none; /* Initially hide the modal */
+            position: fixed;
+            z-index: 1; /* Sit on top of other content */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scrolling if needed */
+            background-color: rgba(0, 0, 0, 0.4); /* Transparent black background */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%; /* Adjust width as needed */
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px
+            }
+            to {
+                top: 0
+            }
+        }
+
+        .navbar {
+            overflow: hidden;
+            /* background-color: #ffffff; */
+            height: 10%;
+            text-align: center;
+            color: #000000;
+
+        }
+
+        .card-header {
+            height: 85%;
+            overflow-y: scroll;
+            border: 1px solid #112c7e;
+            padding: 10px;
+            background-color: #deb6b6;
+        }
+
+        .input-text-field-chat {
+            width: 100%;
+            padding: 50px;
+            border: 3px solid #696d79 !important;
+            border-radius: 5px;
+        }
+
+
+        /* Sit on top of other content */
+
+    </style>
+</head>
+<body>
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+{% if sales_advisor %}
+    <div class="sidebar">
+        {% include "includes/admin/sa_sidebar.html" %}
+    </div>
+{% else %}
+    <div class="sidebar">
+        {% include "includes/admin/sidebar.html" %}
+    </div>
+{% endif %}
+<div class="container sa-message next-shift   " style="height: 200px;margin-top: 70px ;margin-left: 8rem;">
+    <div class="row next-shift">
+
+        <div class="sidebara col-lg-4 col-md-4 col-sm-10 ">
+            <h2 class="primary-background">Users</h2>
+            <ul id="user-list">
+            </ul>
+            <h2 class="primary-background">Groups</h2>
+            <ul id="group-list">
+            </ul>
+            {% if admin %}
+                <a href="{% url 'create-group' %}" id="create-group-btn">Create Group</a>
+            {% endif %}
+        </div>
+        <div class="chat-container  col-lg-7 col-md-7 col-sm-12 ">
+            <nav class="navbar">
+                <h2 class="primary-background" style="height: 111px !important; margin-top: 0% !important;">CHAT
+                    BOX</h2>
+            </nav>
+            <div class="card-header mt-4">
+
+                <div id="chat-history">
+                </div>
+            </div>
+            <div class="card-body>">
+                <form id="message-form" method="post">
+                    {% csrf_token %}
+                    <input class="input-text-field-chat" type="text" id="message-input" data-sender="None"
+                           data-receiver="None" data-group="None"
+                           placeholder="Type your message..."
+                           required>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-group-modal" class="modal">
+
+        <div class="modal-content row">
+
+            <h3>Create Group</h3>
+            <label for="group-name">Group Name:</label>
+            <input type="text" id="group-name" required>
+            <h4>Select Users</h4>
+            <ul id="user-selection-list">
+            </ul>
+            <div class="modal-actions">
+                <button id="cancel-group-creation">Cancel</button>
+                <button id="create-group">Create Group</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let main_receiver_id = null
+    let group_id = null
+    const userList = document.getElementById('user-list');
+    const groupList = document.getElementById('group-list');
+    const chatHistory = document.getElementById('chat-history');
+    const messageInput = document.getElementById('message-input');
+    const messageForm = document.getElementById('message-form');
+    {#const createGroupBtn = document.getElementById('create-group-btn');#}
+    const createGroupModal = document.getElementById('create-group-modal');
+    const cancelGroupCreation = document.getElementById('cancel-group-creation');
+    const createGroup = document.getElementById('create-group');
+    const userSelectionList = document.getElementById('user-selection-list');
+
+    // Simulated user data (replace with your backend integration)
+    // Simulated group data (replace with your backend integration)
+    const groups = {{all_groups|safe}};
+    let users = {{ all_users|safe }};
+
+    function renderUserList() {
+        userList.innerHTML = ''; // Clear existing list items
+        users.forEach((user) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = user.name;
+            listItem.addEventListener('click', async () => {
+
+                userList.querySelectorAll('li').forEach(item => {
+                    item.classList.remove('selected-user');
+                });
+                groupList.querySelectorAll('li').forEach(item => {
+                    item.classList.remove('selected-user');
+                });
+                listItem.classList.add('selected-user');
+                // Handle user selection (e.g., display chat history for the user)
+                console.log(`User selected: ${user.name}`);
+                try {
+                    {#get the id of the sender and receiver form responsae and populate that into input with id message-input#}
+                    messageInput.setAttribute('data-sender', '{{ request.user.id }}');
+                    messageInput.setAttribute('data-receiver', user.id);
+                    main_receiver_id = user.id;
+                    const response = await fetch(`{% url 'manager-get-messages' %}?receiver=${user.id}`);
+                    if (response.ok) {
+                        const messages = await response.json();
+                        // Handle the messages received from the server
+                        console.log(`Messages for user ${user.name}:`, messages);
+                        chatHistory.innerHTML = '';
+                        messages.forEach(message => {
+                            PopulateMessage(`${message.sender}`, `${message.message}`, formatDateTime(`${message.created_at}`), `${message.is_sent_by_user}`);
+                        });
+                    } else {
+                        throw new Error('Failed to fetch messages');
+                    }
+                } catch (error) {
+                    console.error('Error fetching messages:', error);
+                }
+            });
+            userList.appendChild(listItem);
+        });
+    }
+
+
+    function renderGroupList() {
+        groupList.innerHTML = ''; // Clear existing list items
+        groups.forEach((group) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = group.name;
+            listItem.addEventListener('click', async () => {
+                userList.querySelectorAll('li').forEach(item => {
+                    item.classList.remove('selected-user');
+                });
+                groupList.querySelectorAll('li').forEach(item => {
+                    item.classList.remove('selected-user');
+                });
+                listItem.classList.add('selected-user');
+                // Handle group selection (e.g., display chat history for the group)
+                console.log(`Group selected: ${group.name}`);
+                try {
+                    messageInput.setAttribute('data-group', group.id);
+                    group_id = group.id;
+                    const response = await fetch(`{% url 'manager-get-group-messages' %}?group=${group.id}`);
+                    if (response.ok) {
+                        const messages = await response.json();
+                        // Handle the messages received from the server
+                        console.log(`Messages for group ${group.name}:`, messages);
+                        chatHistory.innerHTML = '';
+                        messages.forEach(message => {
+                            PopulateMessage(`${message.sender}`, `${message.message}`, formatDateTime(`${message.created_at}`), `${message.is_sent_by_user}`);
+                        });
+                    } else {
+                        throw new Error('Failed to fetch messages');
+                    }
+                } catch (error) {
+                    console.error('Error fetching messages:', error);
+                }
+
+
+            });
+            groupList.appendChild(listItem);
+        });
+    }
+
+    function PopulateMessage(sender, message, time, is_sent_by_user) {
+        const messageElement = document.createElement('div'); // Use a div for message container
+
+        // Create a span element for the sender's name and add a class for styling
+        const senderSpan = document.createElement('span');
+
+
+        // Append the sender's name to the message container
+        messageElement.appendChild(senderSpan);
+
+        // Create a span element for the message text
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = `${message}`;
+        messageElement.appendChild(messageSpan);
+
+// Add a line break between the message and the time
+        messageElement.appendChild(document.createElement('br'));
+
+        const timeSpan = document.createElement('span');
+        timeSpan.textContent = `${time}`;
+        messageElement.appendChild(timeSpan);
+
+
+        // Add CSS class based on whether it's sent or received
+        if (is_sent_by_user === 'YES') {
+            messageElement.classList.add('sent-message-box');
+        } else {
+            messageElement.classList.add('received-message-box');
+        }
+
+        chatHistory.appendChild(messageElement);
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+    }
+
+
+    function createMessage(message) {
+        const messageElement = document.createElement('p');
+        messageElement.textContent = message;
+        chatHistory.appendChild(messageElement);
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+    }
+
+    messageForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Extract sender and receiver IDs from input-message element
+        const senderId = $('#input-message').data('sender');
+
+        const receiverId = main_receiver_id;
+        const groupId = group_id;
+        console.log('Sender ID:', senderId);
+        console.log('Receiver ID:', receiverId);
+
+        const message = messageInput.value;
+        PopulateMessage('You', message, formatDateTime(new Date()), 'YES');
+        messageInput.value = ''; // Clear input field
+
+        // Make an HTTP request to send_message URL
+        fetch('{% url 'manager-send-messages' %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sender_id: senderId,
+                receiver_id: receiverId,
+                group_id: groupId,
+                message: message,
+            }),
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Message sent successfully
+                    console.log('Message sent successfully');
+                } else {
+                    // Error handling
+                    console.error('Failed to send message');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+
+    {#createGroupBtn.addEventListener('click', () => {#}
+    {#    createGroupModal.style.display = 'block';#}
+    {#    renderUserSelectionList(); // Populate user selection list#}
+
+    function renderUserSelectionList() {
+        userSelectionList.innerHTML = ''; // Clear existing list items
+        users.forEach((user) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = user.name;
+            // Add checkbox for user selection during group creation
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            listItem.appendChild(checkbox);
+            userSelectionList.appendChild(listItem);
+        });
+    }
+
+    cancelGroupCreation.addEventListener('click', () => {
+        createGroupModal.style.display = 'none';
+    });
+
+    createGroup.addEventListener('click', () => {
+        // Get selected users (implement logic based on checkboxes)
+        const selectedUsers = []; // Replace with logic to get selected users
+        const groupName = document.getElementById('group-name').value;
+
+        // Simulate creating a group (replace with your backend integration)
+        groups.push({name: groupName, users: selectedUsers});
+        renderGroupList();
+
+        createGroupModal.style.display = 'none';
+    });
+
+    renderUserList();
+    renderGroupList();
+    {#createGroupBtn.addEventListener('click', () => {#}
+    {#    createGroupModal.style.display = 'block';#}
+    {#    renderUserSelectionList();#}
+
+    cancelGroupCreation.addEventListener('click', () => {
+        createGroupModal.style.display = 'none';
+    });
+
+    function formatDateTime(datetimeString) {
+        const datetime = new Date(datetimeString);
+        const options = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        return datetime.toLocaleString('en-US', options);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<li data-item-id="1"
+    data-content-node-id="{{ content.content.id }}"
+    class="font-family-Inter-SemiBold">
+    <span class=" draggable"><i class=" fal fa-arrows"></i></span>
+    {{ content.content.title }}
+    <strong class="float-right ">
+        <a href="#" data-toggle="modal"
+           data-target="#{{ content.type }}model"
+           data-module="{{ content.type }}"
+           data-url="{% url 'update_content' model_name=content.type id=content.content.id %}"
+           class="editar mr-3 update_content"><i
+                class="fas fa-pen"></i></a>
+        <a href="#"
+        data-module-id="{{ module.id }}"
+        data-content-id="{{ content.content.id }}"
+        data-del-url="{% url 'delete_content' model_name=content.type id=content.content.id %}"
+           class="eliminar del-content-item"><i
+                class="fas fa-trash"></i></a>
+    </strong>
+</li>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.update_content').click(function (e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            var module = $(this).data('module');
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    // Do something with the response
+                    //insert html into modal-body
+                    var target = 'targetModule' + module;
+                    $(`#${target}`).html(response)
+
+
+                }
+            });
+        });
+    });
+</script>

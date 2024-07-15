@@ -1,0 +1,321 @@
+{% load static %}
+<form action="{% url 'edit_role' id=user.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-1 font-family-Inter-Medium box-1-activo" id="lista1_">
+                    1. Completar datos
+                </div>
+                <div class="box-1 font-family-Inter-Medium" id="lista2_">
+                    2. Accesos
+                </div>
+            </div>
+            <div class="col-md-12 mt-4">
+                <div class="box-open-datos" id="box-open-datos1">
+                    <div class="col-md-12">
+                        <label class="form-label d-block font-family-Inter-Regular texto-0">Foto de
+                            perfil</label>
+                    </div>
+                    <div class="box-open-datos-flex">
+                        <div class="">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" id="vista-previa1" class="foto"
+                                     alt="Vista Previa">
+                            {% else %}
+                                <img src="{% static 'img/foto.png' %}" id="vista-previa1" class="foto"
+                                     alt="Vista Previa">
+                            {% endif %}
+                           
+                        </div>
+                        <div class="">
+                            <label class="form-label font-family-Inter-Regular texto-1">
+                                Establezca la imagen de perfil del amdinistrador. Sólo se aceptan archivos
+                                de
+                                imagen
+                                <br> *.png, *.jpg y *.jpeg.
+                            </label>
+                            <p class="mb-3 font-family-Inter-Medium">Archivo: ejemplo.png</p>
+                            <input type="file" class="form-control" id="campo-archivo1" accept="image/*"
+                                   style="display: none;" name="profile_picture">
+                            <label class="custom-button-label font-family-Inter-Medium"
+                                   for="campo-archivo1">Cargar</label>
+                        </div>
+                    </div>
+                    <div class="form-usuario mt-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nombreusaurio1" class="font-family-Inter-Regular">Nombre de
+                                        usuario *</label>
+                                    <input type="text"  name="username" id="nombreusaurio1"
+                                           value="{{ user.user.username }}"
+                                           class="font-family-Inter-Medium" placeholder="Nombre de usuario">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nombrecompleto1" class="font-family-Inter-Regular">Nombre
+                                        completo *</label>
+                                    <input type="text"  name="fullname" id="nombrecompleto1"
+                                           value="{{ user.full_name }}"
+                                           class="font-family-Inter-Medium" placeholder="Nombre completo">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="correo1" class="font-family-Inter-Regular">Correo
+                                        electrónico *</label>
+                                    <input type="email" name="email"  id="correo1"
+                                           class="font-family-Inter-Medium" value="{{ user.user.email }}"
+                                           placeholder="Correo electrónico">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="telefono1" class="font-family-Inter-Regular">Teléfono
+                                        *</label>
+                                    <input type="text" name="phone_number" id="telefono1" 
+                                           value="{{ user.phone_number }}"
+                                           class="font-family-Inter-Medium" placeholder="+503 123456789">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-open-accesos d-none" id="box-open-accesos1">
+                    <div class="box-border">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Bold texto-1">
+                                    Acceso secciones de Administrador:
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1 flex-box-tabla">
+                                    <p class="mb-0 font-family-Inter-Medium">
+                                        Permitir acceso a todas las secciones
+                                    </p>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="marcar-todos_edit"
+                                                {% if user.user.groups.all.count == 6 %}
+                                               checked
+                                                {% endif %}
+                                               name="marcar-todos">
+                                        <label class="custom-control-label" for="marcar-todos_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Regular texto-1">
+                                    Sección 1: <span class="text-blue">Panel</span>
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input edit_opcion"
+                                               id="panel_edit"
+                                                {% for group in user.user.groups.all %}
+                                                    {% if group.name == "dashboards" %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                               name="permission" value="dashboard">
+                                        <label class="custom-control-label" for="panel_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Regular texto-1">
+                                    Sección 2: <span class="text-blue">Usuarios</span>
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input edit_opcion"
+                                               id="usuarios_edit"
+                                                {% for group in user.user.groups.all %}
+                                                    {% if group.name == "users" %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                               name="permission" value="user">
+                                        <label class="custom-control-label" for="usuarios_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Regular texto-1">
+                                    Sección 3: <span class="text-blue">Grupos</span>
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input edit_opcion"
+                                               id="grupos_edit"
+                                                {% for group in user.user.groups.all %}
+                                                    {% if group.name == "groups" %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                               name="permission" value="group">
+                                        <label class="custom-control-label" for="grupos_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Regular texto-1">
+                                    Sección 4: <span class="text-blue">Cursos</span>
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input edit_opcion"
+                                               id="cursos_edit"
+                                                {% for group in user.user.groups.all %}
+                                                    {% if group.name == "courses" %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                               name="permission" value="course">
+                                        <label class="custom-control-label" for="cursos_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Regular texto-1">
+                                    Sección 5: <span class="text-blue">Mensajes</span>
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input edit_opcion"
+                                               id="mensajes_edit"
+                                                {% for group in user.user.groups.all %}
+                                                    {% if group.name == "messages" %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                               name="permission" value="message">
+                                        <label class="custom-control-label" for="mensajes_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="separacion-table">
+                                <td class="font-family-Inter-Regular texto-1">
+                                    Sección 6: <span class="text-blue">Roles</span>
+                                </td>
+                                <td align="right" class="font-family-Inter-Medium texto-1">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input edit_opcion"
+                                               id="roles_edit"
+                                                {% for group in user.user.groups.all %}
+                                                    {% if group.name == "roles" %}
+                                               checked
+                                                    {% endif %}
+                                                {% endfor %}
+                                               name="permission" value="role">
+                                        <label class="custom-control-label" for="roles_edit"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer align-items-center justify-content-between">
+        <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal"
+                id="cerrar1">Cancelar
+        </button>
+        <button type="button" class="btn-gris font-family-Inter-Medium btn-border d-none" id="previous_box1">
+            Anterior
+        </button>
+        <button type="button" class="btn-gris font-family-Inter-Medium btn-blue" id="signature_box1">
+            Siguiente
+        </button>
+
+        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue d-none" id="reset_"
+        >Crear
+        </button>
+    </div>
+</form>
+
+<script>
+    $(".acordeon-titulo").click(function () {
+        // Cerrar otros paneles
+        $(".acordeon-contenido").not($(this).next(".acordeon-contenido")).slideUp();
+        $(".acordeon-titulo").not($(this)).removeClass("activo");
+
+        // Abrir o cerrar el panel actual
+        $(this).toggleClass("activo");
+        $(this).next(".acordeon-contenido").slideToggle();
+    });
+
+    $("#campo-archivo1").change(function () {
+        var archivoSeleccionado = $(this)[0].files[0];
+        if (archivoSeleccionado) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#vista-previa1").attr("src", e.target.result);
+            };
+            reader.readAsDataURL(archivoSeleccionado);
+        }
+    });
+
+    $('#signature_box1').click(function () {
+        $('#lista1_').removeClass('box-1-activo').addClass('box-1-activo-1');
+        $('#lista2_').addClass('box-1-activo');
+        $('#signature_box1').addClass('d-none');
+        $('#cerrar1').addClass('d-none');
+        $('#previous_box1').removeClass('d-none');
+        $('#reset_').removeClass('d-none');
+        $('#box-open-accesos1').removeClass('d-none');
+        $('#box-open-datos1').addClass('d-none');
+    })
+    $('#reset_').click(function () {
+        setTimeout(function () {
+            $('#lista1_').addClass('box-1-activo').removeClass('box-1-activo-1');
+            $('#lista2_').removeClass('box-1-activo');
+            $('#signature_box1').removeClass('d-none');
+            $('#cerrar1').removeClass('d-none');
+            $('#previous_box1').addClass('d-none');
+            $('#reset_').addClass('d-none');
+            $('#box-open-accesos1').addClass('d-none');
+            $('#box-open-datos1').removeClass('d-none');
+        }, 1000);
+    })
+    $('#cerrar-modal').click(function () {
+        setTimeout(function () {
+            $('#lista1_').addClass('box-1-activo').removeClass('box-1-activo-1');
+            $('#lista2_').removeClass('box-1-activo');
+            $('#signature_box1').removeClass('d-none');
+            $('#cerrar1').removeClass('d-none');
+            $('#previous_box1').addClass('d-none');
+            $('#reset_').addClass('d-none');
+            $('#box-open-accesos1').addClass('d-none');
+            $('#box-open-datos1').removeClass('d-none');
+        }, 1000);
+    })
+    $('#previous_box1').click(function () {
+        $('#lista1_').addClass('box-1-activo').removeClass('box-1-activo-1');
+        $('#lista2_').removeClass('box-1-activo');
+        $('#signature_box1').removeClass('d-none');
+        $('#cerrar1').removeClass('d-none');
+        $('#previous_box1').addClass('d-none');
+        $('#reset_').addClass('d-none');
+        $('#box-open-accesos1').addClass('d-none');
+        $('#box-open-datos1').removeClass('d-none');
+    })
+
+    $("#marcar-todos_edit").click(function () {
+        $(".edit_opcion").prop("checked", this.checked);
+    });
+
+    // Al hacer clic en un checkbox individual
+    $(".edit_opcion").click(function () {
+        if ($(".edit_opcion:checked").length === $(".edit_opcion").length) {
+            $("#marcar-todos_edit").prop("checked", true);
+        } else {
+            $("#marcar-todos_edit").prop("checked", false);
+        }
+    });
+
+</script>

@@ -1,0 +1,100 @@
+{% load static %}
+<form action="{% url 'update_group' id=group.id %}" class="form-usuario" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nombre" class="font-family-Inter-Regular">Nombre</label>
+                <input type="text" name="name" id="nombre" class="font-family-Inter-Medium"
+                       placeholder="Nombre" value="{{ group.name }}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="oferta" class="font-family-Inter-Regular">Afiliar ofertas de compra</label>
+                <select class="form-control font-family-Inter-Medium" id="oferta" name="offer">
+                    <option selected class="d-none" disabled>Seleccionar oferta</option>
+                    {% for offer in offers %}
+                        <option value="{{ offer.id }}" {% if group.purchase_offer.id == offer.id %}
+                                selected {% endif %}>{{ offer.name }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="idgrupo" class="font-family-Inter-Regular">ID de Grupo</label>
+                <input type="text" name="group_id" id="idgrupo" class="font-family-Inter-Medium"
+                       placeholder="EDUP-" value="{{ group.group_id }}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="instructor" class="font-family-Inter-Regular">Instructor</label>
+                <select class="form-control font-family-Inter-Medium" id="instructor" name="instructor">
+                    <option selected class="d-none" disabled>Seleccionar oferta</option>
+                    {% for instructor in instructors %}
+                        <option value="{{ instructor.id }}" {% if group.instructor.id == instructor.id %}
+                                selected {% endif %}>{{ instructor.username }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="fechainicio" class="font-family-Inter-Regular">Fecha de inicio</label>
+                <input type="date" name="start_date" id="fechainicio" class="font-family-Inter-Medium"
+                       placeholder="DD/MM/AAAA" value="{{ group.start_date |date:'Y-m-d' }}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="fechafin" class="font-family-Inter-Regular">Fecha de fin</label>
+                <input type="date" name="end_date" id="fechafin" class="font-family-Inter-Medium"
+                       placeholder="DD/MM/AAAA" value="{{ group.end_date |date:'Y-m-d' }}">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <span class="font-family-Inter-Regular" style="font-size: 12px;">Tipo de curso</span>
+            </div>
+        </div>
+        <div class="col-md-6 font-family-Inter-Medium">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="grabado1" name="course_type1"
+                       {% if group.course.course_type == 'recorded' %}checked{% endif %} value="recorded">
+                <label class="custom-control-label" for="grabado1"
+                       style="font-size: 15px;">Grabado</label>
+            </div>
+        </div>
+        <div class="col-md-6 font-family-Inter-Medium">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="envivo1" name="course_type1"
+                       {% if group.course.course_type == 'live' %}checked{% endif %} value="live">
+                <label class="custom-control-label" for="envivo1" style="font-size: 15px;">En
+                    vivo</label>
+            </div>
+        </div>
+        <div class="col-md-12 mt-4">
+            <div class="form-group">
+                <label for="afiliados" class="font-family-Inter-Regular">Curso afiliado</label>
+                <select class="form-control font-family-Inter-Medium" id="afiliados1" name="course">
+                    <option selected class="d-none" disabled>Seleccionar Curso</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if group.course.id == course.id %}
+                                selected {% endif %}>{{ course.name }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer align-items-center justify-content-center">
+        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+        <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+            Cancelar
+        </button>
+    </div>
+</form>
+<script src="{% static 'js/groups.js' %}">
+
+</script>

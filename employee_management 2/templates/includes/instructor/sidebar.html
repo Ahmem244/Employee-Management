@@ -1,0 +1,51 @@
+<ul class="font-family-Inter-SemiBold position-relative">
+
+    
+    {% comment %} <a href="javascript:void(0);" id="open" class="bars">
+        <i class="fas fa-bars"></i>
+    </a>
+    <a href="javascript:void(0);" id="close" class="bars d-none">
+        <i class="fas fa-times"></i>
+    </a> {% endcomment %}
+    
+    
+        <li>
+            <a href="{% url 'instructor-panel' %}" class="nav-link {% if nav_class == 'panel' %}activo{% endif %}"><i class="fab fa-windows"></i> Panel</a>
+        </li>
+    
+    <li class="linea-gris"></li>
+    <li>
+        <a href="{% url 'instructor-groups' %}" class="nav-link {% if nav_class == 'groups' %}activo{% endif %}" >
+            <i class="fas fa-users"></i> Mis Grupos
+        </a>
+        
+    </li>
+    <li class="linea-gris"></li>
+    <li>
+        <a href="{% url 'instructor-courses' %}" class="nav-link {% if nav_class == 'Courses' %}activo{% endif %}">
+            <i class="fas fa-play-circle"></i> Mis Cursos
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'instructor-evaluaciones' %}" class="nav-link {% if nav_class == 'evaluaciones' %}activo{% endif %}">
+            <i class="fas fa-file-invoice"></i> Evaluaciones
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'instructor-messages' %}" class="nav-link {% if nav_class == 'messages' %}activo{% endif %}">
+            <i class="fas fa-comment"></i> Mensajes
+        </a>
+    </li>
+    <li class="linea-gris"></li>
+    <li>
+        <a href="{% url 'instructor-profile' %}" class="nav-link {% if nav_class == 'Mi Perfil' %}activo{% endif %}">
+            <i class="fas fa-user"></i> Mi Perfil
+        </a>
+    </li>
+    
+    <li>
+        <a target="_blank" href="https://www.youtube.com/watch?v=b3ootXSAaqE" class="nav-link">
+            <i class="fas fa-outdent"></i> Tutorial de Uso
+        </a>
+    </li>
+</ul>

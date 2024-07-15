@@ -1,0 +1,124 @@
+  <form action="{% url 'edit_user' id=userprofile.user.id %}" class="form-usuario" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                                <input type="text" name="first_name" id="first_name" class="font-family-Inter-Medium"
+                                    placeholder="Nombres" value="{{ userprofile.first_name }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="apellidos" class="font-family-Inter-Regular">Apellidos</label>
+                                <input type="text" name="surname" id="surname" class="font-family-Inter-Medium"
+                                    placeholder="Apellidos" value="{{ userprofile.surname }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nickname" class="font-family-Inter-Regular">Nombre de Usuario</label>
+                                <input type="text" name="username" id="username" class="font-family-Inter-Medium"
+                                    placeholder="Nombre de Usuario" value="{{ userprofile.user.username }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ciudad" class="font-family-Inter-Regular">Ciudad</label>
+                                <select class="form-control font-family-Inter-Medium" id="city" name="city">
+                                    <option selected class="d-none">Selecciona ciudad</option>
+                                    {% for city in cities %}
+                                    <option value="{{ city.name }}" {% if userprofile.city == city.name %} selected {% endif %}>{{ city.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="departamento" class="font-family-Inter-Regular">Departamento</label>
+                                <select class="form-control font-family-Inter-Medium" id="department"
+                                    name="department">
+                                    <option selected class="d-none">Selecciona departamento</option>
+                                    {% for department in departments %}
+                                    <option value="{{ department.id }}" {% if userprofile.department.id == department.id %} selected {% endif %}>{{ department.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="telefono" class="font-family-Inter-Regular">Teléfono</label>
+                                <input type="text" name="phone_number" id="phone_number" class="font-family-Inter-Medium"
+                                    placeholder="+503 123456789" value="{{ userprofile.phone_number }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="correo" class="font-family-Inter-Regular">Correo</label>
+                                <input type="email" name="email" id="email" class="font-family-Inter-Medium"
+                                    placeholder="Correo" value="{{ userprofile.user.email }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dui" class="font-family-Inter-Regular">Número DUI</label>
+                                <input type="text" name="dui_number" id="dui_number" class="font-family-Inter-Medium"
+                                    placeholder="76543219" value="{{ userprofile.dui_number }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="sexo" class="font-family-Inter-Regular">Sexo</label>
+                                <select class="form-control font-family-Inter-Medium" id="gender" name="gender">
+                                    <option selected class="d-none" disabled>Selecciona sexo</option>
+                                    <option value="male" {% if userprofile.gender == 'male' %} selected {% endif %}>Male</option>
+                                    <option value="female" {% if userprofile.gender == 'female' %} selected {% endif %}>Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nacimiento" class="font-family-Inter-Regular">Fecha de nacimiento</label>
+                                <input type="date" name="birthdate" id="birthdate" class="font-family-Inter-Medium"
+                                    placeholder="DD/MM/AAAA" value="{{ userprofile.birth_date|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contrasena" class="font-family-Inter-Regular">Crear contraseña</label>
+                                <input type="password" name="password" id="password" class="font-family-Inter-Medium"
+                                    placeholder="Crear contraseña" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <span class="font-family-Inter-Regular">ROL</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 font-family-Inter-Medium">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="student-edit" name="role"
+                                    value="student" {% if userprofile.role == 'student' %} checked {% endif %} 
+                                />
+                                <label class="custom-control-label" for="student-edit"
+                                    style="font-size: 15px;">Estudiante</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 font-family-Inter-Medium">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="instructor-edit" name="role"
+                                    value="instructor" {% if userprofile.role == 'instructor' %} checked {% endif %}
+                                />
+                                <label class="custom-control-label" for="instructor-edit"
+                                    style="font-size: 15px;">Instructor</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer align-items-center justify-content-center">
+                        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                        <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>

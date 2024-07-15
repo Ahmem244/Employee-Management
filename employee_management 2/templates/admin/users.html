@@ -1,0 +1,376 @@
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+{% load static %}
+
+<div class="sidebar">
+    {% include "includes/admin/sidebar.html" %}
+</div>
+<div class="main">
+    <section class="bg-panel">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mb-4 mt-3">
+                    <h1 class="font-family-Outfit-SemiBold titulo">
+                        Gestión de usuarios
+                    </h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="box-border">
+                        <div class="header">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="buscador">
+                                        <div class="form-group position-relative">
+                                            <label for="buscar"><i class="fal fa-search"></i></label>
+                                            <input type="text" name="buscar" id="buscar" placeholder="Buscar usuario"
+                                                    {% if search_name %} value="{{ search_name }}" {% endif %}>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a href="javascript:void(0)" class="btn-gris font-family-Inter-Regular" href="#"
+                                       role="button" id="dropdownMenuLinkfilter"
+                                       data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">
+                                        <i class="fal fa-filter"></i> Filtros <i class="far fa-chevron-down"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right"
+                                         aria-labelledby="dropdownMenuLinkfilter">
+                                        <a class="dropdown-item texto-1 font-family-Inter-Regular filter_button"
+                                           href="#" value="all">All</a>
+                                        <a class="dropdown-item texto-1 font-family-Inter-Regular filter_button"
+                                           href="#" value="active">Active</a>
+                                        <a class="dropdown-item texto-1 font-family-Inter-Regular filter_button"
+                                           href="#" value="inactive">Inactive</a>
+
+                                    </div>
+
+
+                                    <a href="javascript:void(0)" class="btn-gris font-family-Inter-Regular"
+                                       data-toggle="modal" data-target="#importuser">
+                                        Importar Excel
+                                    </a>
+                                    <a href="javascript:void(0)" class="btn-gris font-family-Inter-Regular btn-blue"
+                                       data-toggle="modal" data-target="#crearusuario">
+                                        + Crear Usuario
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                    <tr class="font-family-Outfit-SemiBold">
+                                        <th>ESTUDIANTE</th>
+                                        <th>USUARIO</th>
+                                        <th>TIPO</th>
+                                        <th>ESTADO</th>
+                                        <th style="text-align: right;">ACCIONES</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user in users %}
+                                        <tr>
+                                            <td class="texto-usuario">
+                                                <p class="font-family-Inter-Regular">
+                                                    {% if user.profile_picture %}
+                                                        <img src="{{ user.profile_picture.url }}" alt="user"
+                                                             height="36px" width="36px">
+                                                    {% else %}
+                                                        <img src="{% static 'img/user.png' %}" alt="user">
+                                                    {% endif %}
+                                                    <strong class="font-family-Inter-Regular">
+                                                        {{ user.first_name }} {{ user.surname }}
+                                                        <span class="d-block">{{ user.account_id }}</span>
+                                                    </strong>
+                                                </p>
+                                            </td>
+                                            <td class="font-family-Inter-Medium texto-0">{{ user.user.username }}</td>
+                                            <td class="font-family-Inter-Medium texto-0">{{ user.role }}</td>
+                                            <td class="font-family-Inter-Medium texto-0">
+                                                {% if user.status == 'active' %}
+                                                    <div class="alerta boton-aceptado">
+                                                        <i class="fas fa-circle"></i> {{ user.status }}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="alerta boton-rechazada">
+                                                        <i class="fas fa-circle"></i> {{ user.status }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td align="right" class="font-family-Inter-Medium texto-0">
+                                                <div class="dropdown d-inline-block">
+                                                    <a class="btn-action dropdownMenuLink font-family-Inter-Regular"
+                                                       href="#" role="button" id="dropdownMenuLink"
+                                                       data-toggle="dropdown" aria-haspopup="true"
+                                                       aria-expanded="false">
+                                                        Acción <i class="fas fa-chevron-down"></i>
+                                                    </a>
+
+                                                    <div class="dropdown-menu dropdown-menu-right"
+                                                         aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item texto-1 font-family-Inter-Regular"
+                                                           href="{% url 'show_user_details' id=user.id %}">Ver
+                                                            detalles</a>
+                                                        <a class="dropdown-item texto-1 font-family-Inter-Regular edit-user"
+                                                           href="#" data-toggle="modal"
+                                                           data-url="{% url 'edit_user' id=user.user.id %}"
+                                                           data-ajax-popup="true"
+                                                           data-target="#edituser">Editar</a>
+                                                        {% if user.status == 'active' %}
+                                                            <a class="dropdown-item texto-1 font-family-Inter-Regular suspend-link"
+                                                               href="{% url 'deactivate_user' id=user.id %}?status=inactive"
+                                                               id="suspend-link"
+                                                               data-toggle="modal"
+                                                               data-target="#modalsuspender">Suspender</a>
+                                                        {% else %}
+                                                            <a class="dropdown-item texto-1 font-family-Inter-Regular suspend-link"
+                                                               href="{% url 'deactivate_user' id=user.id %}?status=active"
+                                                               id="suspend-link"
+                                                               data-toggle="modal"
+                                                               data-target="#modalsuspender">Activate</a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Modal  crear susuario-->
+<div class="modal fade" id="crearusuario" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create_user' %}" class="form-usuario" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nombre" class="font-family-Inter-Regular">Nombres</label>
+                                <input type="text" name="first_name" id="nombre" class="font-family-Inter-Medium"
+                                       placeholder="Nombres" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="apellidos" class="font-family-Inter-Regular">Apellidos</label>
+                                <input type="text" name="surname" id="apellidos" class="font-family-Inter-Medium"
+                                       placeholder="Apellidos" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nickname" class="font-family-Inter-Regular">Nombre de Usuario</label>
+                                <input type="text" name="username" id="nickname" class="font-family-Inter-Medium"
+                                       placeholder="Nombre de Usuario" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ciudad" class="font-family-Inter-Regular">Ciudad</label>
+                                <select class="form-control font-family-Inter-Medium" id="ciudad" name="city" required>
+                                    <option selected class="d-none" disabled value="">Selecciona ciudad</option>
+                                    {% for city in cities %}
+                                        <option value="{{ city.name }}">{{ city.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="departamento" class="font-family-Inter-Regular">Departamento</label>
+                                <select class="form-control font-family-Inter-Medium" id="departamento" required
+                                        name="department">
+                                    <option selected class="d-none" disabled value="">Selecciona departamento</option>
+                                    {% for department in departments %}
+                                        <option value="{{ department.id }}">{{ department.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="telefono" class="font-family-Inter-Regular">Teléfono</label>
+                                <input type="text" name="phone_number" id="telefono" class="font-family-Inter-Medium"
+                                       placeholder="+503 123456789">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="correo" class="font-family-Inter-Regular">Correo</label>
+                                <input type="email" name="email" id="correo" class="font-family-Inter-Medium"
+                                       placeholder="Correo" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dui" class="font-family-Inter-Regular">Número DUI</label>
+                                <input type="text" name="dui_number" id="dui" class="font-family-Inter-Medium"
+                                       placeholder="76543219">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="sexo" class="font-family-Inter-Regular">Sexo</label>
+                                <select class="form-control font-family-Inter-Medium" id="sexo" name="gender" required>
+                                    <option selected class="d-none" disabled value="">Selecciona sexo</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nacimiento" class="font-family-Inter-Regular">Fecha de nacimiento</label>
+                                <input type="date" name="birthdate" id="nacimiento" class="font-family-Inter-Medium"
+                                       placeholder="DD/MM/AAAA">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contrasena" class="font-family-Inter-Regular">Crear contraseña</label>
+                                <input type="password" name="password" id="contrasena" class="font-family-Inter-Medium"
+                                       placeholder="Crear contraseña" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <span class="font-family-Inter-Regular">ROL</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 font-family-Inter-Medium">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="estudiante" name="role"
+                                       value="student" required>
+                                <label class="custom-control-label" for="estudiante"
+                                       style="font-size: 15px;">Estudiante</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 font-family-Inter-Medium">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="instructor" name="role"
+                                       value="instructor" required>
+                                <label class="custom-control-label" for="instructor"
+                                       style="font-size: 15px;">Instructor</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer align-items-center justify-content-center">
+                        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                        <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="edituser" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body edit-user-model-body" id="editUserFormTarget">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="importuser" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-header" style="border-radius: 12px 12px 0 0;">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Import Users</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'import_users' %}" class="form-usuario" method="post" enctype="multipart/form-data">
+                <div class="modal-body ">
+
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+
+
+                            <div class="form-group">
+                                <label for="nombre" class="font-family-Inter-Regular">Excel File</label>
+                                <input type="file" name="excel_file" id="nombre1d" class="font-family-Inter-Medium"
+                                       accept="application/vnd.sealed.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                       placeholder="Users excel file" required>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="modal-footer align-items-center justify-content-center">
+                    <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar</button>
+                    <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.edit-user').click(function (e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    // Do something with the response
+                    //insert html into modal-body
+                    $('#editUserFormTarget').html(response)
+
+
+                }
+            });
+        });
+    });
+</script>
+<script src="{% static 'js/users.js' %}"></script>
+
+
+{% include "admin/../includes/admin/footer.html" %}

@@ -1,0 +1,43 @@
+<ul class="font-family-Inter-SemiBold sales_advisor " id="sales_advisor">
+    <li>
+        <a href="{% url 'index' %}" class="nav-link {% if nav_class == 'dashboard' %}activo{% endif %}">
+            <i class="fab fa-windows"></i> Dashboard
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'next-shifts' %}" class="nav-link {% if nav_class == 'next_shifts' %}activo{% endif %}">
+            <i class="fas fa-calendar-alt"></i> Next Shifts
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'task-overview' %}" class="nav-link {% if nav_class == 'tasks_overview' %}activo{% endif %}">
+            <i class="fas fa-tasks"></i> Task Overview
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sa-latest-accouncement' %}" class="nav-link {% if nav_class == 'latest_announements' %}activo{% endif %}">
+            <i class="fas fa-bullhorn"></i> Announcements
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sa-leave-request-status' %}" class="nav-link {% if nav_class == 'leave_request_status' %}activo{% endif %}">
+            <i class="fas fa-file-alt"></i> Request Status
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'sa-messages' %}" class="nav-link {% if nav_class == 'messages' %}activo{% endif %}">
+            <i class="fas fa-comment"></i> Messages
+        </a>
+    </li>
+</ul>
+
+<script src="../../../staticfiles/js/sidebar.js"></script> 
+
+
+
+
+
+
+
+
+

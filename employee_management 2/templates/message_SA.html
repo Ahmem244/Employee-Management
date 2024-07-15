@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Advisors Messaging</title>
+    <link rel="stylesheet" href="../staticfiles/message_SA.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Sales Advisors Messaging</h2>
+    
+    <!-- Search Bar for Finding Managers -->
+    <div class="search-bar">
+        <input type="text" id="manager-search" placeholder="Search for a manager or colleague...">
+        <button type="button" onclick="searchContacts()">Search</button>
+    </div>
+    
+    <!-- Messaging Interface -->
+    <div class="messaging-interface">
+        <div class="contacts-list">
+            <h3>Contacts</h3>
+            <ul>
+                <li onclick="openChat('manager1')">Manager 1</li>
+                <li onclick="openChat('manager2')">Manager 2</li>
+                <li onclick="openChat('colleague1')">Colleague 1</li>
+                <!-- Additional contacts populated dynamically -->
+            </ul>
+        </div>
+        
+        <div class="chat-window">
+            <h3>Chat</h3>
+            <div class="chat-history">
+                <!-- Chat messages dynamically loaded here -->
+                <p>Select a contact to start messaging</p>
+            </div>
+            <textarea id="message-text" placeholder="Type your message here..."></textarea>
+            <button id="send-message-btn">Send</button>
+        </div>
+    </div>
+</div>
+
+<script src="messaging.js"></script> <!-- Ensure to link to your JavaScript file -->
+</body>
+</html>
+

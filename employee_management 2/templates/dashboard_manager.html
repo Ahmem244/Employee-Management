@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard_manager.css' %}"> <!-- Ensure the CSS file path is correct -->
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h2>Manager Dashboard</h2>
+
+    <nav class="dashboard-nav">
+        <ul>
+            <li><a href="{% url 'manager-shift' %}">Shift Management</a></li>
+            <li><a href="{% url 'manager-task-assignment' %}">Task Assignment</a></li>
+            <li><a href="{% url 'manager-leave-requests' %}">Leave Request Management</a></li>
+            <li><a href="{% url 'manager-sales-advisors-directory' %}">Sales Advisor Directory</a></li>
+            <li><a href="{% url 'manager-employee-profile-edit' %}">Employee Profile Editing</a></li>
+            <!-- Add more links as needed for other functionalities -->
+        </ul>
+    </nav>
+
+    <!-- Additional content sections can be added here -->
+</div>
+
+</body>
+</html>

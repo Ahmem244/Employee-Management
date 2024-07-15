@@ -1,0 +1,342 @@
+{% load static %}
+{% load django_tables2 %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        /* Include your custom styles here */
+
+
+    </style>
+</head>
+<body>
+{% include "includes/admin/header.html" %}
+{% include "includes/admin/nav.html" %}
+<div class="sidebar">
+    {% include "includes/admin/sidebar.html" %}
+</div>
+<div class="container next-shift">
+    {% if messages %}
+        <div id="alert-container" class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="card" style="width: 1000px">
+            <div class="card-body">
+                <h2 class="card-title">{{ form_title }}
+                    {% if form_title == 'Sales Advisors' %}
+                        <a href="{% url 'add_sales_advisor' %}" class="btn btn-primary float-right">
+                            Add Sales Advisor
+                        </a>
+                    {% endif %}
+                </h2>
+
+                <br>
+                {% if form %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-lg-3 col-md-6 col-sm-12  form-group">
+                                    <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                                    <br>
+                                    {% render_field field class="form-control" %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if shifts %}
+        <div class="row ">
+            <div class="card" style="width: 1000px">
+                <div class="card-body">
+                    <h3>All Shifts</h3>
+                    <!-- Search Form for Shifts -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="shiftSearch" class="form-control" placeholder="Search shifts..."
+                               onkeyup="filterShifts()">
+                    </div>
+                    <div id="shiftList">
+                        {% for shift in shifts %}
+                            <div class="card shift-card" style="border-width: 6px;">
+                                <div class="card-header " style="background: #3F28E3;color: #ffffff ">
+                                    <div class="row">
+                                        <div>{{ shift.userprofile.user.get_full_name }}</div>
+                                        <div class="col-lg-7 col-md-6 col-sm-12">{{ shift.date }}</div>
+                                        <div class="col-lg-2 col-md-6 col-sm-12">{{ shift.start_time }}
+                                            - {{ shift.end_time }}</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ shift.notes }}</p>
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+                s
+            </div>
+        </div>
+    {% endif %}
+
+    {% if tasks %}
+        <div class="row mt-4">
+            <div class="card" style="width: 1000px">
+                <div class="card-body">
+                    <h3>All Tasks</h3>
+                    <!-- Search Form for Tasks -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="taskSearch" class="form-control" placeholder="Search tasks..."
+                               onkeyup="filterTasks()">
+                    </div>
+                    <div id="taskList">
+                        {% for task in tasks %}
+                            <div class="card task-card" style="border-width: 6px;">
+                                <div class="card-header" style="background: #3F28E3;color: white ">
+                                    <div class="row">
+                                        <div class="col-3">{{ task.userprofile.user.get_full_name }}</div>
+                                        <div class="col-7">{{ task.title }}</div>
+                                        <div class="col-2">{{ task.due_date }}</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ task.description }}</p>
+                                    <p>Department: {{ task.department }}</p>
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if leave_requests %}
+        <div class="row mt-4">
+            <div class="card" style="width: 1000px">
+                <div class="card-body">
+                    <h3>All Leave Requests</h3>
+                    <!-- Search Form for Leave Requests -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="leaveRequestSearch" class="form-control"
+                               placeholder="Search leave requests..." onkeyup="filterLeaveRequests()">
+                    </div>
+                    <div id="leaveRequestList">
+                        {% for request in leave_requests %}
+                            <div class="card leave-request-card" style="border-width: 6px;">
+                                <div class="card-header" style="background: #3F28E3;color: white ">
+                                    <div class="row">
+                                        <div class="col-3">{{ request.userprofile.user.get_full_name }}</div>
+                                        <div class="col-7">{{ request.title }}</div>
+                                        <div class="col-2 font-weight-bold"
+                                             {% if request.approval_status == 'PENDING' %}style="color: #ffdd00"
+                                             {% elif request.approval_status == 'DENIED' %}style="color: red"
+                                             {% else %}style="color: #5bda5b"
+                                             {% endif %}>
+                                            {{ request.approval_status|upper }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ request.description }}</p>
+                                    <p>Date: {{ request.created_at }}</p>
+                                    <div class="float-right">
+                                        <a class="btn btn-light"
+                                           href="{% url 'manager-take-action-on-leave-requests' request.id %}?decision=1">Approve</a>
+                                        <a class="btn btn-danger"
+                                           href="{% url 'manager-take-action-on-leave-requests' request.id %}?decision=0">Reject</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if advisors %}
+        <div class="row mt-4">
+            <div class="card" style="width: 1000px">
+                <div class="card-body">
+                    <h3>All Sales Advisors</h3>
+                    <!-- Search Form for Advisors -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="advisorSearch" class="form-control" placeholder="Search advisors..."
+                               onkeyup="filterAdvisors()">
+                    </div>
+                    <div id="advisorList">
+                        {% for advisor in advisors %}
+                            <div class="card advisor-card" style="border-width: 6px;">
+                                <div class="card-header" style="background: #3F28E3;color: white ">
+                                    <div class="row">
+                                        <div class="col-3">{{ advisor.user.get_full_name }}</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p class="font-weight-bolder">Middle Name: {{ advisor.middle_name }}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="font-weight-bolder">Employee
+                                                Number: {{ advisor.employee_number }}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="font-weight-bolder">Department: {{ advisor.department }}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="font-weight-bolder">Phone: {{ advisor.phone }}</p>
+                                        </div>
+                                        <div class="col-10">
+                                            <p class="font-weight-bolder">Address: {{ advisor.address }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="float-right">
+                                        <a class="btn btn-light"
+                                           href="{% url 'manager-edit-advisor-department' advisor.id %}?decision=1">Edit
+                                            Department</a>
+                                        <button class="btn btn-danger" onclick="confirmDelete('{{ advisor.id }}')">
+                                            Delete Advisor
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this advisor?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a id="deleteLink" href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.alert').delay(3000).fadeOut('slow', function () {
+            $(this).remove();
+        });
+    });
+
+    function confirmDelete(advisorId) {
+        // Set the delete link dynamically
+        var deleteUrl = "{% url 'manager-delete-advisor' %}?id=" + advisorId;
+        $('#deleteLink').attr('href', deleteUrl);
+
+        // Show the modal
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    // Search Functions
+    function filterShifts() {
+        var input, filter, cards, cardContainer, title, i;
+        input = document.getElementById("shiftSearch");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("shiftList");
+        cards = cardContainer.getElementsByClassName("shift-card");
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].getElementsByClassName("col-3")[0];
+            if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    function filterTasks() {
+        var input, filter, cards, cardContainer, title, i;
+        input = document.getElementById("taskSearch");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("taskList");
+        cards = cardContainer.getElementsByClassName("task-card");
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].getElementsByClassName("col-3")[0];
+            if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    function filterLeaveRequests() {
+        var input, filter, cards, cardContainer, title, i;
+        input = document.getElementById("leaveRequestSearch");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("leaveRequestList");
+        cards = cardContainer.getElementsByClassName("leave-request-card");
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].getElementsByClassName("col-3")[0];
+            if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    function filterAdvisors() {
+        var input, filter, cards, cardContainer, title, i;
+        input = document.getElementById("advisorSearch");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("advisorList");
+        cards = cardContainer.getElementsByClassName("advisor-card");
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].getElementsByClassName("col-3")[0];
+            if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+</body>
+</html>
+

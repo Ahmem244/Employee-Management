@@ -1,0 +1,366 @@
+{% include "includes/instructor/header.html" %}
+{% include "includes/instructor/nav.html" %}
+{% load static %}
+
+    <div class="sidebar">
+        {% include "includes/instructor/sidebar.html" %}
+    </div>
+    <div class="main">
+        <section class="bg-panel">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-4 mt-3">
+                        <h1 class="font-family-Outfit-SemiBold titulo">
+                            Grupos de Estudio
+                        </h1>
+                    </div>
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-pills font-family-Inter-Medium lista-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#todos">Todos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#progreso">En progreso</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#iniciados">No iniciados</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#Finalizados">Finalizados</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div id="todos" class="tab-pane active"><br>
+                                <div class="row">
+                                    {% for group in groups %}
+                                    <div class="col-md-4 mb-4">
+                                        <div class="box-curso">
+                                            <div class="header-curso">
+                                                <div class="fondo-img">
+                                                    <img src="{% static "img/instructor/box-curso.png" %}" alt="icono">
+                                                </div>
+                                                <div class="">
+                                                    <h6 class="font-family-Inter-Medium">
+                                                        {{group.group_id}}
+                                                    </h6>
+                                                    <h3 class="font-family-Inter-SemiBold">
+                                                        {{group.name}}
+                                                    </h3>
+                                                    <p class="font-family-Inter-Regular">
+                                                         {{group.members.count}} Integrantes
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="datos-cursos">
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.start_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        Inicio
+                                                    </p>
+                                                </div>
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.end_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        fin
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="barra-progreso">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{group.group_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{group.group_progress}}%;">
+                                                        <span class="sr-only">{{group.group_progress}}% Complete</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-integrantes">
+                                                {% for member in group.members %}
+                                                    {% if forloop.counter <= 6 %}
+                                                        {% if member.user.profile_picture %}
+                                                            <img src="{{member.user.profile_picture.url}}" alt="user">
+                                                        {% else %}
+                                                            <img src="{% static "img/user.png" %}" alt="user">
+                                                        {% endif %}
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if group.members.count > 6 %}
+                                                    <div class="final font-family-Inter-Regular">
+                                                        +{{ group.members.count|add:"-6" }}
+                                                    </div>
+                                                {% endif %}
+                                                {% comment %} <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <div class="final font-family-Inter-Regular">
+                                                    +20
+                                                </div> {% endcomment %}
+                                            </div>
+                                            <a href="{% url 'group-detail' group.id %}" class="font-family-Inter-Medium btn-ver">
+                                                Ver Detalles
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div id="progreso" class="tab-pane fade"><br>
+                                <div class="row">
+                                    {% for group in groups_in_progress %}
+                                    <div class="col-md-4 mb-4">
+                                        <div class="box-curso">
+                                            <div class="header-curso">
+                                                <div class="fondo-img">
+                                                    <img src="{% static "img/instructor/box-curso.png" %}" alt="icono">                                                </div>
+                                                <div class="">
+                                                    <h6 class="font-family-Inter-Medium">
+                                                        {{group.group_id}}
+                                                    </h6>
+                                                    <h3 class="font-family-Inter-SemiBold">
+                                                        {{group.name}}
+                                                    </h3>
+                                                    <p class="font-family-Inter-Regular">
+                                                        {{group.members.count}} Integrantes
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="datos-cursos">
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.start_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        Inicio
+                                                    </p>
+                                                </div>
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.end_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        fin
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="barra-progreso">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{group.group_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{group.group_progress}}%;">
+                                                        <span class="sr-only">60% Complete</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-integrantes">
+                                                {% for member in group.members %}
+                                                    {% if forloop.counter <= 6 %}
+                                                        {% if member.user.profile_picture %}
+                                                            <img src="{{member.user.profile_picture.url}}" alt="user">
+                                                        {% else %}
+                                                            <img src="{% static "img/user.png" %}" alt="user">
+                                                        {% endif %}
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if group.members.count > 6 %}
+                                                    <div class="final font-family-Inter-Regular">
+                                                        +{{ group.members.count|add:"-6" }}
+                                                    </div>
+                                                {% endif %}
+                                                {% comment %} <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <div class="final font-family-Inter-Regular">
+                                                    +20
+                                                </div> {% endcomment %}
+                                            </div>
+                                            <a href="{% url 'group-detail' group.id %}" class="font-family-Inter-Medium btn-ver">
+                                                Ver Detalles
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                </div>
+                            </div>
+                            <div id="iniciados" class="tab-pane fade"><br>
+                                <div class="row">
+                                    {% for group in groups_not_initiated %}
+                                    <div class="col-md-4 mb-4">
+                                        <div class="box-curso">
+                                            <div class="header-curso">
+                                                <div class="fondo-img">
+                                                    <img src="{% static "img/instructor/box-curso.png" %}" alt="icono">                                                </div>
+                                                <div class="">
+                                                    <h6 class="font-family-Inter-Medium">
+                                                        {{group.group_id}}
+                                                    </h6>
+                                                    <h3 class="font-family-Inter-SemiBold">
+                                                        {{group.name}}
+                                                    </h3>
+                                                    <p class="font-family-Inter-Regular">
+                                                        {{group.members.count}} Integrantes
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="datos-cursos">
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.start_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        Inicio
+                                                    </p>
+                                                </div>
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.end_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        fin
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="barra-progreso">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{group.group_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{group.group_progress}}%;">
+                                                        <span class="sr-only">{{group.group_progress}}% Complete</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-integrantes">
+                                                {% for member in group.members %}
+                                                    {% if forloop.counter <= 6 %}
+                                                        {% if member.user.profile_picture %}
+                                                            <img src="{{member.user.profile_picture.url}}" alt="user">
+                                                        {% else %}
+                                                            <img src="{% static "img/user.png" %}" alt="user">
+                                                        {% endif %}
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if group.members.count > 6 %}
+                                                    <div class="final font-family-Inter-Regular">
+                                                        +{{ group.members.count|add:"-6" }}
+                                                    </div>
+                                                {% endif %}
+                                                {% comment %} <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <div class="final font-family-Inter-Regular">
+                                                    +20
+                                                </div> {% endcomment %}
+                                            </div>
+                                            <a href="{% url 'group-detail' group.id %}" class="font-family-Inter-Medium btn-ver">
+                                                Ver Detalles
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div id="Finalizados" class="tab-pane fade"><br>
+                                <div class="row">
+                                    {% for group in groups_finshed %}
+                                    <div class="col-md-4 mb-4">
+                                        <div class="box-curso">
+                                            <div class="header-curso">
+                                                <div class="fondo-img">
+                                                    <img src="{% static "img/instructor/box-curso.png" %}" alt="icono">                                                </div>
+                                                <div class="">
+                                                    <h6 class="font-family-Inter-Medium">
+                                                        {{group.group_id}}
+                                                    </h6>
+                                                    <h3 class="font-family-Inter-SemiBold">
+                                                        {{group.name}}
+                                                    </h3>
+                                                    <p class="font-family-Inter-Regular">
+                                                        {{group.members.count}} Integrantes
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="datos-cursos">
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.start_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        Inicio
+                                                    </p>
+                                                </div>
+                                                <div class="box-datos">
+                                                    <h5 class="font-family-Inter-Medium">
+                                                        {{group.end_date.date}}
+                                                    </h5>
+                                                    <p class="font-family-Inter-Regular">
+                                                        fin
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="barra-progreso">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{group.group_progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{group.group_progress}}%;">
+                                                        <span class="sr-only">{{group.group_progress}}% Complete</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-integrantes">
+                                                {% for member in group.members %}
+                                                    {% if forloop.counter <= 6 %}
+                                                        {% if member.user.profile_picture %}
+                                                            <img src="{{member.user.profile_picture.url}}" alt="user">
+                                                        {% else %}
+                                                            <img src="{% static "img/user.png" %}" alt="user">
+                                                        {% endif %}
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if group.members.count > 6 %}
+                                                    <div class="final font-family-Inter-Regular">
+                                                        +{{ group.members.count|add:"-6" }}
+                                                    </div>
+                                                {% endif %}
+                                                {% comment %} <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <img src="{% static "img/user.png" %}" alt="user">
+                                                <div class="final font-family-Inter-Regular">
+                                                    +20
+                                                </div> {% endcomment %}
+                                            </div>
+                                            <a href="{% url 'group-detail' group.id %}" class="font-family-Inter-Medium btn-ver">
+                                                Ver Detalles
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {% include "includes/instructor/footer.html" %}

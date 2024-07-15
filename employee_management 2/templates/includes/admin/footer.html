@@ -1,0 +1,98 @@
+{% load static %}
+<!-- Modal suspender-->
+<div class="modal fade" id="modalsuspender" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-radius-12">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="box1" id="box1">
+                            <img src="{% static 'img/help.png' %}" alt="help">
+                            <p class="font-family-Inter-SemiBold">
+                                ¿Estás seguro que deseas realizar esta operación?
+                            </p>
+                        </div>
+                        <div class="box2 d-none" id="box2">
+                            <img src="{% static 'img/check.png' %}" alt="check">
+                            <p class="font-family-Inter-SemiBold">
+                                Operación exitosa
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer align-items-center justify-content-center">
+                <button type="button" class="btn-gris font-family-Inter-Medium btn-border" data-dismiss="modal" id="no">
+                    No
+                </button>
+                <a class="btn-gris font-family-Inter-Medium btn-blue" id="si">Si</a>
+                <button type="button" class="btn-gris font-family-Inter-Medium btn-blue d-none" id="ok"
+                        data-dismiss="modal">ok
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal alerta mensajes-->
+<div class="modal left fade" id="modalalerta" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-family-Outfit-SemiBold">Notificaciones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body body_modal">
+                <h6 class="font-family-Inter-Light mb-3">Hoy <span>2</span></h6>
+                <div class="mensaje_box d-flex align-items-start justify-content-start mb-3">
+                    <div>
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 font-family-Inter-Medium">Tienes un mensaje</p>
+                        <span class="font-family-Inter-Regular">Fram Damian</span>
+                    </div>
+                </div>
+                <div class="mensaje_box d-flex align-items-start justify-content-start mb-3">
+                    <div>
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 font-family-Inter-Medium">Felicidades por terminar el curso</p>
+                        <span class="font-family-Inter-Regular">Curso Diseño</span>
+                    </div>
+                </div>
+                <h6 class="font-family-Inter-Light mt-3 mb-3">Ayer</h6>
+                <div class="mensaje_box d-flex align-items-start justify-content-start mb-3">
+                    <div>
+                        <i class="fas fa-circle leido"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 font-family-Inter-Medium">Tienes un mensaje</p>
+                        <span class="font-family-Inter-Regular">Fram Damian</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            showNotification("{{message}}", "", "{{ message.tags }}", "fa fa-check")
+        </script>
+    {% endfor %}
+{% endif %}
+
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Tasks</title>
+    <link rel="stylesheet" href="{% static 'task_assignment.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Assign Tasks to Employees</h2>
+
+    <!-- Task Assignment Form -->
+    <div class="task-assignment-form">
+        <form method="post" action="">
+            {% csrf_token %}
+            <label for="task-title">Task Title:</label>
+            <input type="text" id="task-title" name="task-title" required>
+
+            <label for="task-description">Task Description:</label>
+            <textarea id="task-description" name="task-description" rows="4" required></textarea>
+
+            <label for="due-date">Due Date:</label>
+            <input type="date" id="due-date" name="due-date" required>
+
+            <label for="employee-number">Employee Number:</label>
+            <input type="text" id="employee-number" name="employee-number" placeholder="Optional">
+
+            <label for="department">Department:</label>
+            <input type="text" id="department" name="department" placeholder="Optional">
+
+            <button type="submit">Assign Task</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

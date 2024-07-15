@@ -1,0 +1,16 @@
+<form action="{% url 'update_module' id=module.id %}" class="form-estado" method="post">
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="tituloMaterial" class="d-block font-family-Inter-Regular">
+                Nombre de Lección
+            </label>
+            <input type="text" name="title" id="tituloMaterial"
+                   placeholder="Ejemplo de Nombre de Lección 1" class="font-family-Inter-Medium" value="{{ module.title }}">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn-gris font-family-Inter-Medium btn-blue">Guardar Cambios</button>
+    </div>
+</form>

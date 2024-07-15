@@ -1,0 +1,9 @@
+<div class="espacio-estado label-item" data-member="{{ member.id }}" data-label-id="{{ label.id }}">
+    <a href="javascript:void(0);" class="btn-estado boton-reporte-4 font-family-Inter-Medium">{{ label.label }}</a>
+    <a href="#" class="btn-trash del-label-item" 
+       data-delete-url="{% url 'remove_label' id=label.id %}"
+      data-member="{{ member.id }}"
+        data-label-id="{{ label.id }}"
+        data-del-url = "{% url 'remove_label' id=label.id %}"
+    ><i class="fas fa-trash-alt"></i></a>
+</div>
